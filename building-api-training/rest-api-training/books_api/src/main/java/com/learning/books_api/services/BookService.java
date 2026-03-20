@@ -1,0 +1,58 @@
+package com.learning.books_api.services;
+
+import com.learning.books_api.entities.Book;
+import com.learning.books_api.repositories.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class BookService {
+
+    @Autowired
+    private BookRepository repository;
+
+    public Book findById(Long id) {
+        Optional<Book> obj = repository.findById(id);
+        if (obj.isPresent()) {
+            return obj.get();
+        } else {
+            throw new RuntimeException("Book not found with id: " + id);
+        }
+    }
+
+    public Page<Book> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repository.findAll(pageable);
+    }
+
+    public Book insert(Book book) {
+        return repository.save(book);
+    }
+
+    public Book update(Long id, Book obj) {
+        if(!repository.existsById(id)) {
+            throw new RuntimeException("Book not found with id: " + id);
+        }
+        Book entity = repository.getReferenceById(id);
+        updateBook(entity, obj);
+        return repository.save(entity);
+    }
+
+    public void delete(Long id) {
+        if(!repository.existsById(id)) {
+            throw new RuntimeException("Book not found with id: " + id);
+        }
+        repository.deleteById(id);
+    }
+
+    private void updateBook(Book entity, Book obj) {
+        entity.setTitle(obj.getTitle());
+        entity.setCategory(obj.getCategory());
+        entity.setPublisher(obj.getPublisher());
+    }
+}

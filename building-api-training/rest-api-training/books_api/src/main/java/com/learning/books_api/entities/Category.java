@@ -3,11 +3,12 @@ package com.learning.books_api.entities;
 import jakarta.persistence.*;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "categories")
-public class Category {
+public class Category implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 

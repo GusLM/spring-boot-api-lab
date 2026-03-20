@@ -3,6 +3,7 @@ package com.learning.books_api.entities;
 import jakarta.persistence.*;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
@@ -10,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "book")
-public class Book {
+public class Book implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
