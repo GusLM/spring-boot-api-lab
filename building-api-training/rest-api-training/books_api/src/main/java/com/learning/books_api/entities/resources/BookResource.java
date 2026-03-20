@@ -3,10 +3,14 @@ package com.learning.books_api.entities.resources;
 import com.learning.books_api.dto.PageResponse;
 import com.learning.books_api.entities.Book;
 import com.learning.books_api.services.BookService;
+import jakarta.servlet.ServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/books")
@@ -33,12 +37,13 @@ public class BookResource {
     @PostMapping
     public ResponseEntity<Book> insert(@RequestBody Book obj) {
         obj = service.insert(obj);
-        return ResponseEntity.ok().body(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Book> update(@PathVariable Long id, @RequestBody Book obj) {
-        service.update(id, obj);
+        obj = service.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
 
