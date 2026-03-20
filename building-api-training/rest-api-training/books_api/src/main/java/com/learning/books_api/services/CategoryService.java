@@ -2,7 +2,10 @@ package com.learning.books_api.services;
 
 import com.learning.books_api.entities.Category;
 import com.learning.books_api.repositories.CategoryRepository;
+import com.learning.books_api.services.exceptions.DatabaseException;
+import com.learning.books_api.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,11 +22,7 @@ public class CategoryService {
 
     public Category findById(Long id) {
         Optional<Category> category = repository.findById(id);
-        if (category.isPresent()) {
-            return category.get();
-        } else {
-            throw new RuntimeException("Category with id " + id + " not found");
-        }
+        return category.orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " not found"));
     }
 
     public Page<Category> findAll(int page, int size) {
@@ -37,7 +36,7 @@ public class CategoryService {
 
     public Category update(Long id, Category obj) {
         if(!repository.existsById(id)) {
-            throw new RuntimeException("Category with id " + id + " not found");
+            throw new ResourceNotFoundException("Category with id " + id + " not found");
         }
         Category category = repository.getReferenceById(id);
         category.setName(obj.getName());
@@ -46,9 +45,14 @@ public class CategoryService {
 
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException("Category with id " + id + " not found");
+            throw new ResourceNotFoundException("Category with id " + id + " not found");
         }
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+
     }
 
 }
