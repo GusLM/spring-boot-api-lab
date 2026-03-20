@@ -1,22 +1,47 @@
 package com.learning.books_api.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serial;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@Table(name = "book")
 public class Book {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 100)
     private String title;
-    private Category category;
-    private Publisher publisher;
+
+    @Column(nullable = false, name = "launch_date")
     private Instant launchDate;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "publisher_id", nullable = false)
+    private Publisher publisher;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "book_authors",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
     private Set<Author> authors = new HashSet<>();
+
+    public Book() {
+    }
 
     public Book(Long id, String title, Category category, Publisher publisher, Instant launchDate) {
         this.id = id;

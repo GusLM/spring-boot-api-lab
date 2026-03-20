@@ -1,13 +1,21 @@
 package com.learning.books_api.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serial;
 import java.util.Objects;
 
+@Entity
+@Table(name = "categories")
 public class Category {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 75)
     private String name;
 
     public Category() {

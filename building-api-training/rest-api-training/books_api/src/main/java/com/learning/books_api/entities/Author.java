@@ -1,14 +1,24 @@
 package com.learning.books_api.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serial;
 import java.util.Objects;
 
+@Entity
+@Table(name = "authors")
 public class Author {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 45, name = "first_name")
     private String firstName;
+
+    @Column(nullable = false, length = 45, name = "last_name")
     private String lastName;
 
     public Author() {
