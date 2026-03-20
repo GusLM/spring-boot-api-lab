@@ -1,13 +1,13 @@
-package com.learning.rest_api_training;
+package com.learning.books_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RestApiTrainingApplication {
+public class BooksApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RestApiTrainingApplication.class, args);
+		SpringApplication.run(BooksApiApplication.class, args);
 	}
 
 }
