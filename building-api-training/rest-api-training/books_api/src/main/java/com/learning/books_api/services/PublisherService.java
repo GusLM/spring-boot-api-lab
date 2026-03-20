@@ -34,7 +34,7 @@ public class PublisherService {
         return repository.save(publisher);
     }
 
-    public Publisher updateById(Long id, Publisher obj) {
+    public Publisher update(Long id, Publisher obj) {
         if (!repository.existsById(id)) {
             throw new RuntimeException("Publisher with id " + id + "not found");
         }
