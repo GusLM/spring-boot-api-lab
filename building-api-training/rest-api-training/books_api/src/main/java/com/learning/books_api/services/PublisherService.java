@@ -2,7 +2,10 @@ package com.learning.books_api.services;
 
 import com.learning.books_api.entities.Publisher;
 import com.learning.books_api.repositories.PublisherRepository;
+import com.learning.books_api.services.exceptions.DatabaseException;
+import com.learning.books_api.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +21,7 @@ public class PublisherService {
 
     public Publisher findById(Long id) {
         Optional<Publisher> obj = repository.findById(id);
-        if (obj.isPresent()) {
-            return obj.get();
-        } else {
-            throw new RuntimeException("Publisher with id " + id + "not found");
-        }
+        return obj.orElseThrow(() -> new ResourceNotFoundException("Publisher with id " + id + "not found"));
     }
 
     public Page<Publisher> findAll(int page, int size) {
@@ -36,7 +35,7 @@ public class PublisherService {
 
     public Publisher update(Long id, Publisher obj) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException("Publisher with id " + id + "not found");
+            throw new ResourceNotFoundException("Publisher with id " + id + "not found");
         }
         Publisher entity = repository.getReferenceById(id);
         entity.setName(obj.getName());
@@ -45,8 +44,12 @@ public class PublisherService {
 
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException("Publisher with id " + id + "not found");
+            throw new ResourceNotFoundException("Publisher with id " + id + "not found");
         }
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
+        }
     }
 }
