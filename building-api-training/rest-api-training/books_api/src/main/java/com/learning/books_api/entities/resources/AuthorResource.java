@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/authors")
@@ -33,12 +36,13 @@ public class AuthorResource {
     @PostMapping
     public ResponseEntity<Author> insert(@RequestBody Author obj) {
         obj = service.insert(obj);
-        return ResponseEntity.ok().body(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Author> update(@PathVariable Long id, Author obj) {
-        service.update(id, obj);
+    public ResponseEntity<Author> update(@PathVariable Long id, @RequestBody Author obj) {
+        obj = service.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
 
