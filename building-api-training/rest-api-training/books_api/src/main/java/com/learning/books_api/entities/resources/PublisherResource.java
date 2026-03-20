@@ -2,7 +2,6 @@ package com.learning.books_api.entities.resources;
 
 import com.learning.books_api.dto.PageResponse;
 import com.learning.books_api.entities.Publisher;
-import com.learning.books_api.entities.Publisher;
 import com.learning.books_api.services.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
