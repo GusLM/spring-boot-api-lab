@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/categories")
@@ -33,11 +36,12 @@ public class CategoryResource {
     @PostMapping
     public ResponseEntity<Category> insert(@RequestBody Category obj) {
         obj = service.insert(obj);
-        return ResponseEntity.ok().body(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Category> update(@PathVariable Long id, Category obj) {
+    public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category obj) {
         service.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
