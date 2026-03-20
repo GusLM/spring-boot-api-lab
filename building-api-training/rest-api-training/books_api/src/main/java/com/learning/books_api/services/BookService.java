@@ -2,9 +2,10 @@ package com.learning.books_api.services;
 
 import com.learning.books_api.entities.Book;
 import com.learning.books_api.repositories.BookRepository;
-import com.learning.books_api.services.exceptions.DatabaseIntegrityException;
+import com.learning.books_api.services.exceptions.DatabaseException;
 import com.learning.books_api.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,8 +48,8 @@ public class BookService {
         }
         try {
             repository.deleteById(id);
-        } catch (DatabaseIntegrityException e) {
-            throw new DatabaseIntegrityException(e.getMessage());
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
         }
     }
 

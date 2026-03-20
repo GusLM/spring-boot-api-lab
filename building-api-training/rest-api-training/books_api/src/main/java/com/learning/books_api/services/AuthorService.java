@@ -2,7 +2,10 @@ package com.learning.books_api.services;
 
 import com.learning.books_api.entities.Author;
 import com.learning.books_api.repositories.AuthorRepository;
+import com.learning.books_api.services.exceptions.DatabaseException;
+import com.learning.books_api.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +21,7 @@ public class AuthorService {
 
     public Author findById(Long id) {
         Optional<Author> obj = repository.findById(id);
-        if (obj.isPresent()) {
-            return obj.get();
-        } else {
-            throw new RuntimeException("Author with id " + id + "not found");
-        }
+        return obj.orElseThrow(() -> new ResourceNotFoundException("Author with id " + id + "not found"));
     }
 
     public Page<Author> findAll(int page, int size) {
@@ -36,7 +35,7 @@ public class AuthorService {
 
     public Author update(Long id, Author obj) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException("Author with id " + id + "not found");
+            throw new ResourceNotFoundException("Author with id " + id + "not found");
         }
         Author entity = repository.getReferenceById(id);
         entity.setFirstName(obj.getFirstName());
@@ -46,8 +45,13 @@ public class AuthorService {
 
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException("Author with id " + id + "not found");
+            throw new ResourceNotFoundException("Author with id " + id + "not found");
         }
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+
     }
 }
