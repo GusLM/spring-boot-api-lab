@@ -4,6 +4,7 @@ import com.learning.books_api.dto.PageResponse;
 import com.learning.books_api.entities.Book;
 import com.learning.books_api.services.BookService;
 import jakarta.servlet.ServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +36,12 @@ public class BookResource {
     }
 
     @PostMapping
-    public ResponseEntity<Book> insert(@RequestBody Book obj) {
+    public ResponseEntity<Book> insert(@Valid @RequestBody Book obj) {
         obj = service.insert(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(obj.getId())
+                .toUri();
         return ResponseEntity.created(uri).body(obj);
     }
 

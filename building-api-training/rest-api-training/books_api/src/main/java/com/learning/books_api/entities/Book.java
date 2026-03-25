@@ -1,6 +1,7 @@
 package com.learning.books_api.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -19,20 +20,25 @@ public class Book implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Title cannot be null")
     @Column(nullable = false, length = 100)
     private String title;
 
+    @NotNull(message = "Launch date cannot be null")
     @Column(nullable = false, name = "launch_date")
     private Instant launchDate;
 
+    @NotNull(message = "Category cannot be null")
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @NotNull(message = "Publisher cannot be null")
     @ManyToOne
     @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
+    @NotNull(message = "Authors cannot be null")
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_authors",
