@@ -37,8 +37,8 @@ public class BookResource {
     }
 
     @PostMapping
-    public ResponseEntity<Book> insert(@Valid @RequestBody Book obj) {
-        obj = service.insert(obj);
+    public ResponseEntity<Book> insert(@Valid @RequestBody BookDTO dto) {
+        Book obj = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(obj.getId())

@@ -45,8 +45,10 @@ public class BookService {
         return repository.findAll(pageable);
     }
 
-    public Book insert(Book book) {
-        return repository.save(book);
+    public Book insert(BookDTO dto) {
+        Book obj = new Book();
+        updateBook(obj, dto);
+        return repository.save(obj);
     }
 
     public Book update(Long id, BookDTO dto) {
