@@ -3,6 +3,7 @@ package com.learning.books_api.entities.resources;
 import com.learning.books_api.dto.PageResponse;
 import com.learning.books_api.entities.Author;
 import com.learning.books_api.services.AuthorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +35,14 @@ public class AuthorResource {
     }
 
     @PostMapping
-    public ResponseEntity<Author> insert(@RequestBody Author obj) {
+    public ResponseEntity<Author> insert(@Valid @RequestBody Author obj) {
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Author> update(@PathVariable Long id, @RequestBody Author obj) {
+    public ResponseEntity<Author> update(@PathVariable Long id, @Valid @RequestBody Author obj) {
         obj = service.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }

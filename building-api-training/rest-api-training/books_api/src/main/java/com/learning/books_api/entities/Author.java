@@ -1,6 +1,7 @@
 package com.learning.books_api.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -16,9 +17,11 @@ public class Author implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "First name cannot be null")
     @Column(nullable = false, length = 45, name = "first_name")
     private String firstName;
 
+    @NotNull(message = "Last name cannot be null")
     @Column(nullable = false, length = 45, name = "last_name")
     private String lastName;
 
