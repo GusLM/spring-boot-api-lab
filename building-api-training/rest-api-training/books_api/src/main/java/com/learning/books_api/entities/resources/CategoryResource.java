@@ -3,6 +3,7 @@ package com.learning.books_api.entities.resources;
 import com.learning.books_api.dto.PageResponse;
 import com.learning.books_api.entities.Category;
 import com.learning.books_api.services.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -34,15 +35,16 @@ public class CategoryResource {
     }
 
     @PostMapping
-    public ResponseEntity<Category> insert(@RequestBody Category obj) {
+    public ResponseEntity<Category> insert(@Valid @RequestBody Category obj) {
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category obj) {
+    public ResponseEntity<Category> update(@PathVariable Long id, @Valid@RequestBody Category obj) {
         service.update(id, obj);
+        obj.setId(id);
         return ResponseEntity.ok().body(obj);
     }
 
