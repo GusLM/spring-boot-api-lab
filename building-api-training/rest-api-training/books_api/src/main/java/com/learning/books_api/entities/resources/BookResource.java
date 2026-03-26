@@ -1,5 +1,6 @@
 package com.learning.books_api.entities.resources;
 
+import com.learning.books_api.dto.BookDTO;
 import com.learning.books_api.dto.PageResponse;
 import com.learning.books_api.entities.Book;
 import com.learning.books_api.services.BookService;
@@ -46,8 +47,8 @@ public class BookResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Book> update(@PathVariable Long id, @Valid @RequestBody Book obj) {
-        obj = service.update(id, obj);
+    public ResponseEntity<Book> update(@PathVariable Long id, @Valid @RequestBody BookDTO dto) {
+        Book obj = service.update(id, dto);
         return ResponseEntity.ok().body(obj);
     }
 

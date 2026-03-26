@@ -1,5 +1,6 @@
 package com.learning.books_api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -8,6 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "publishers")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Publisher implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

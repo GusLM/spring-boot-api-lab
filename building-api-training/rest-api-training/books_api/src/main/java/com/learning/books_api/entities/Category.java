@@ -1,5 +1,6 @@
 package com.learning.books_api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "categories")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Category implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

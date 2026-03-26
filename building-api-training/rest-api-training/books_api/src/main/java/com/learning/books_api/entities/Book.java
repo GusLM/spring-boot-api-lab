@@ -1,5 +1,6 @@
 package com.learning.books_api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "book")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Book implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -99,7 +101,7 @@ public class Book implements Serializable {
     }
 
     public Set<Author> getAuthors() {
-        return Set.copyOf(authors);
+        return authors;
     }
 
     public void addAuthor(Author author) {
