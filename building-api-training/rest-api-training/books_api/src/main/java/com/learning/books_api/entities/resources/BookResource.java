@@ -46,7 +46,7 @@ public class BookResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Book> update(@PathVariable Long id, @RequestBody Book obj) {
+    public ResponseEntity<Book> update(@PathVariable Long id, @Valid @RequestBody Book obj) {
         obj = service.update(id, obj);
         return ResponseEntity.ok().body(obj);
     }
