@@ -1,5 +1,6 @@
 package com.learning.books_api.entities.resources;
 
+import com.learning.books_api.dto.AuthorDTO;
 import com.learning.books_api.dto.PageResponse;
 import com.learning.books_api.entities.Author;
 import com.learning.books_api.services.AuthorService;
@@ -35,15 +36,15 @@ public class AuthorResource {
     }
 
     @PostMapping
-    public ResponseEntity<Author> insert(@Valid @RequestBody Author obj) {
-        obj = service.insert(obj);
+    public ResponseEntity<Author> insert(@Valid @RequestBody AuthorDTO dto) {
+        Author obj = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Author> update(@PathVariable Long id, @Valid @RequestBody Author obj) {
-        obj = service.update(id, obj);
+    public ResponseEntity<Author> update(@PathVariable Long id, @Valid @RequestBody AuthorDTO dto) {
+        Author obj = service.update(id, dto);
         return ResponseEntity.ok().body(obj);
     }
 

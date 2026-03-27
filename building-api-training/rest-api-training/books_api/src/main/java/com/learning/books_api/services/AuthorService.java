@@ -1,5 +1,6 @@
 package com.learning.books_api.services;
 
+import com.learning.books_api.dto.AuthorDTO;
 import com.learning.books_api.entities.Author;
 import com.learning.books_api.repositories.AuthorRepository;
 import com.learning.books_api.services.exceptions.DatabaseException;
@@ -29,17 +30,18 @@ public class AuthorService {
         return repository.findAll(pageable);
     }
 
-    public Author insert(Author author) {
-        return repository.save(author);
+    public Author insert(AuthorDTO dto) {
+        Author obj = new Author();
+        updateAuthor(obj, dto);
+        return repository.save(obj);
     }
 
-    public Author update(Long id, Author obj) {
+    public Author update(Long id, AuthorDTO dto) {
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("Author with id " + id + "not found");
         }
         Author entity = repository.getReferenceById(id);
-        entity.setFirstName(obj.getFirstName());
-        entity.setLastName(obj.getLastName());
+        updateAuthor(entity, dto);
         return repository.save(entity);
     }
 
@@ -53,5 +55,10 @@ public class AuthorService {
             throw new DatabaseException(e.getMessage());
         }
 
+    }
+
+    private void updateAuthor(Author entity, AuthorDTO dto) {
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
     }
 }
