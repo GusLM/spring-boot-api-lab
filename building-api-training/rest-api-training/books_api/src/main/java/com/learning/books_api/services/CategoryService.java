@@ -1,5 +1,6 @@
 package com.learning.books_api.services;
 
+import com.learning.books_api.dto.CategoryDTO;
 import com.learning.books_api.entities.Category;
 import com.learning.books_api.repositories.CategoryRepository;
 import com.learning.books_api.services.exceptions.DatabaseException;
@@ -30,17 +31,19 @@ public class CategoryService {
         return repository.findAll(pageable);
     }
 
-    public Category insert(Category category) {
-        return repository.save(category);
+    public Category insert(CategoryDTO dto) {
+        Category obj = new Category();
+        obj.setName(dto.getName());
+        return repository.save(obj);
     }
 
-    public Category update(Long id, Category obj) {
+    public Category update(Long id, CategoryDTO dto) {
         if(!repository.existsById(id)) {
             throw new ResourceNotFoundException("Category with id " + id + " not found");
         }
-        Category category = repository.getReferenceById(id);
-        category.setName(obj.getName());
-        return repository.save(category);
+        Category entity = repository.getReferenceById(id);
+        entity.setName(dto.getName());
+        return repository.save(entity);
     }
 
     public void delete(Long id) {
