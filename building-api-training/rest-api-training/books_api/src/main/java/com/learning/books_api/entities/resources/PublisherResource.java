@@ -1,6 +1,7 @@
 package com.learning.books_api.entities.resources;
 
 import com.learning.books_api.dto.PageResponse;
+import com.learning.books_api.dto.PublisherDTO;
 import com.learning.books_api.entities.Publisher;
 import com.learning.books_api.services.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +35,15 @@ public class PublisherResource {
     }
 
     @PostMapping
-    public ResponseEntity<Publisher> insert(@RequestBody Publisher obj) {
-        obj = service.insert(obj);
+    public ResponseEntity<Publisher> insert(@RequestBody PublisherDTO dto) {
+        Publisher obj = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Publisher> update(@PathVariable Long id, @RequestBody Publisher obj) {
-        service.update(id, obj);
+    public ResponseEntity<Publisher> update(@PathVariable Long id, @RequestBody PublisherDTO dto) {
+        Publisher obj = service.update(id, dto);
         return ResponseEntity.ok().body(obj);
     }
 

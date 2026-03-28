@@ -1,5 +1,6 @@
 package com.learning.books_api.services;
 
+import com.learning.books_api.dto.PublisherDTO;
 import com.learning.books_api.entities.Publisher;
 import com.learning.books_api.repositories.PublisherRepository;
 import com.learning.books_api.services.exceptions.DatabaseException;
@@ -29,16 +30,18 @@ public class PublisherService {
         return repository.findAll(pageable);
     }
 
-    public Publisher insert(Publisher publisher) {
-        return repository.save(publisher);
+    public Publisher insert(PublisherDTO dto) {
+        Publisher obj = new Publisher();
+        obj.setName(dto.getName());
+        return repository.save(obj);
     }
 
-    public Publisher update(Long id, Publisher obj) {
+    public Publisher update(Long id, PublisherDTO dto) {
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("Publisher with id " + id + "not found");
         }
         Publisher entity = repository.getReferenceById(id);
-        entity.setName(obj.getName());
+        entity.setName(dto.getName());
         return repository.save(entity);
     }
 
