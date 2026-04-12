@@ -1,7 +1,10 @@
 package com.gustavosantos.ecommerce_api.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -13,41 +16,51 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "public_id", unique = true)
-    private UUID uuid;
+    @Column(name = "public_id", unique = true, nullable = false, updatable = false)
+    @JdbcTypeCode(SqlTypes.BINARY)
+    private UUID publicId;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name", nullable = false, length = 45)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name", nullable = false, length = 45)
     private String lastName;
 
-    @Column(name = "tax_id", nullable = false)
+    @Column(name = "tax_id", nullable = false, length = 11)
     private String taxId;
 
-    @Column(name = "phone", nullable = false)
-    private String phone;
-
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, length = 150)
     private String email;
 
-    @Column(name = "street", nullable = false)
+    @Column(name = "phone", nullable = false, length = 13)
+    private String phone;
+
+    @Column(name = "street", nullable = false, length = 100)
     private String street;
 
-    @Column(name = "number", nullable = false)
+    @Column(name = "number", nullable = false, length = 10)
     private String number;
 
-    @Column(name = "neighborhood", nullable = false)
+    @Column(name = "neighborhood", nullable = false, length = 50)
     private String neighborhood;
 
-    @Column(name = "city", nullable = false)
+    @Column(name = "city", nullable = false, length = 50)
     private String city;
 
-    @Column(name = "state", nullable = false)
+    @Column(name = "state", nullable = false, length = 45)
     private String state;
 
-    @Column(name = "postal_code", nullable = false)
+    @Column(name = "postal_code", nullable = false, length = 8)
     private String postalCode;
+
+    @Column(name = "country", nullable = false, length = 60)
+    private String country;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     public Customer() {
     }
@@ -63,7 +76,9 @@ public class Customer {
             String neighborhood,
             String city,
             String state,
-            String postalCode
+            String postalCode,
+            String country,
+            Date createdAt
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -76,14 +91,16 @@ public class Customer {
         this.city = city;
         this.state = state;
         this.postalCode = postalCode;
+        this.country = country;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
         return id;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getPublicId() {
+        return publicId;
     }
 
     public String getFirstName() {
@@ -174,15 +191,46 @@ public class Customer {
         this.postalCode = postalCode;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @PrePersist
+    public void generateUuid() {
+        if (publicId == null) {
+            publicId = UUID.randomUUID();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return Objects.equals(id, customer.id) && Objects.equals(uuid, customer.uuid);
+        return Objects.equals(publicId, customer.publicId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid);
+        return Objects.hashCode(publicId);
     }
 }
