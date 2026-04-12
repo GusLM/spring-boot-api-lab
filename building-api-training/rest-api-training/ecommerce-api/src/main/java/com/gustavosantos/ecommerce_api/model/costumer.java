@@ -1,65 +1,58 @@
 package com.gustavosantos.ecommerce_api.model;
 
-import lombok.*;
+import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
-@NoArgsConstructor
-@EqualsAndHashCode(of = {"id", "uuid"})
-@ToString(exclude = {"id", "uuid"})
-public class costumer {
+@Entity
+@Table(name = "customers")
+public class customer {
 
-    @Getter(AccessLevel.PUBLIC)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter(AccessLevel.PUBLIC)
+    @Column(name = "public_id", unique = true)
     private UUID uuid;
 
-    @Getter
-    @Setter
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Getter
-    @Setter
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Getter
-    @Setter
+    @Column(name = "tax_id", nullable = false)
     private String taxId;
 
-    @Getter
-    @Setter
+    @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Getter
-    @Setter
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Getter
-    @Setter
+    @Column(name = "street", nullable = false)
     private String street;
 
-    @Getter
-    @Setter
+    @Column(name = "number", nullable = false)
     private String number;
 
-    @Getter
-    @Setter
+    @Column(name = "neighborhood", nullable = false)
     private String neighborhood;
 
-    @Getter
-    @Setter
+    @Column(name = "city", nullable = false)
     private String city;
 
-    @Getter
-    @Setter
+    @Column(name = "state", nullable = false)
     private String state;
 
-    @Getter
-    @Setter
+    @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
-    public costumer(
+    public customer() {
+    }
+
+    public customer(
             String firstName,
             String lastName,
             String taxId,
@@ -83,5 +76,113 @@ public class costumer {
         this.city = city;
         this.state = state;
         this.postalCode = postalCode;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getTaxId() {
+        return taxId;
+    }
+
+    public void setTaxId(String taxId) {
+        this.taxId = taxId;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getNeighborhood() {
+        return neighborhood;
+    }
+
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        costumer costumer = (costumer) o;
+        return Objects.equals(id, costumer.id) && Objects.equals(uuid, costumer.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, uuid);
     }
 }
