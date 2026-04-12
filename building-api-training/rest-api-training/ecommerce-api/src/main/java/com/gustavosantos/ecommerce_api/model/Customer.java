@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "customers")
-public class customer {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,10 +49,10 @@ public class customer {
     @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
-    public customer() {
+    public Customer() {
     }
 
-    public customer(
+    public Customer(
             String firstName,
             String lastName,
             String taxId,
@@ -177,8 +177,8 @@ public class customer {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        costumer costumer = (costumer) o;
-        return Objects.equals(id, costumer.id) && Objects.equals(uuid, costumer.uuid);
+        Customer customer = (Customer) o;
+        return Objects.equals(id, customer.id) && Objects.equals(uuid, customer.uuid);
     }
 
     @Override
