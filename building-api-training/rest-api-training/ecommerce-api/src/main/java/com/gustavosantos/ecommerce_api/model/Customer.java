@@ -26,10 +26,10 @@ public class Customer {
     @Column(name = "last_name", nullable = false, length = 45)
     private String lastName;
 
-    @Column(name = "tax_id", nullable = false, length = 11)
+    @Column(name = "tax_id", nullable = false, length = 11, unique = true)
     private String taxId;
 
-    @Column(name = "email", nullable = false, length = 150)
+    @Column(name = "email", nullable = false, length = 150, unique = true)
     private String email;
 
     @Column(name = "phone", nullable = false, length = 13)
@@ -50,7 +50,7 @@ public class Customer {
     @Column(name = "state", nullable = false, length = 45)
     private String state;
 
-    @Column(name = "postal_code", nullable = false, length = 8)
+    @Column(name = "postal_code", nullable = false, length = 20)
     private String postalCode;
 
     @Column(name = "country", nullable = false, length = 60)

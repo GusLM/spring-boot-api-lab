@@ -34,7 +34,7 @@ public class ResourceExceptionHandler {
     }
 
     @ExceptionHandler(DatabaseException.class)
-    public ResponseEntity<StandardError> databae(DatabaseException e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
 
         String error = "Database error";
 
