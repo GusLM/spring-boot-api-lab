@@ -10,10 +10,10 @@ spring:
     password: ${DB_PASSWORD}
 
 # H2 CLIENT
-  h2:
-    console:
-      enabled: ${H2_CONSOLE_ENABLED}
-      path: ${H2_CONSOLE_PATH}
+#  h2:
+#    console:
+#      enabled: ${H2_CONSOLE_ENABLED}
+#      path: ${H2_CONSOLE_PATH}
 
 # JPA, SQL
   jpa:
@@ -23,7 +23,7 @@ spring:
       hibernate:
         format_sql: ${JPA_FORMAT_SQL}
 
-# SERVER
-server:
-  address: ${SERVER_ADDRESS}
-  port: ${SERVER_PORT}
+## SERVER
+#server:
+#  address: ${SERVER_ADDRESS}
+#  port: ${SERVER_PORT}
