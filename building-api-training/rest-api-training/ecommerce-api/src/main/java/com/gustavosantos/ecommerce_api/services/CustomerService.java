@@ -4,10 +4,10 @@ import com.gustavosantos.ecommerce_api.dto.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.model.Customer;
 import com.gustavosantos.ecommerce_api.repositories.CustomerRepository;
 import com.gustavosantos.ecommerce_api.services.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -18,14 +18,13 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public List<CustomerListDTO> findByFirstNameOrLastName(String name) {
-        List<Customer> customers = customerRepository.findByFirstNameOrLastName(name);
-        if (customers == null || customers.isEmpty()) {
+    public Page<CustomerListDTO> findByFirstNameOrLastName(String name, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Customer> customerPage = customerRepository.findByFirstNameOrLastName(name, pageable);
+        if (customerPage.isEmpty()) {
             throw new ResourceNotFoundException("Customer not found");
         }
-        return customers.stream()
-                .map(this::toListDTO)
-                .collect(Collectors.toList());
+        return customerPage.map(this::toListDTO);
     }
 
     private CustomerListDTO toListDTO(Customer customer) {
