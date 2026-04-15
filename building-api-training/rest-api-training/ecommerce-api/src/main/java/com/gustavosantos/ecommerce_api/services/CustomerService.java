@@ -30,7 +30,7 @@ public class CustomerService {
     public Page<CustomerListDTO> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Customer> customerPage = customerRepository.findAll(pageable);
-        return customerPage.map(customer -> toListDTO(customer));
+        return customerPage.map(this::toListDTO);
     }
 
     private CustomerListDTO toListDTO(Customer customer) {
