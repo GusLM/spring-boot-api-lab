@@ -35,7 +35,7 @@ public class CustomerController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
-        Page<CustomerListDTO> customerListDTO = customerService.findAll(page, size);
-        return ResponseEntity.ok().body(PageResponse.from(customerListDTO));
+        Page<CustomerListDTO> customerPage = customerService.findAll(page, size);
+        return ResponseEntity.ok().body(PageResponse.from(customerPage));
     }
 }
