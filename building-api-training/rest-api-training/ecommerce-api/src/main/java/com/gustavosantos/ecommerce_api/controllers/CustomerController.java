@@ -29,4 +29,13 @@ public class CustomerController {
         Page<CustomerListDTO> customerListDTO = customerService.findByFirstNameOrLastName(name, page, size);
         return ResponseEntity.ok().body(PageResponse.from(customerListDTO));
     }
+
+    @GetMapping({"/findAll"})
+    public ResponseEntity<PageResponse<CustomerListDTO>> findAll(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Page<CustomerListDTO> customerListDTO = customerService.findAll(page, size);
+        return ResponseEntity.ok().body(PageResponse.from(customerListDTO));
+    }
 }

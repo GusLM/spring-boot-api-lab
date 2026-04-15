@@ -27,6 +27,12 @@ public class CustomerService {
         return customerPage.map(this::toListDTO);
     }
 
+    public Page<CustomerListDTO> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Customer> customerPage = customerRepository.findAll(pageable);
+        return customerPage.map(customer -> toListDTO(customer));
+    }
+
     private CustomerListDTO toListDTO(Customer customer) {
         CustomerListDTO customerListDTO = new CustomerListDTO();
         customerListDTO.setPublicId(customer.getPublicId());
