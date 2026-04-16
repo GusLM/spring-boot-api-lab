@@ -1,0 +1,9 @@
+{
+  "name": "consumo-api-spring",
+  "version": "1.0.0",
+  "description": "Interface web inspirada no Spring para consumo de API de customers",
+  "scripts": {
+    "start": "echo \"Este projeto deve ser aberto via index.html no navegador.\""
+  },
+  "private": true
+}
