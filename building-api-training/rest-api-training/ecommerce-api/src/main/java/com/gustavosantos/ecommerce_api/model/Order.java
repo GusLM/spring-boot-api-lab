@@ -4,6 +4,8 @@ import com.gustavosantos.ecommerce_api.model.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Date;
 import java.util.Objects;
@@ -18,7 +20,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "public_id", nullable = false, unique = true, updatable = false)
+    @Column(name = "public_id", unique = true, nullable = false, updatable = false)
+    @JdbcTypeCode(SqlTypes.BINARY)
     private UUID publicId;
 
     @Setter
