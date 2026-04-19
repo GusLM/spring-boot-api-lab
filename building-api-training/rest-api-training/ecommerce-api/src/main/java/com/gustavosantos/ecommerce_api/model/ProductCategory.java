@@ -44,11 +44,11 @@ public class ProductCategory {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ProductCategory that = (ProductCategory) o;
-        return Objects.equals(id, that.id) && Objects.equals(publicId, that.publicId);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, publicId);
+        return Objects.hashCode(id);
     }
 }

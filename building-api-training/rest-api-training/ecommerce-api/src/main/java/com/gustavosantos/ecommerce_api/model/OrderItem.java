@@ -62,11 +62,11 @@ public class OrderItem {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         OrderItem orderItem = (OrderItem) o;
-        return Objects.equals(id, orderItem.id) && Objects.equals(publicId, orderItem.publicId);
+        return Objects.equals(id, orderItem.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, publicId);
+        return Objects.hashCode(id);
     }
 }

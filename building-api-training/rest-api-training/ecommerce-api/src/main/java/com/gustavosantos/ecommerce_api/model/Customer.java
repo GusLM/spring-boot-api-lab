@@ -226,11 +226,11 @@ public class Customer {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return Objects.equals(publicId, customer.publicId);
+        return Objects.equals(id, customer.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(publicId);
+        return Objects.hashCode(id);
     }
 }

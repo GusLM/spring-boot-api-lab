@@ -3,6 +3,8 @@ package com.gustavosantos.ecommerce_api.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -17,6 +19,7 @@ public class ProductStock {
     private Long id;
 
     @Column(name = "public_id", nullable = false, unique = true, updatable = false)
+    @JdbcTypeCode(SqlTypes.BINARY)
     private UUID publicId;
 
     @Setter
@@ -47,11 +50,11 @@ public class ProductStock {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ProductStock that = (ProductStock) o;
-        return Objects.equals(id, that.id) && Objects.equals(publicId, that.publicId);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, publicId);
+        return Objects.hashCode(id);
     }
 }
