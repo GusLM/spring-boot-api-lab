@@ -17,16 +17,17 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public Page<CustomerListDTO> findByFirstNameOrLastName(String name, int page, int size) {
+    public Page<CustomerListDTO> findCustomers(String name, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
+
+        if (name == null || name.isBlank()) {
+            return customerRepository.findAllProjected(pageable);
+        }
+
         Page<CustomerListDTO> customerPage = customerRepository.findByFirstNameOrLastName(name, pageable);
         if (customerPage.isEmpty()) {
             throw new ResourceNotFoundException("Customer not found");
         }
         return customerPage;
-    }
-    public Page<CustomerListDTO> findAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return customerRepository.findAllProjected(pageable);
     }
 }

@@ -18,22 +18,13 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping
-    public ResponseEntity<PageResponse<CustomerListDTO>> findByFirstOrLastName(
-            @RequestParam("name") String name,
+    @GetMapping()
+    public ResponseEntity<PageResponse<CustomerListDTO>> findCustomers(
+            @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
-        Page<CustomerListDTO> customerListDTO = customerService.findByFirstNameOrLastName(name, page, size);
+        Page<CustomerListDTO> customerListDTO = customerService.findCustomers(name, page, size);
         return ResponseEntity.ok().body(PageResponse.from(customerListDTO));
-    }
-
-    @GetMapping({"/findAll"})
-    public ResponseEntity<PageResponse<CustomerListDTO>> findAll(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        Page<CustomerListDTO> customerPage = customerService.findAll(page, size);
-        return ResponseEntity.ok().body(PageResponse.from(customerPage));
     }
 }
