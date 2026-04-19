@@ -50,6 +50,13 @@ public class Product {
         this.currentPrice = currentPrice;
     }
 
+    @PrePersist
+    public void generateUuid() {
+        if (publicId == null) {
+            publicId = UUID.randomUUID();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

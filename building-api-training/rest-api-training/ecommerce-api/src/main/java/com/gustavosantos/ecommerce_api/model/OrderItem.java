@@ -51,6 +51,13 @@ public class OrderItem {
         this.value = value;
     }
 
+    @PrePersist
+    public void generateUuid() {
+        if (publicId == null) {
+            publicId = UUID.randomUUID();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

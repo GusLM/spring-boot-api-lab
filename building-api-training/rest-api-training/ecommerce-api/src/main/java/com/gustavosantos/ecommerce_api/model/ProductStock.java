@@ -22,7 +22,7 @@ public class ProductStock {
     @Setter
     @OneToOne
     @JoinColumn(name = "product_id", nullable = false, unique = true)
-    private Product productId;
+    private Product product;
 
     @Setter
     @Column(nullable = false)
@@ -31,9 +31,16 @@ public class ProductStock {
     public ProductStock() {
     }
 
-    public ProductStock(Product productId, Integer quantity) {
-        this.productId = productId;
+    public ProductStock(Product product, Integer quantity) {
+        this.product = product;
         this.quantity = quantity;
+    }
+
+    @PrePersist
+    public void generateUuid() {
+        if (publicId == null) {
+            publicId = UUID.randomUUID();
+        }
     }
 
     @Override

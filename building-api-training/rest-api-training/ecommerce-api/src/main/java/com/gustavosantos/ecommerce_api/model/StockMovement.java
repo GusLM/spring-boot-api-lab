@@ -21,7 +21,7 @@ public class StockMovement {
     private ProductStock productStock;
 
     @ManyToOne
-    @JoinColumn(name = "order_item_id", nullable = false)
+    @JoinColumn(name = "order_item_id", nullable = true)
     private OrderItem orderItem;
 
     @Enumerated(EnumType.STRING)
