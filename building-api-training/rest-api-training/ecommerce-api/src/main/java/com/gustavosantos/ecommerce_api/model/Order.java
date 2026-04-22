@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -35,15 +35,15 @@ public class Order {
     private OrderStatus status;
 
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    private Instant createdAt;
 
     @Column(name = "updated_at", nullable = true)
-    private Date updatedAt;
+    private Instant updatedAt;
 
     public Order() {
     }
 
-    public Order(Customer customer, OrderStatus status, Date createdAt) {
+    public Order(Customer customer, OrderStatus status, Instant createdAt) {
         this.customer = customer;
         this.status = status;
         this.createdAt = createdAt;

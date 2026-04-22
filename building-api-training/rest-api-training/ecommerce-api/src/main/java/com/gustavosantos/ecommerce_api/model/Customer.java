@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -57,10 +57,10 @@ public class Customer {
     private String country;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private Instant createdAt;
 
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Instant updatedAt;
 
     public Customer() {
     }
@@ -77,8 +77,7 @@ public class Customer {
             String city,
             String state,
             String postalCode,
-            String country,
-            Date createdAt
+            String country
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -92,7 +91,7 @@ public class Customer {
         this.state = state;
         this.postalCode = postalCode;
         this.country = country;
-        this.createdAt = createdAt;
+        this.createdAt = Instant.now();
     }
 
     public Long getId() {
@@ -199,20 +198,20 @@ public class Customer {
         this.country = country;
     }
 
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedAt() {
+        this.createdAt = Instant.now();
     }
 
-    public Date getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedAt() {
+        this.updatedAt = Instant.now();
     }
 
     @PrePersist

@@ -4,7 +4,7 @@ import com.gustavosantos.ecommerce_api.model.enums.StockMovementType;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.Objects;
 
 @Getter
@@ -29,7 +29,7 @@ public class StockMovement {
     private StockMovementType movementType;
 
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    private Instant createdAt;
 
     public StockMovement() {
     }
@@ -38,7 +38,7 @@ public class StockMovement {
         this.productStock = productStock;
         this.orderItem = orderItem;
         this.movementType = movementType;
-        this.createdAt = new Date();
+        this.createdAt = Instant.now();
     }
 
     @Override
