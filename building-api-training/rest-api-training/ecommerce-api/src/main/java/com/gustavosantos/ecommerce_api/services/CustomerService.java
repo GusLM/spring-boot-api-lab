@@ -24,10 +24,6 @@ public class CustomerService {
             return customerRepository.findAllProjected(pageable);
         }
 
-        Page<CustomerListDTO> customerPage = customerRepository.findByFirstNameOrLastName(name, pageable);
-        if (customerPage.isEmpty()) {
-            throw new ResourceNotFoundException("Customer not found");
-        }
-        return customerPage;
+        return customerRepository.findByFirstNameOrLastName(name, pageable);
     }
 }
