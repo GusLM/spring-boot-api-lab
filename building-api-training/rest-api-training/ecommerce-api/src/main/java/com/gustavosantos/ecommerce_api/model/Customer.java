@@ -218,6 +218,16 @@ public class Customer {
         this.updatedAt = Instant.now();
     }
 
+    public void addOrder(Order order) {
+        orders.add(order);
+        order.setCustomer(this);
+    }
+
+    public void removeOrder(Order order) {
+        orders.remove(order);
+        order.setCustomer(null);
+    }
+
     @PrePersist
     public void generateUuid() {
         if (publicId == null) {

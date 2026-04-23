@@ -43,6 +43,14 @@ public class ProductStock {
         this.quantity = quantity;
     }
 
+    public void addStockMovement(StockMovement stockMovement) {
+        movements.add(stockMovement);
+    }
+
+    public void removeStockMovement(StockMovement stockMovement) {
+        movements.remove(stockMovement);
+    }
+
     @PrePersist
     public void generateUuid() {
         if (publicId == null) {

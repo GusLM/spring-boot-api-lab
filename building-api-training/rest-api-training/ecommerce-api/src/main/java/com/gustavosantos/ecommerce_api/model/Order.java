@@ -53,6 +53,16 @@ public class Order {
         this.createdAt = createdAt;
     }
 
+    public void addOrderItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
+    }
+
+    public void removeOrderItem(OrderItem item) {
+        items.remove(item);
+        item.setOrder(null);
+    }
+
     @PrePersist
     public void generateUuid() {
         if (publicId == null) {

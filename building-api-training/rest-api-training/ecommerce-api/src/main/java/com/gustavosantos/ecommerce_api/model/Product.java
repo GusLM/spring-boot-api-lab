@@ -57,6 +57,16 @@ public class Product {
         this.currentPrice = currentPrice;
     }
 
+    public void addOrderItem(OrderItem item) {
+        orderItems.add(item);
+        item.setProduct(this);
+    }
+
+    public void removeOrderItem(OrderItem item) {
+        orderItems.remove(item);
+        item.setProduct(null);
+    }
+
     @PrePersist
     public void generateUuid() {
         if (publicId == null) {

@@ -37,6 +37,16 @@ public class ProductCategory {
         this.name = name;
     }
 
+    public void addProduct(Product product) {
+        products.add(product);
+        product.setProductCategory(this);
+    }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+        product.setProductCategory(null);
+    }
+
     @PrePersist
     public void generateUuid() {
         if (publicId == null) {
