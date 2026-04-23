@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -25,6 +26,9 @@ public class ProductCategory {
     @Column(name = "public_id", nullable = false, unique = true, updatable = false)
     @JdbcTypeCode(SqlTypes.BINARY)
     private UUID publicId;
+
+    @OneToMany(mappedBy = "productCategory")
+    private List<Product> products;
 
     public ProductCategory() {
     }

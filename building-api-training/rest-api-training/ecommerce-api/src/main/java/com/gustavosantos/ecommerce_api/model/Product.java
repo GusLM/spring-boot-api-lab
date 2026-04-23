@@ -7,6 +7,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -39,6 +40,12 @@ public class Product {
     @Setter
     @Column(name = "current_price", nullable = false, precision = 8, scale = 2)
     private BigDecimal currentPrice;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItems;
+
+    @OneToOne(mappedBy = "product")
+    private ProductStock productStock;
 
     public Product() {
     }

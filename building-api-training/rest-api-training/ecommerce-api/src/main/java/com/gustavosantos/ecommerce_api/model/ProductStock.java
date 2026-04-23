@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,6 +31,9 @@ public class ProductStock {
     @Setter
     @Column(nullable = false)
     private Integer quantity;
+
+    @OneToMany(mappedBy = "productStock", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StockMovement> movements;
 
     public ProductStock() {
     }
