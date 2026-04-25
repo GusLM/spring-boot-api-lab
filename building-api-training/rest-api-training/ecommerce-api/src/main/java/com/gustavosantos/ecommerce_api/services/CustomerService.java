@@ -1,8 +1,7 @@
 package com.gustavosantos.ecommerce_api.services;
 
-import com.gustavosantos.ecommerce_api.dto.CustomerListDTO;
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.repositories.CustomerRepository;
-import com.gustavosantos.ecommerce_api.services.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

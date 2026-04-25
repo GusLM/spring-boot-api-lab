@@ -31,14 +31,19 @@ public class StockMovement {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
     public StockMovement() {
     }
 
-    public StockMovement(ProductStock productStock, OrderItem orderItem, StockMovementType movementType) {
+    public StockMovement(ProductStock productStock, OrderItem orderItem, StockMovementType movementType, Integer quantity) {
         this.productStock = productStock;
         this.orderItem = orderItem;
         this.movementType = movementType;
         this.createdAt = Instant.now();
+        this.quantity = quantity;
+
     }
 
     @Override

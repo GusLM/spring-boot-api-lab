@@ -1,4 +1,4 @@
-package com.gustavosantos.ecommerce_api.dto;
+package com.gustavosantos.ecommerce_api.dto.products.categories;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +11,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerListDTO {
+public class ProductCategoryListDTO {
 
     private UUID publicId;
-    private String firstName;
-    private String lastName;
-    private String email;
+    private String name;
 }

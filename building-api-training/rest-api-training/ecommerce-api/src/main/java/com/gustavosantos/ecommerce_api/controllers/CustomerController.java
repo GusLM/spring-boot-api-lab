@@ -1,6 +1,6 @@
 package com.gustavosantos.ecommerce_api.controllers;
 
-import com.gustavosantos.ecommerce_api.dto.CustomerListDTO;
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.dto.PageResponse;
 import com.gustavosantos.ecommerce_api.services.CustomerService;
 import org.springframework.data.domain.Page;
