@@ -16,5 +16,4 @@ public class CustomerListDTO {
     private UUID publicId;
     private String firstName;
     private String lastName;
-    private String email;
 }

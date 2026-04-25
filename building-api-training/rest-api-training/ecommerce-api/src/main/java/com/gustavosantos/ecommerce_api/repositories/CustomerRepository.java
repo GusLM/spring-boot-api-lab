@@ -12,11 +12,10 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("""
-            SELECT new com.gustavosantos.ecommerce_api.dto.CustomerListDTO(
+            SELECT new com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO(
                 c.publicId,
                 c.firstName,
-                c.lastName,
-                c.email
+                c.lastName
             )
             FROM Customer c
             WHERE c.firstName LIKE %?1%
@@ -25,11 +24,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Page<CustomerListDTO> findByFirstNameOrLastName(String name, Pageable pageable);
 
     @Query("""
-            SELECT new com.gustavosantos.ecommerce_api.dto.CustomerListDTO(
+            SELECT new com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO(
                 c.publicId,
                 c.firstName,
-                c.lastName,
-                c.email
+                c.lastName
             )
             FROM Customer c
             """)
