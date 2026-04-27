@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -27,6 +26,4 @@ public class CustomerDetailDTO {
     private String state;
     private String postalCode;
     private String country;
-    private Instant createdAt;
-    private Instant updatedAt;
 }

@@ -1,5 +1,6 @@
 package com.gustavosantos.ecommerce_api.controllers;
 
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.dto.PageResponse;
 import com.gustavosantos.ecommerce_api.services.CustomerService;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+
+import java.util.UUID;
 
 @Validated
 @RestController
@@ -38,5 +41,11 @@ public class CustomerController {
     ) {
         Page<CustomerListDTO> customerListDTO = customerService.findCustomers(name, page, size);
         return ResponseEntity.ok().body(PageResponse.from(customerListDTO));
+    }
+
+    @GetMapping("/{publicId}")
+    public ResponseEntity<CustomerDetailDTO> findCustomerDetail(@PathVariable UUID publicId) {
+        CustomerDetailDTO obj = customerService.findCustomerDetail(publicId);
+        return ResponseEntity.ok().body(obj);
     }
 }

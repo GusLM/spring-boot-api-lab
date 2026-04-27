@@ -1,11 +1,16 @@
 package com.gustavosantos.ecommerce_api.services;
 
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.repositories.CustomerRepository;
+import com.gustavosantos.ecommerce_api.services.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -25,4 +30,10 @@ public class CustomerService {
 
         return customerRepository.findByFirstNameOrLastName(name, pageable);
     }
+
+    public CustomerDetailDTO findCustomerDetail(UUID publicId) {
+        Optional<CustomerDetailDTO> obj = customerRepository.findByPublicId(publicId);
+        return obj.orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+    }
+
 }
