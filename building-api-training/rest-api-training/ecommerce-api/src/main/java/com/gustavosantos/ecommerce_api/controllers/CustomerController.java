@@ -21,7 +21,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 public class CustomerController {
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;

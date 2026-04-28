@@ -76,7 +76,7 @@ public class GlobalExceptionHandler {
                 Instant.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 "Validation error",
-                e.getBindingResult().getAllErrors().get(0).getDefaultMessage(),
+                e.getBindingResult().getAllErrors().getFirst().getDefaultMessage(),
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
