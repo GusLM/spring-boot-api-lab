@@ -35,9 +35,10 @@ public class CustomerService {
         return customerRepository.findByFirstNameOrLastName(name, pageable);
     }
 
-    public Customer findCustomerDetail(UUID publicId) {
-        Optional<Customer> obj = customerRepository.findByPublicId(publicId);
-        return obj.orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+    public CustomerDetailDTO findCustomerDetail(UUID publicId) {
+        Customer obj = customerRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        return customerMapper.toDetailDTO(obj);
     }
 
 }
