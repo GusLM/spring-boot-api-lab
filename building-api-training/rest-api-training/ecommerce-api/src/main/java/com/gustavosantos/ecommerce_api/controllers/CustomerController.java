@@ -3,7 +3,9 @@ package com.gustavosantos.ecommerce_api.controllers;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.dto.PageResponse;
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerUpdateDTO;
 import com.gustavosantos.ecommerce_api.services.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,5 +49,11 @@ public class CustomerController {
     public ResponseEntity<CustomerDetailDTO> findCustomerDetail(@PathVariable UUID publicId) {
         CustomerDetailDTO obj = customerService.findCustomerDetail(publicId);
         return ResponseEntity.ok().body(obj);
+    }
+
+    @PutMapping("/{publicId}")
+    public ResponseEntity<Void> updateCustomer(@PathVariable UUID publicId, @RequestBody @Valid CustomerUpdateDTO dto) {
+        customerService.updateCustomer(publicId, dto);
+        return ResponseEntity.noContent().build();
     }
 }

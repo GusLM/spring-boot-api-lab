@@ -1,6 +1,7 @@
 package com.gustavosantos.ecommerce_api.mappers.customers;
 
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerUpdateDTO;
 import com.gustavosantos.ecommerce_api.model.Customer;
 import org.springframework.stereotype.Component;
 
@@ -23,5 +24,19 @@ public class CustomerMapper {
                 customer.getPostalCode(),
                 customer.getCountry()
         );
+    }
+
+    public void updateEntity(Customer customer, CustomerUpdateDTO dto) {
+        customer.setFirstName(dto.getFirstName());
+        customer.setLastName(dto.getLastName());
+        customer.setEmail(dto.getEmail());
+        customer.setPhone(dto.getPhone());
+        customer.setStreet(dto.getStreet());
+        customer.setNumber(dto.getNumber());
+        customer.setNeighborhood(dto.getNeighborhood());
+        customer.setCity(dto.getCity());
+        customer.setState(dto.getState());
+        customer.setPostalCode(dto.getPostalCode());
+        customer.setCountry(dto.getCountry());
     }
 }

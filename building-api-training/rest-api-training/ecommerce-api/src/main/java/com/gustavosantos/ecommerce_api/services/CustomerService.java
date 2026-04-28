@@ -2,6 +2,7 @@ package com.gustavosantos.ecommerce_api.services;
 
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerUpdateDTO;
 import com.gustavosantos.ecommerce_api.mappers.customers.CustomerMapper;
 import com.gustavosantos.ecommerce_api.model.Customer;
 import com.gustavosantos.ecommerce_api.repositories.CustomerRepository;
@@ -39,6 +40,14 @@ public class CustomerService {
         Customer obj = customerRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
         return customerMapper.toDetailDTO(obj);
+    }
+
+    public void updateCustomer(UUID publicId, CustomerUpdateDTO dto) {
+        Customer obj = customerRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        customerMapper.updateEntity(obj, dto);
+        obj.setUpdatedAt();
+        customerRepository.save(obj);
     }
 
 }
