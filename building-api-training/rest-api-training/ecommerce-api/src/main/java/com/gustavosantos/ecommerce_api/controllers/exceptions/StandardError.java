@@ -1,4 +1,4 @@
-package com.gustavosantos.ecommerce_api.repositories.exceptions;
+package com.gustavosantos.ecommerce_api.controllers.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
