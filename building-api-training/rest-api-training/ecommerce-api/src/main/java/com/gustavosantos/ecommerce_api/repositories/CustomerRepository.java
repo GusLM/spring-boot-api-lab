@@ -37,24 +37,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             """)
     Page<CustomerListDTO> findAllProjected(Pageable pageable);
 
-    @Query("""
-            SELECT new com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO(
-                 c.publicId,
-                 c.firstName,
-                 c.lastName,
-                 c.taxId,
-                 c.email,
-                 c.phone,
-                 c.street,
-                 c.number,
-                 c.neighborhood,
-                 c.city,
-                 c.state,
-                 c.postalCode,
-                 c.country
-            )
-            FROM Customer c
-            WHERE c.publicId = :publicId
-            """)
-    Optional<CustomerDetailDTO> findByPublicId(UUID publicId);
+    @Query("SELECT c FROM Customer c WHERE c.publicId = :publicId")
+    Optional<Customer> findByPublicId(UUID publicId);
 }

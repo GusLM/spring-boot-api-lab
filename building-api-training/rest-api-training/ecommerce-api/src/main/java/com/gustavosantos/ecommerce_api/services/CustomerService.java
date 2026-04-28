@@ -2,6 +2,8 @@ package com.gustavosantos.ecommerce_api.services;
 
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
+import com.gustavosantos.ecommerce_api.mappers.customers.CustomerMapper;
+import com.gustavosantos.ecommerce_api.model.Customer;
 import com.gustavosantos.ecommerce_api.repositories.CustomerRepository;
 import com.gustavosantos.ecommerce_api.services.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
@@ -15,10 +17,12 @@ import java.util.UUID;
 @Service
 public class CustomerService {
 
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
     public Page<CustomerListDTO> findCustomers(String name, int page, int size) {
@@ -31,8 +35,8 @@ public class CustomerService {
         return customerRepository.findByFirstNameOrLastName(name, pageable);
     }
 
-    public CustomerDetailDTO findCustomerDetail(UUID publicId) {
-        Optional<CustomerDetailDTO> obj = customerRepository.findByPublicId(publicId);
+    public Customer findCustomerDetail(UUID publicId) {
+        Optional<Customer> obj = customerRepository.findByPublicId(publicId);
         return obj.orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
     }
 
