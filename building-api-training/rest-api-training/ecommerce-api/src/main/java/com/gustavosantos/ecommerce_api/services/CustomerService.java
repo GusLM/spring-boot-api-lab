@@ -49,4 +49,10 @@ public class CustomerService {
         customerRepository.save(obj);
     }
 
+    public void deleteCustomer(UUID publicId) {
+        Customer obj = customerRepository.findByPublicId(publicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        customerRepository.delete(obj);
+    }
+
 }
