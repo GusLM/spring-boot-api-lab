@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
                 Instant.now(),
                 HttpStatus.NOT_FOUND.value(),
                 "Resource not found",
-                e.getMessage(),
+                e.getMessage(), 
                 request.getRequestURI()
         );
 

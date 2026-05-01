@@ -1,5 +1,6 @@
 package com.gustavosantos.ecommerce_api.services;
 
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerCreateDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerUpdateDTO;
@@ -7,6 +8,7 @@ import com.gustavosantos.ecommerce_api.mappers.customers.CustomerMapper;
 import com.gustavosantos.ecommerce_api.model.Customer;
 import com.gustavosantos.ecommerce_api.repositories.CustomerRepository;
 import com.gustavosantos.ecommerce_api.services.exceptions.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,4 +57,11 @@ public class CustomerService {
         customerRepository.delete(obj);
     }
 
+    @Transactional
+    public CustomerDetailDTO insertCustomer(CustomerCreateDTO dto) {
+        Customer obj = customerMapper.toEntity(dto);
+        obj.setCreatedAt();
+        customerRepository.save(obj);
+        return customerMapper.toDetailDTO(obj);
+    }
 }

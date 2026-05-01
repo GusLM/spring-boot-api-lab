@@ -1,5 +1,6 @@
 package com.gustavosantos.ecommerce_api.controllers;
 
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerCreateDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.dto.PageResponse;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.UUID;
 
 @Validated
@@ -61,5 +64,17 @@ public class CustomerController {
     public ResponseEntity<Void> deleteCustomer(@PathVariable UUID publicId) {
         customerService.deleteCustomer(publicId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<CustomerDetailDTO> insertCustomer(@RequestBody CustomerCreateDTO dto) {
+        CustomerDetailDTO obj = customerService.insertCustomer(dto);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{publicId}")
+                .buildAndExpand(obj.getPublicId())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(obj);
     }
 }

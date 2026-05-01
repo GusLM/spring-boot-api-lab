@@ -1,5 +1,6 @@
 package com.gustavosantos.ecommerce_api.mappers.customers;
 
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerCreateDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerUpdateDTO;
 import com.gustavosantos.ecommerce_api.model.Customer;
@@ -38,5 +39,27 @@ public class CustomerMapper {
         customer.setState(dto.getState());
         customer.setPostalCode(dto.getPostalCode());
         customer.setCountry(dto.getCountry());
+    }
+
+    public Customer toEntity(CustomerCreateDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        Customer customer = new Customer();
+        customer.setFirstName(dto.getFirstName());
+        customer.setLastName(dto.getLastName());
+        customer.setTaxId(dto.getTaxId());
+        customer.setEmail(dto.getEmail());
+        customer.setPhone(dto.getPhone());
+        customer.setStreet(dto.getStreet());
+        customer.setNumber(dto.getNumber());
+        customer.setNeighborhood(dto.getNeighborhood());
+        customer.setCity(dto.getCity());
+        customer.setState(dto.getState());
+        customer.setPostalCode(dto.getPostalCode());
+        customer.setCountry(dto.getCountry());
+
+        return customer;
     }
 }
