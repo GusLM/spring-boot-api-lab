@@ -22,6 +22,7 @@ public class CustomerUpdateDTO {
     @Size(max = 45, message = "Last name must be up to 45 characters")
     private String lastName;
 
+    @NotBlank(message = "Email cannot be blank")
     @Email(message = "Invalid email format")
     @Size(max = 150, message = "Email must be up to 150 characters")
     private String email;

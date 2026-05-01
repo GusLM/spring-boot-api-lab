@@ -229,9 +229,13 @@ public class Customer {
     }
 
     @PrePersist
-    public void generateUuid() {
+    public void prePersist() {
         if (publicId == null) {
             publicId = UUID.randomUUID();
+        }
+
+        if (createdAt == null) {
+            createdAt = Instant.now();
         }
     }
 

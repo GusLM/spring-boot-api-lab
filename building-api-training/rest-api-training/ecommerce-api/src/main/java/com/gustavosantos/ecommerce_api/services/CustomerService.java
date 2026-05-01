@@ -7,12 +7,13 @@ import com.gustavosantos.ecommerce_api.dto.customers.CustomerUpdateDTO;
 import com.gustavosantos.ecommerce_api.mappers.customers.CustomerMapper;
 import com.gustavosantos.ecommerce_api.model.Customer;
 import com.gustavosantos.ecommerce_api.repositories.CustomerRepository;
+import com.gustavosantos.ecommerce_api.services.exceptions.DatabaseException;
 import com.gustavosantos.ecommerce_api.services.exceptions.ResourceNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -43,6 +44,7 @@ public class CustomerService {
         return customerMapper.toDetailDTO(obj);
     }
 
+    @Transactional
     public void updateCustomer(UUID publicId, CustomerUpdateDTO dto) {
         Customer obj = customerRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
@@ -51,6 +53,7 @@ public class CustomerService {
         customerRepository.save(obj);
     }
 
+    @Transactional
     public void deleteCustomer(UUID publicId) {
         Customer obj = customerRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
@@ -59,8 +62,15 @@ public class CustomerService {
 
     @Transactional
     public CustomerDetailDTO insertCustomer(CustomerCreateDTO dto) {
+        if (customerRepository.existsByTaxId(dto.getTaxId())) {
+            throw new DatabaseException("Tax ID already registered");
+        }
+
+        if (customerRepository.existsByEmail(dto.getEmail())) {
+            throw new DatabaseException("Email already registered");
+        }
+
         Customer obj = customerMapper.toEntity(dto);
-        obj.setCreatedAt();
         customerRepository.save(obj);
         return customerMapper.toDetailDTO(obj);
     }

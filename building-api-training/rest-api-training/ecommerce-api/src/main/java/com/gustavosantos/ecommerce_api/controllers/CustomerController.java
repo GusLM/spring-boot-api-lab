@@ -67,7 +67,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDetailDTO> insertCustomer(@RequestBody CustomerCreateDTO dto) {
+    public ResponseEntity<CustomerDetailDTO> insertCustomer(@Valid @RequestBody CustomerCreateDTO dto) {
         CustomerDetailDTO obj = customerService.insertCustomer(dto);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()

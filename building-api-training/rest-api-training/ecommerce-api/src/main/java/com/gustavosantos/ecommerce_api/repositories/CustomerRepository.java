@@ -39,4 +39,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT c FROM Customer c WHERE c.publicId = :publicId")
     Optional<Customer> findByPublicId(UUID publicId);
+
+    boolean existsByTaxId(String taxId);
+
+    boolean existsByEmail(String email);
 }

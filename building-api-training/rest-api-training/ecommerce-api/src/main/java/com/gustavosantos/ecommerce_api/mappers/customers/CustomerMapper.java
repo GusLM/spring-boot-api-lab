@@ -43,7 +43,7 @@ public class CustomerMapper {
 
     public Customer toEntity(CustomerCreateDTO dto) {
         if (dto == null) {
-            return null;
+            throw new IllegalArgumentException("CustomerCreateDTO cannot be null");
         }
 
         Customer customer = new Customer();

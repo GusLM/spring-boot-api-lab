@@ -28,6 +28,7 @@ public class CustomerCreateDTO {
     @Pattern(regexp = "^[0-9]{11}$", message = "Tax ID must contain only numbers")
     private String taxId;
 
+    @NotBlank(message = "Email cannot be blank")
     @Email(message = "Invalid email format")
     @Size(max = 150, message = "Email must be up to 150 characters")
     private String email;
