@@ -1,7 +1,8 @@
-package com.gustavosantos.ecommerce_api.mappers.customers;
+package com.gustavosantos.ecommerce_api.mappers;
 
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerCreateDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
+import com.gustavosantos.ecommerce_api.dto.customers.CustomerSummaryDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerUpdateDTO;
 import com.gustavosantos.ecommerce_api.model.Customer;
 import org.springframework.stereotype.Component;
@@ -61,5 +62,14 @@ public class CustomerMapper {
         customer.setCountry(dto.getCountry());
 
         return customer;
+    }
+
+    public CustomerSummaryDTO toSummaryDTO(Customer customer) {
+        return new CustomerSummaryDTO(
+                customer.getPublicId(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail()
+        );
     }
 }

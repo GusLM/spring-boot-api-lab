@@ -4,7 +4,7 @@ import com.gustavosantos.ecommerce_api.dto.customers.CustomerCreateDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerUpdateDTO;
-import com.gustavosantos.ecommerce_api.mappers.customers.CustomerMapper;
+import com.gustavosantos.ecommerce_api.mappers.CustomerMapper;
 import com.gustavosantos.ecommerce_api.model.Customer;
 import com.gustavosantos.ecommerce_api.repositories.CustomerRepository;
 import com.gustavosantos.ecommerce_api.services.exceptions.DatabaseException;

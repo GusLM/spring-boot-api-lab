@@ -50,7 +50,7 @@ public class Order {
     public Order(Customer customer, OrderStatus status, Instant createdAt) {
         this.customer = customer;
         this.status = status;
-        this.createdAt = createdAt;
+        this.createdAt = Instant.now();
     }
 
     public void addOrderItem(OrderItem item) {
@@ -67,6 +67,10 @@ public class Order {
     public void generateUuid() {
         if (publicId == null) {
             publicId = UUID.randomUUID();
+        }
+
+        if (createdAt == null) {
+            createdAt = Instant.now();
         }
     }
 
