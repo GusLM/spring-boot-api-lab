@@ -1,7 +1,6 @@
 package com.gustavosantos.ecommerce_api.repositories;
 
 import com.gustavosantos.ecommerce_api.dto.orders.OrderListDTO;
-import com.gustavosantos.ecommerce_api.model.Customer;
 import com.gustavosantos.ecommerce_api.model.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

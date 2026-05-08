@@ -2,7 +2,6 @@ package com.gustavosantos.ecommerce_api.mappers;
 
 import com.gustavosantos.ecommerce_api.dto.orders.OrderDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.orders.OrderItemDTO;
-import com.gustavosantos.ecommerce_api.dto.orders.OrderListDTO;
 import com.gustavosantos.ecommerce_api.dto.products.ProductSummaryDTO;
 import com.gustavosantos.ecommerce_api.model.Order;
 import com.gustavosantos.ecommerce_api.model.OrderItem;
@@ -10,9 +9,7 @@ import com.gustavosantos.ecommerce_api.model.Product;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class OrderMapper {
@@ -26,7 +23,7 @@ public class OrderMapper {
     /**
      * Converte uma entidade Order para um DTO de detalhes do pedido (OrderDetailDTO).
      */
-    public OrderDetailDTO toDetailDTO(Order order) {
+    public OrderDetailDTO toOrderDetailDTO(Order order) {
         List<OrderItemDTO> items = toOrderItemDTOList(order.getItems());
         BigDecimal total = calculateOrderTotal(items);
 
