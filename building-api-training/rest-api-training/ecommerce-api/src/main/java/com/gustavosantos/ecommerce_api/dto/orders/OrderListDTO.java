@@ -18,7 +18,7 @@ import java.util.UUID;
 public class OrderListDTO {
 
     private UUID publicId;
-    private CustomerSummaryDTO customer;
+    private UUID customerPublicId;
     private OrderStatus status;
     private BigDecimal total;
     private Instant createdAt;

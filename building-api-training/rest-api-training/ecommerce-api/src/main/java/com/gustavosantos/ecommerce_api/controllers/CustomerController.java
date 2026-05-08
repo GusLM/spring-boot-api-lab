@@ -5,6 +5,7 @@ import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.dto.PageResponse;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerUpdateDTO;
+import com.gustavosantos.ecommerce_api.dto.orders.OrderListDTO;
 import com.gustavosantos.ecommerce_api.services.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -76,5 +77,15 @@ public class CustomerController {
                 .toUri();
 
         return ResponseEntity.created(uri).body(obj);
+    }
+
+    @GetMapping("/{publicId}/orders")
+    public ResponseEntity<PageResponse<OrderListDTO>> findOrdersByCustomer(
+            @PathVariable UUID publicId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") @Max(value = 100, message = "Size must be less than or equal to 100") int size
+    ) {
+        Page<OrderListDTO> orderListDTO = customerService.findCustomerOrders(publicId, page, size);
+        return ResponseEntity.ok().body(PageResponse.from(orderListDTO));
     }
 }

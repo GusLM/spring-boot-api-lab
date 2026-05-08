@@ -1,6 +1,5 @@
 package com.gustavosantos.ecommerce_api.repositories;
 
-import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.model.Customer;
 import org.springframework.data.domain.Page;
@@ -39,6 +38,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT c FROM Customer c WHERE c.publicId = :publicId")
     Optional<Customer> findByPublicId(UUID publicId);
+
+    boolean existsByPublicId(UUID publicId);
 
     boolean existsByTaxId(String taxId);
 

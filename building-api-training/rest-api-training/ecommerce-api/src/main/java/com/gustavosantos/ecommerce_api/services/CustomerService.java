@@ -4,9 +4,12 @@ import com.gustavosantos.ecommerce_api.dto.customers.CustomerCreateDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerDetailDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerListDTO;
 import com.gustavosantos.ecommerce_api.dto.customers.CustomerUpdateDTO;
+import com.gustavosantos.ecommerce_api.dto.orders.OrderListDTO;
 import com.gustavosantos.ecommerce_api.mappers.CustomerMapper;
+import com.gustavosantos.ecommerce_api.mappers.OrderMapper;
 import com.gustavosantos.ecommerce_api.model.Customer;
 import com.gustavosantos.ecommerce_api.repositories.CustomerRepository;
+import com.gustavosantos.ecommerce_api.repositories.OrderRepository;
 import com.gustavosantos.ecommerce_api.services.exceptions.DatabaseException;
 import com.gustavosantos.ecommerce_api.services.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
@@ -22,10 +25,19 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+    private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
-    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+    public CustomerService(
+            CustomerRepository customerRepository,
+            CustomerMapper customerMapper,
+            OrderRepository orderRepository,
+            OrderMapper orderMapper
+    ) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+        this.orderRepository = orderRepository;
+        this.orderMapper = orderMapper;
     }
 
     public Page<CustomerListDTO> findCustomers(String name, int page, int size) {
@@ -73,5 +85,15 @@ public class CustomerService {
         Customer obj = customerMapper.toEntity(dto);
         customerRepository.save(obj);
         return customerMapper.toDetailDTO(obj);
+    }
+
+    public Page<OrderListDTO> findCustomerOrders(UUID publicId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        if (!customerRepository.existsByPublicId(publicId)) {
+            throw new ResourceNotFoundException("Customer not found");
+        }
+
+        return orderRepository.findByCustomer(publicId, pageable);
     }
 }
