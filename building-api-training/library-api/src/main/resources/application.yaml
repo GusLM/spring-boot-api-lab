@@ -1,3 +1,8 @@
 spring:
   application:
     name: library-api
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: ${DATABASE_DRIVER_CLASS_NAME}
