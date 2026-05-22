@@ -30,9 +30,8 @@ public class DatabaseConfiguration {
     /*
      * Configuração do HikariCP, implementação de pool de conexões usada pela aplicação.
      * Define as propriedades necessárias para estabelecer conexões com o banco de dados.
-     *
+     * https://github.com/brettwooldridge/hikaricp
      */
-
     @Bean
     public DataSource hikariDataSource(){
         // Cria a configuração do HikariCP, implementação de pool de conexões usada pela aplicação.
