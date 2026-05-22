@@ -23,9 +23,9 @@ public class BookGenre {
     @Column(name = "public_id", nullable = false, unique = true)
     private UUID publicId;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "genre", nullable = false)
-    @Setter
     private Genre genre;
 
     public BookGenre(Genre genre) {

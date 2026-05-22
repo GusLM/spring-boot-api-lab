@@ -3,6 +3,7 @@ package com.gustavosantos.library_api.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,15 +24,19 @@ public class Book {
     @Column(name = "public_id", nullable = false, unique = true)
     private UUID publicId;
 
+    @Setter
     @Column(name = "isbn", nullable = false, unique = true, length = 20)
     private String isbn;
 
+    @Setter
     @Column(name = "title", nullable = false, length = 200)
     private String title;
 
+    @Setter
     @Column(name = "publication_date", nullable = false)
     private LocalDate publicationDate;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id", nullable = false)
     private BookGenre genre;
