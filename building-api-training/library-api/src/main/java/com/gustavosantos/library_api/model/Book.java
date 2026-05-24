@@ -58,7 +58,9 @@ public class Book {
 
     @PrePersist
     private void prePersist() {
-        this.publicId = UUID.randomUUID();
+        if (publicId == null) {
+            publicId = UUID.randomUUID();
+        }
     }
 
     public void addAuthor(Author author) {
