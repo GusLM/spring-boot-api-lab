@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Table(name = "authors", schema = "public")
 @Getter
 @NoArgsConstructor
+@ToString
 public class Author {
 
     @Id
@@ -40,6 +42,7 @@ public class Author {
     @Column(nullable = false, length = 100)
     private String nationality;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "authors")
     private final List<Book> books = new ArrayList<>();
 

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Table(name = "books", schema = "public")
 @Getter
 @NoArgsConstructor
+@ToString
 public class Book {
 
     @Id
@@ -36,11 +38,13 @@ public class Book {
     @Column(name = "publication_date", nullable = false)
     private LocalDate publicationDate;
 
+    @ToString.Exclude
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id", nullable = false)
     private BookGenre genre;
 
+    @ToString.Exclude
     @ManyToMany
     @JoinTable(
             name = "books_authors",
