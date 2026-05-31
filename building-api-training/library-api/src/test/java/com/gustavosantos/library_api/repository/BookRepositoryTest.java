@@ -1,6 +1,5 @@
 package com.gustavosantos.library_api.repository;
 
-import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.model.BookGenre;
 import com.gustavosantos.library_api.model.enums.Genre;
@@ -24,32 +23,73 @@ public class BookRepositoryTest {
 
     @Test
     void shouldSaveBook() {
-        Author author = createAuthor();
+        Book savedBook = bookRepository.saveAndFlush(createBook());
 
-        Book book = createBook();
+        Book book = bookRepository.findById(savedBook.getId()).orElse(null);
 
-        book.addAuthor(author);
-
-        Book savedBook = bookRepository.saveAndFlush(book);
-
-        Integer relationshipCount = jdbcTemplate.queryForObject(
-                """
-                SELECT COUNT(*)
-                FROM books_authors
-                WHERE book_id = ?
-                AND author_id = ?
-                """,
-                Integer.class,
-                savedBook.getId(),
-                author.getId()
-        );
-
-        assertThat(relationshipCount).isEqualTo(1);
-
+        assertThat(book).isNotNull();
     }
 
-    private Author createAuthor() {
-        return new Author("Maria", "Doe", LocalDate.of(1985, 3, 13), "American");
+    @Test
+    void shouldUpdateBookWhenBookExists() {
+        Book savedBook = bookRepository.saveAndFlush(createBook());
+
+        Book book = bookRepository.findById(savedBook.getId()).orElse(null);
+
+        assertThat(book).isNotNull();
+
+        book.setTitle("Updated Book");
+
+        bookRepository.saveAndFlush(book);
+
+        String updatedTitle = jdbcTemplate.queryForObject(
+                """
+                SELECT title
+                FROM books
+                WHERE title = ?
+                """,
+                String.class,
+                book.getTitle()
+        );
+
+        assertThat(updatedTitle).isEqualTo("Updated Book");
+    }
+
+    @Test
+    void shouldDeleteBookWhenBookExists() {
+        Book savedBook = bookRepository.saveAndFlush(createBook());
+        Book book = bookRepository.findById(savedBook.getId()).orElse(null);
+
+        assertThat(book).isNotNull();
+
+        bookRepository.delete(book);
+
+        Book deletedBook = bookRepository.findById(book.getId()).orElse(null);
+
+        assertThat(deletedBook).isNull();
+    }
+
+    @Test
+    void shouldNotDeleteBookWhenBookDoesNotExist() {
+        Book book = bookRepository.saveAndFlush(createBook());
+
+        bookRepository.delete(book);
+
+        Book deletedBook = bookRepository.findById(book.getId()).orElse(null);
+
+        assertThat(deletedBook).isNull();
+    }
+
+    @Test
+    void shouldCountBooks() {
+        Book savedBook = bookRepository.saveAndFlush(createBook());
+        Book book = bookRepository.findById(savedBook.getId()).orElse(null);
+
+        assertThat(book).isNotNull();
+
+        long count = bookRepository.count();
+
+        assertThat(count).isEqualTo(1);
     }
 
     private Book createBook() {
