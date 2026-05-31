@@ -4,10 +4,10 @@ import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.model.BookGenre;
 import com.gustavosantos.library_api.model.enums.Genre;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDate;
 
@@ -20,34 +20,44 @@ public class BookRepositoryTest {
     private BookRepository bookRepository;
 
     @Autowired
-    private AuthorRepository authorRepository;
-
-    @Autowired
-    private BookGenreRepository bookGenreRepository;
+    private JdbcTemplate jdbcTemplate;
 
     @Test
     void shouldSaveBook() {
-        Author author = createAuthor ("Maria", "Doe", LocalDate.of(1985, 3, 13), "American");
+        Author author = createAuthor();
 
-        Author savedAuthor = authorRepository.save(author);
+        Book book = createBook();
 
-        assertThat(savedAuthor).isNotNull();
+        book.addAuthor(author);
 
-        BookGenre bookGenre = bookGenreRepository.save(new BookGenre(Genre.GUIDE));
+        Book savedBook = bookRepository.saveAndFlush(book);
 
-        Book book = createBook("12345678910111213", "Java: Programming Language", LocalDate.of(2023, 1, 1),  bookGenre);
+        Integer relationshipCount = jdbcTemplate.queryForObject(
+                """
+                SELECT COUNT(*)
+                FROM books_authors
+                WHERE book_id = ?
+                AND author_id = ?
+                """,
+                Integer.class,
+                savedBook.getId(),
+                author.getId()
+        );
 
-        book.addAuthor(savedAuthor);
+        assertThat(relationshipCount).isEqualTo(1);
 
-        bookRepository.save(book);
     }
 
-    private Author createAuthor(String firstName, String lastName, LocalDate birthDate, String nationality) {
-        return new Author(firstName, lastName, birthDate, nationality);
+    private Author createAuthor() {
+        return new Author("Maria", "Doe", LocalDate.of(1985, 3, 13), "American");
     }
 
-    private Book createBook(String isbn, String title, LocalDate publicationDate, BookGenre genre) {
-        return new Book(isbn, title, publicationDate, genre);
+    private Book createBook() {
+        return new Book("12345678910111213", "Java: Programming Language", LocalDate.of(2023, 1, 1), createBookGenre());
+    }
+
+    private BookGenre createBookGenre() {
+        return new BookGenre(Genre.GUIDE);
     }
 
 }
