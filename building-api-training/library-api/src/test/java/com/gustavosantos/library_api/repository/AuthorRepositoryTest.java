@@ -1,6 +1,9 @@
 package com.gustavosantos.library_api.repository;
 
 import com.gustavosantos.library_api.model.Author;
+import com.gustavosantos.library_api.model.Book;
+import com.gustavosantos.library_api.model.BookGenre;
+import com.gustavosantos.library_api.model.enums.Genre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -21,7 +24,7 @@ class AuthorRepositoryTest {
 
     @Test
     void shouldSaveAuthor() {
-        Author author = createAuthor("Maria", "Doe", "American", LocalDate.of(1985, 3, 13));
+        Author author = createAuthor();
 
         Author savedAuthor = authorRepository.save(author);
 
@@ -36,7 +39,7 @@ class AuthorRepositoryTest {
     @Test
     void shouldUpdateAuthorWhenAuthorExists() {
         Author savedAuthor = authorRepository.save(
-                createAuthor("John", "Doe", "American", LocalDate.of(1985, 1, 1))
+                createAuthor()
         );
 
         Author author = authorRepository.findByPublicId(savedAuthor.getPublicId());
@@ -60,8 +63,8 @@ class AuthorRepositoryTest {
 
     @Test
     void shouldFindAllAuthors() {
-        authorRepository.save(createAuthor("Maria", "Doe", "American", LocalDate.of(1985, 3, 13)));
-        authorRepository.save(createAuthor("John", "Smith", "British", LocalDate.of(1990, 7, 20)));
+        authorRepository.save(createAuthor());
+        authorRepository.save(new Author("John", "Smith", LocalDate.of(1990, 7, 20), "British"));
 
         List<Author> authors = authorRepository.findAll();
 
@@ -72,7 +75,7 @@ class AuthorRepositoryTest {
     void shouldCountAuthors() {
         long countBefore = authorRepository.count();
 
-        authorRepository.save(createAuthor("Maria", "Doe", "American", LocalDate.of(1985, 3, 13)));
+        authorRepository.save(createAuthor());
 
         long countAfter = authorRepository.count();
 
@@ -82,7 +85,7 @@ class AuthorRepositoryTest {
     @Test
     void shouldDeleteAuthorByPublicIdWhenAuthorExists() {
         Author savedAuthor = authorRepository.save(
-                createAuthor("Maria", "Doe", "American", LocalDate.of(1985, 3, 13))
+                createAuthor()
         );
 
         int deletedRows = authorRepository.deleteByPublicId(savedAuthor.getPublicId());
@@ -100,12 +103,31 @@ class AuthorRepositoryTest {
         assertThat(deletedRows).isZero();
     }
 
-    private Author createAuthor(String firstName, String lastName, String nationality, LocalDate birthDate) {
+    @Test
+    void shouldSaveAuthorAndBookList() {
+        Author author = createAuthor();
+
+        author.addBook(
+                new Book(
+                        "99887766",
+                        "BackEnd Ultimate Guide",
+                        LocalDate.of(2024, 5, 3),
+                        new BookGenre(Genre.GUIDE)
+                )
+        );
+
+        Author savedAuthor = authorRepository.save(author);
+
+        assertThat(author.getFirstName()).isEqualTo(savedAuthor.getFirstName());
+        assertThat(savedAuthor.getBooks()).isNotEmpty();
+    }
+
+    private Author createAuthor() {
         Author author = new Author();
-        author.setFirstName(firstName);
-        author.setLastName(lastName);
-        author.setNationality(nationality);
-        author.setBirthDate(birthDate);
+        author.setFirstName("Maria");
+        author.setLastName("Doe");
+        author.setNationality("Brazilian");
+        author.setBirthDate(LocalDate.of(1998, 5, 3));
         return author;
     }
 }

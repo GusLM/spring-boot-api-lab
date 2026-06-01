@@ -43,7 +43,7 @@ public class Author {
     private String nationality;
 
     @ToString.Exclude
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany(mappedBy = "authors", cascade = CascadeType.PERSIST)
     private final List<Book> books = new ArrayList<>();
 
     public Author(String firstName, String lastName, LocalDate birthDate, String nationality) {
