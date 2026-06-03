@@ -1,5 +1,6 @@
 package com.gustavosantos.library_api.repository;
 
+import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.model.BookGenre;
 import com.gustavosantos.library_api.model.enums.Genre;
@@ -9,6 +10,7 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -92,12 +94,43 @@ public class BookRepositoryTest {
         assertThat(count).isEqualTo(1);
     }
 
+    @Test
+    void shouldFindByIsbn() {
+        Book book = bookRepository.saveAndFlush(createBook());
+        Book foundBook = bookRepository.findByIsbn(book.getIsbn());
+
+        assertThat(foundBook).isNotNull();
+        assertThat(foundBook.getIsbn()).isEqualTo(book.getIsbn());
+    }
+
+    @Test
+    void shouldFindByTitleIgnoreCase() {
+        Book book = bookRepository.saveAndFlush(createBook());
+        List<Book> foundBooks = bookRepository.findByTitleContainingIgnoreCase("java");
+
+        assertThat(foundBooks).isNotNull();
+        assertThat(foundBooks).hasSize(1);
+        assertThat(foundBooks.get(0).getTitle()).isEqualTo(book.getTitle());
+    }
+
+    @Test
+    void shouldFindByAuthors() {
+        Book book = createBook();
+        Author author = new Author("John", "Smith", LocalDate.of(1990, 7, 20), "British");
+        book.addAuthor(author);
+        bookRepository.saveAndFlush(book);
+        List<Book> foundBooks = bookRepository.findByAuthors(author);
+
+        assertThat(foundBooks).isNotNull();
+        assertThat(foundBooks).hasSize(1);
+        assertThat(foundBooks.get(0).getTitle()).isEqualTo(book.getTitle());
+    }
+
     private Book createBook() {
-        return new Book("12345678910111213", "Java: Programming Language", LocalDate.of(2023, 1, 1), createBookGenre());
+        return new Book("12345-67890", "Java: Programming Language", LocalDate.of(2023, 1, 1), createBookGenre());
     }
 
     private BookGenre createBookGenre() {
         return new BookGenre(Genre.GUIDE);
     }
-
 }
