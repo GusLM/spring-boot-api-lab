@@ -126,6 +126,24 @@ public class BookRepositoryTest {
         assertThat(foundBooks.get(0).getTitle()).isEqualTo(book.getTitle());
     }
 
+    @Test
+    void shouldFindAuthorsWhoHaveBooks() {
+        Author author = new Author("John", "Smith", LocalDate.of(1990, 7, 20), "British");
+        Author author1 = new Author("Maria", "Doe", LocalDate.of(1998, 2, 5), "Spanish");
+        Author author2 = new Author("Joseph", "Joestar", LocalDate.of(2000, 6, 12), "American");
+
+        Book book = createBook();
+        book.addAuthor(author);
+        book.addAuthor(author2);
+
+        bookRepository.saveAndFlush(book);
+
+        List<Author> authors = bookRepository.findAllAuthorsWhoHaveBooks();
+
+        assertThat(authors).isNotNull();
+        assertThat(authors).hasSizeGreaterThan(1);
+    }
+
     private Book createBook() {
         return new Book("12345-67890", "Java: Programming Language", LocalDate.of(2023, 1, 1), createBookGenre());
     }
