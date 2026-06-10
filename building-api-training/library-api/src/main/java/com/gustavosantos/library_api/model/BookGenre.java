@@ -1,11 +1,14 @@
 package com.gustavosantos.library_api.model;
 
-import com.gustavosantos.library_api.model.enums.Genre;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -14,21 +17,33 @@ import java.util.UUID;
 @Table(name = "books_genres", schema = "public")
 @Getter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class BookGenre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "public_id", nullable = false, unique = true)
     private UUID publicId;
 
     @Setter
-    @Enumerated(EnumType.STRING)
-    @Column(name = "genre", nullable = false)
-    private Genre genre;
+    @Column(name = "genre", length = 45, nullable = false)
+    private String genre;
 
-    public BookGenre(Genre genre) {
+    @CreatedDate
+    @Column(name = "registered_at")
+    private LocalDateTime registeredAt;
+
+    @LastModifiedBy
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "user_id")
+    private int userId;
+
+    // Constructor
+    public BookGenre(String genre) {
         this.genre = genre;
     }
 

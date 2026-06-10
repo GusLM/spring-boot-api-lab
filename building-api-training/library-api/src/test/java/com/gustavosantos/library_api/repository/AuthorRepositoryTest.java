@@ -112,7 +112,7 @@ class AuthorRepositoryTest {
                         "99887766",
                         "BackEnd Ultimate Guide",
                         LocalDate.of(2024, 5, 3),
-                        new BookGenre(Genre.GUIDE)
+                        new BookGenre("Guide")
                 )
         );
 

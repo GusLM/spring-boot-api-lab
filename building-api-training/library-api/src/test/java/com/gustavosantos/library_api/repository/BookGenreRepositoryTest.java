@@ -23,42 +23,42 @@ class BookGenreRepositoryTest {
 
     @Test
     void shouldSaveBookGenre() {
-        BookGenre savedBookGenre = saveBookGenre(Genre.FICTION);
+        BookGenre savedBookGenre = saveBookGenre("Fiction");
 
         assertThat(savedBookGenre.getId()).isNotNull();
         assertThat(savedBookGenre.getPublicId()).isNotNull();
-        assertThat(savedBookGenre.getGenre()).isEqualTo(Genre.FICTION);
+        assertThat(savedBookGenre.getGenre()).isEqualTo("Fiction");
     }
 
     @Test
     void shouldUpdateBookGenreWhenBookGenreExists() {
-        BookGenre savedBookGenre = saveBookGenre(Genre.FANTASY);
+        BookGenre savedBookGenre = saveBookGenre("Fantasy");
 
-        savedBookGenre.setGenre(Genre.ROMANCE);
+        savedBookGenre.setGenre("Romance");
         BookGenre updatedBookGenre = bookGenreRepository.saveAndFlush(savedBookGenre);
 
         assertThat(updatedBookGenre.getId()).isEqualTo(savedBookGenre.getId());
         assertThat(updatedBookGenre.getPublicId()).isEqualTo(savedBookGenre.getPublicId());
-        assertThat(updatedBookGenre.getGenre()).isEqualTo(Genre.ROMANCE);
+        assertThat(updatedBookGenre.getGenre()).isEqualTo("Romance");
     }
 
     @Test
     void shouldFindAllBookGenres() {
-        saveBookGenre(Genre.MYSTERY);
-        saveBookGenre(Genre.THRILLER);
+        saveBookGenre("Mystery");
+        saveBookGenre("Thriller");
 
         List<BookGenre> bookGenres = bookGenreRepository.findAll();
 
         assertThat(bookGenres)
                 .extracting(BookGenre::getGenre)
-                .contains(Genre.MYSTERY, Genre.THRILLER);
+                .contains("Mystery", "Thriller");
     }
 
     @Test
     void shouldCountBookGenres() {
         long countBefore = bookGenreRepository.count();
 
-        saveBookGenre(Genre.HORROR);
+        saveBookGenre("Horror");
 
         long countAfter = bookGenreRepository.count();
 
@@ -67,13 +67,13 @@ class BookGenreRepositoryTest {
 
     @Test
     void shouldFindBookGenreByPublicIdWhenBookGenreExists() {
-        BookGenre savedBookGenre = saveBookGenre(Genre.ADVENTURE);
+        BookGenre savedBookGenre = saveBookGenre("Adventure");
 
         BookGenre foundBookGenre = bookGenreRepository.findByPublicId(savedBookGenre.getPublicId());
 
         assertThat(foundBookGenre).isNotNull();
         assertThat(foundBookGenre.getId()).isEqualTo(savedBookGenre.getId());
-        assertThat(foundBookGenre.getGenre()).isEqualTo(Genre.ADVENTURE);
+        assertThat(foundBookGenre.getGenre()).isEqualTo("Adventure");
     }
 
     @Test
@@ -85,24 +85,24 @@ class BookGenreRepositoryTest {
 
     @Test
     void shouldFindBookGenreByGenreWhenBookGenreExists() {
-        saveBookGenre(Genre.SCIENCE_FICTION);
+        saveBookGenre("Science Fiction");
 
-        BookGenre foundBookGenre = bookGenreRepository.findByGenre(Genre.SCIENCE_FICTION);
+        BookGenre foundBookGenre = bookGenreRepository.findByGenre("Science Fiction");
 
         assertThat(foundBookGenre).isNotNull();
-        assertThat(foundBookGenre.getGenre()).isEqualTo(Genre.SCIENCE_FICTION);
+        assertThat(foundBookGenre.getGenre()).isEqualTo("Science Fiction");
     }
 
     @Test
     void shouldReturnNullWhenFindingByGenreThatDoesNotExist() {
-        BookGenre foundBookGenre = bookGenreRepository.findByGenre(Genre.BIOGRAPHY);
+        BookGenre foundBookGenre = bookGenreRepository.findByGenre("Biography");
 
         assertThat(foundBookGenre).isNull();
     }
 
     @Test
     void shouldDeleteBookGenreWhenBookGenreExists() {
-        BookGenre savedBookGenre = saveBookGenre(Genre.HISTORY);
+        BookGenre savedBookGenre = saveBookGenre("History");
 
         bookGenreRepository.delete(savedBookGenre);
         bookGenreRepository.flush();
@@ -112,7 +112,7 @@ class BookGenreRepositoryTest {
 
     @Test
     void shouldDeleteBookGenreByPublicIdWhenBookGenreExists() {
-        BookGenre savedBookGenre = saveBookGenre(Genre.SELF_HELP);
+        BookGenre savedBookGenre = saveBookGenre("Self-Help");
 
         int deletedRows = bookGenreRepository.deleteByPublicId(savedBookGenre.getPublicId());
 
@@ -135,11 +135,11 @@ class BookGenreRepositoryTest {
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
-    private BookGenre saveBookGenre(Genre genre) {
+    private BookGenre saveBookGenre(String genre) {
         return bookGenreRepository.saveAndFlush(createBookGenre(genre));
     }
 
-    private BookGenre createBookGenre(Genre genre) {
+    private BookGenre createBookGenre(String genre) {
         return new BookGenre(genre);
     }
 }

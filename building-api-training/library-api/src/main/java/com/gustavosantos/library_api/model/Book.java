@@ -5,8 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,11 +21,12 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @ToString
+@EntityListeners(AuditingEntityListener.class)
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "public_id", nullable = false, unique = true)
     private UUID publicId;
@@ -37,6 +42,17 @@ public class Book {
     @Setter
     @Column(name = "publication_date", nullable = false)
     private LocalDate publicationDate;
+
+    @CreatedDate
+    @Column(name = "registered_at")
+    private LocalDateTime registeredAt;
+
+    @LastModifiedBy
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "user_id")
+    private int userId;
 
     @ToString.Exclude
     @Setter
