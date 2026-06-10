@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,9 +42,11 @@ class AuthorRepositoryTest {
                 createAuthor()
         );
 
-        Author author = authorRepository.findByPublicId(savedAuthor.getPublicId());
+        Optional<Author> authorOptional = authorRepository.findById(savedAuthor.getId());
 
-        assertThat(author).isNotNull();
+        assertThat(authorOptional).isPresent();
+
+        Author author = authorOptional.get();
 
         author.setFirstName("Updated John");
         author.setLastName("Updated Doe");
