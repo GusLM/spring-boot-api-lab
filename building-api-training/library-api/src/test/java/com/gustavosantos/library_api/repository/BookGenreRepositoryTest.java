@@ -1,7 +1,6 @@
 package com.gustavosantos.library_api.repository;
 
 import com.gustavosantos.library_api.model.BookGenre;
-import com.gustavosantos.library_api.model.enums.Genre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -107,7 +106,7 @@ class BookGenreRepositoryTest {
         bookGenreRepository.delete(savedBookGenre);
         bookGenreRepository.flush();
 
-        assertThat(bookGenreRepository.findById(savedBookGenre.getId())).isEmpty();
+        assertThat(bookGenreRepository.findById(savedBookGenre.getId()).isEmpty());
     }
 
     @Test

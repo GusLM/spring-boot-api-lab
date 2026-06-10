@@ -26,7 +26,7 @@ public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "public_id", nullable = false, unique = true)
     private UUID publicId;
@@ -47,16 +47,19 @@ public class Author {
     @Column(nullable = false, length = 100)
     private String nationality;
 
+    @Setter
     @CreatedDate
     @Column(name = "registered_at")
     private LocalDateTime registeredAt;
 
+    @Setter
     @LastModifiedBy
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Setter
     @Column(name = "user_id")
-    private int userId;
+    private Integer userId;
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "authors", cascade = CascadeType.PERSIST)

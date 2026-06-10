@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface BookGenreRepository extends JpaRepository<BookGenre, Long> {
+public interface BookGenreRepository extends JpaRepository<BookGenre, Integer> {
 
     BookGenre findByPublicId(UUID publicId);
 

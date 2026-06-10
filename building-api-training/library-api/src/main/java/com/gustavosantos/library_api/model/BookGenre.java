@@ -22,7 +22,7 @@ public class BookGenre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "public_id", nullable = false, unique = true)
     private UUID publicId;
@@ -31,16 +31,19 @@ public class BookGenre {
     @Column(name = "genre", length = 45, nullable = false)
     private String genre;
 
+    @Setter
     @CreatedDate
     @Column(name = "registered_at")
     private LocalDateTime registeredAt;
 
+    @Setter
     @LastModifiedBy
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Setter
     @Column(name = "user_id")
-    private int userId;
+    private Integer userId;
 
     // Constructor
     public BookGenre(String genre) {

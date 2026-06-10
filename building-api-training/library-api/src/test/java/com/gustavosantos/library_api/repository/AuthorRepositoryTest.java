@@ -3,7 +3,6 @@ package com.gustavosantos.library_api.repository;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.model.BookGenre;
-import com.gustavosantos.library_api.model.enums.Genre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -33,7 +32,7 @@ class AuthorRepositoryTest {
         assertThat(savedAuthor.getFirstName()).isEqualTo("Maria");
         assertThat(savedAuthor.getLastName()).isEqualTo("Doe");
         assertThat(savedAuthor.getNationality()).isEqualTo("American");
-        assertThat(savedAuthor.getBirthDate()).isEqualTo(LocalDate.of(1985, 3, 13));
+        assertThat(savedAuthor.getBirthDate()).isEqualTo(LocalDate.of(1998, 5, 3));
     }
 
     @Test
@@ -126,7 +125,7 @@ class AuthorRepositoryTest {
         Author author = new Author();
         author.setFirstName("Maria");
         author.setLastName("Doe");
-        author.setNationality("Brazilian");
+        author.setNationality("American");
         author.setBirthDate(LocalDate.of(1998, 5, 3));
         return author;
     }

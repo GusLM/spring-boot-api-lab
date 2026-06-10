@@ -26,7 +26,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "public_id", nullable = false, unique = true)
     private UUID publicId;
@@ -43,16 +43,19 @@ public class Book {
     @Column(name = "publication_date", nullable = false)
     private LocalDate publicationDate;
 
+    @Setter
     @CreatedDate
     @Column(name = "registered_at")
     private LocalDateTime registeredAt;
 
+    @Setter
     @LastModifiedBy
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Setter
     @Column(name = "user_id")
-    private int userId;
+    private Integer userId;
 
     @ToString.Exclude
     @Setter
