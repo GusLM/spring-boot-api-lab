@@ -18,4 +18,8 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("DELETE FROM Author a WHERE a.publicId = :publicId")
     int deleteByPublicId(UUID publicId);
+
+    void deleteAuthorByPublicId(UUID publicId);
+
+    boolean existsAuthorByPublicId(UUID publicId);
 }

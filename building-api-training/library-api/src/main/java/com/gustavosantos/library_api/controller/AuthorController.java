@@ -4,6 +4,7 @@ import com.gustavosantos.library_api.controller.dto.AuthorDTO;
 import com.gustavosantos.library_api.controller.dto.AuthorResponseDTO;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.service.AuthorService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -46,5 +47,16 @@ public class AuthorController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{publicId}")
+    public ResponseEntity<Void> delete(@PathVariable String publicId) {
+        if (!authorService.existsByPublicId(UUID.fromString(publicId))) {
+            return ResponseEntity.notFound().build();
+        }
+
+        authorService.delete(UUID.fromString(publicId));
+
+        return ResponseEntity.noContent().build();
     }
 }
