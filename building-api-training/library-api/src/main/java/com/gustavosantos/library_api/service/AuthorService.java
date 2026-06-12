@@ -1,8 +1,12 @@
 package com.gustavosantos.library_api.service;
 
+import com.gustavosantos.library_api.controller.dto.AuthorDTO;
 import com.gustavosantos.library_api.controller.dto.AuthorResponseDTO;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.repository.AuthorRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,5 +37,66 @@ public class AuthorService {
 
     public boolean existsByPublicId(UUID publicId) {
         return authorRepository.existsAuthorByPublicId(publicId);
+    }
+
+    public Page<AuthorDTO> findByFirstOrLastNameAndOrNationality(
+            String firstName,
+            String lastName,
+            String nationality,
+            int page,
+            int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        boolean hasFirstName = hasText(firstName);
+        boolean hasLastName = hasText(lastName);
+        boolean hasNationality = hasText(nationality);
+
+        if (hasFirstName && hasLastName && hasNationality) {
+            return authorRepository.findByFirstNameAndLastNameAndNationality(
+                    firstName,
+                    lastName,
+                    nationality,
+                    pageable
+            );
+        }
+
+        if (hasFirstName && hasLastName) {
+            return authorRepository.findByFirstNameAndLastName(firstName, lastName, pageable);
+        }
+
+        if (hasFirstName && hasNationality) {
+            return authorRepository.findByFirstNameAndNationality(
+                    firstName,
+                    nationality,
+                    pageable
+            );
+        }
+
+        if (hasLastName && hasNationality) {
+            return authorRepository.findByLastNameAndNationality(
+                    lastName,
+                    nationality,
+                    pageable
+            );
+        }
+
+        if (hasFirstName) {
+            return authorRepository.findByFirstName(firstName, pageable);
+        }
+
+        if (hasLastName) {
+            return authorRepository.findByLastName(lastName, pageable);
+        }
+
+        if (hasNationality) {
+            return authorRepository.findByNationality(nationality, pageable);
+        }
+
+        return authorRepository.findAllProjected(pageable);
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.isBlank();
     }
 }

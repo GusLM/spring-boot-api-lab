@@ -2,9 +2,10 @@ package com.gustavosantos.library_api.controller;
 
 import com.gustavosantos.library_api.controller.dto.AuthorDTO;
 import com.gustavosantos.library_api.controller.dto.AuthorResponseDTO;
+import com.gustavosantos.library_api.controller.dto.PageResponse;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.service.AuthorService;
-import jakarta.websocket.server.PathParam;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -58,5 +59,33 @@ public class AuthorController {
         authorService.delete(UUID.fromString(publicId));
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<PageResponse<AuthorDTO>> findByFirstOrLastNameAndOrNationality(
+            @RequestParam(value = "firstName", required = false)
+            String firstName,
+
+            @RequestParam(value = "lastName", required = false)
+            String lastName,
+
+            @RequestParam(value = "nationality", required = false)
+            String nationality,
+
+            @RequestParam(value = "page", defaultValue = "0")
+            int page,
+
+            @RequestParam(value = "size", defaultValue = "10")
+            int size
+    ) {
+        Page<AuthorDTO> authorDTOPage = authorService.findByFirstOrLastNameAndOrNationality(
+                firstName,
+                lastName,
+                nationality,
+                page,
+                size
+        );
+
+        return ResponseEntity.ok(PageResponse.from(authorDTOPage));
     }
 }
