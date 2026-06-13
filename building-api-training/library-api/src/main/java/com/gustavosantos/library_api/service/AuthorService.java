@@ -22,7 +22,14 @@ public class AuthorService {
     }
 
     //@Transactional
-    public void insert(Author author) {
+    public void save(Author author) {
+        authorRepository.save(author);
+    }
+
+    public void update(Author author) {
+        if (author.getId() == null) {
+            throw new IllegalArgumentException("The author ID does not exist in the database.");
+        }
         authorRepository.save(author);
     }
 
@@ -30,16 +37,20 @@ public class AuthorService {
         return authorRepository.findByPublicId(publicId);
     }
 
+    public Optional<Author> searchAuthorByPublicId(UUID publicId) {
+        return authorRepository.searchAuthorByPublicId(publicId);
+    }
+
     //@Transactional
     public void delete(UUID publicId) {
-        authorRepository.deleteAuthorByPublicId(publicId);
+        authorRepository.deleteByPublicId(publicId);
     }
 
     public boolean existsByPublicId(UUID publicId) {
-        return authorRepository.existsAuthorByPublicId(publicId);
+        return authorRepository.existsByPublicId(publicId);
     }
 
-    public Page<AuthorDTO> findByFirstOrLastNameAndOrNationality(
+    public Page<AuthorDTO> search(
             String firstName,
             String lastName,
             String nationality,
@@ -93,7 +104,7 @@ public class AuthorService {
             return authorRepository.findByNationality(nationality, pageable);
         }
 
-        return authorRepository.findAllProjected(pageable);
+        return authorRepository.findAllCustom(pageable);
     }
 
     private boolean hasText(String value) {

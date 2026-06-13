@@ -18,6 +18,8 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
 
     Optional<AuthorResponseDTO> findByPublicId(UUID publicId);
 
+    Optional<Author> searchAuthorByPublicId(UUID publicId);
+
     @Query("""
                         SELECT new com.gustavosantos.library_api.controller.dto.AuthorDTO(
                         a.firstName,
@@ -136,15 +138,11 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
                         FROM Author a
                         ORDER BY a.firstName
             """)
-    Page<AuthorDTO> findAllProjected(Pageable pageable);
-
-
+    Page<AuthorDTO> findAllCustom(Pageable pageable);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("DELETE FROM Author a WHERE a.publicId = :publicId")
-    int deleteByPublicId(UUID publicId);
+    void deleteByPublicId(UUID publicId);
 
-    void deleteAuthorByPublicId(UUID publicId);
-
-    boolean existsAuthorByPublicId(UUID publicId);
+    boolean existsByPublicId(UUID publicId);
 }

@@ -26,9 +26,9 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> insert(@RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<Void> save(@RequestBody AuthorDTO authorDTO) {
         Author obj = authorDTO.toEntity();
-        authorService.insert(obj);
+        authorService.save(obj);
 
         URI uri  = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{publicId}")
@@ -42,12 +42,13 @@ public class AuthorController {
     public ResponseEntity<AuthorResponseDTO> findByPublicId(@PathVariable String publicId) {
         Optional<AuthorResponseDTO> authorOptional = authorService.findByPublicId(UUID.fromString(publicId));
 
-        if (authorOptional.isPresent()) {
-            AuthorResponseDTO dto = authorOptional.get();
-            return ResponseEntity.ok(dto);
+        if (authorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.notFound().build();
+        AuthorResponseDTO dto = authorOptional.get();
+        return ResponseEntity.ok(dto);
+
     }
 
     @DeleteMapping("/{publicId}")
@@ -62,7 +63,7 @@ public class AuthorController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<AuthorDTO>> findByFirstOrLastNameAndOrNationality(
+    public ResponseEntity<PageResponse<AuthorDTO>> search(
             @RequestParam(value = "firstName", required = false)
             String firstName,
 
@@ -78,7 +79,7 @@ public class AuthorController {
             @RequestParam(value = "size", defaultValue = "10")
             int size
     ) {
-        Page<AuthorDTO> authorDTOPage = authorService.findByFirstOrLastNameAndOrNationality(
+        Page<AuthorDTO> authorDTOPage = authorService.search(
                 firstName,
                 lastName,
                 nationality,
@@ -87,5 +88,29 @@ public class AuthorController {
         );
 
         return ResponseEntity.ok(PageResponse.from(authorDTOPage));
+    }
+
+    @PutMapping("/{publicId}")
+    public ResponseEntity<Void> update(
+            @PathVariable String publicId,
+            @RequestBody AuthorDTO authorDTO
+    ) {
+
+        Optional<Author> authorOptional =
+                authorService.searchAuthorByPublicId(UUID.fromString(publicId));
+
+        if (authorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Author author = authorOptional.get();
+        author.setFirstName(authorDTO.firstName());
+        author.setLastName(authorDTO.lastName());
+        author.setBirthDate(authorDTO.birthDate());
+        author.setNationality(authorDTO.nationality());
+
+        authorService.update(author);
+
+        return ResponseEntity.noContent().build();
     }
 }

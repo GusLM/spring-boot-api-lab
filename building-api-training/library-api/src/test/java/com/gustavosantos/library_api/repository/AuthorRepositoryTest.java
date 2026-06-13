@@ -90,19 +90,16 @@ class AuthorRepositoryTest {
                 createAuthor()
         );
 
-        int deletedRows = authorRepository.deleteByPublicId(savedAuthor.getPublicId());
+        authorRepository.deleteByPublicId(savedAuthor.getPublicId());
 
-        assertThat(deletedRows).isEqualTo(1);
-        assertThat(authorRepository.findByPublicId(savedAuthor.getPublicId())).isNull();
+        assertThat(authorRepository.findByPublicId(savedAuthor.getPublicId())).isEmpty();
     }
 
     @Test
-    void shouldReturnZeroWhenDeletingAuthorByPublicIdThatDoesNotExist() {
+    void shouldNotFailWhenDeletingAuthorByPublicIdThatDoesNotExist() {
         UUID nonExistingPublicId = UUID.randomUUID();
 
-        int deletedRows = authorRepository.deleteByPublicId(nonExistingPublicId);
-
-        assertThat(deletedRows).isZero();
+        authorRepository.deleteByPublicId(nonExistingPublicId);
     }
 
     @Test
