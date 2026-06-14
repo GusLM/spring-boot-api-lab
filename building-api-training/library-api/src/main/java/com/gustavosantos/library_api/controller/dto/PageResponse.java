@@ -17,7 +17,7 @@ public record PageResponse<T> (
 
     public static <T> PageResponse<T> from(Page<T> page) {
         return new PageResponse<>(
-                page.getTotalPages(),
+                page.getNumber(),
                 page.getSize(),
                 page.getTotalElements(),
                 page.getTotalPages(),
