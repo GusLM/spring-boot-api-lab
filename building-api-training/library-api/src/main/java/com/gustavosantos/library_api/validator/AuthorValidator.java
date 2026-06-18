@@ -10,7 +10,7 @@ import java.util.Optional;
 @Component
 public class AuthorValidator {
 
-    private AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
 
     public AuthorValidator(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
@@ -21,19 +21,25 @@ public class AuthorValidator {
             throw new DuplicateRecord("Author already registered!");
         }
     }
-
+    
     private boolean existsAuthorRegistered(Author author) {
-        Optional<Author> authorFound = authorRepository.findByFirstNameAndLastNameAndBirthDateAndNationality(
+        Optional<Author> possibleDuplicate = authorRepository.findByFirstNameAndLastNameAndBirthDateAndNationality(
                 author.getFirstName(),
                 author.getLastName(),
                 author.getBirthDate(),
                 author.getNationality()
         );
 
-        if (author.getId() == null) {
-            return authorFound.isPresent();
+        if (possibleDuplicate.isEmpty()) {
+            return false;
         }
 
-        return !author.getId().equals(authorFound.get().getId()) && authorFound.isPresent();
+        if (author.getId() == null) {
+            return true;
+        }
+
+        Author registeredAuthor = possibleDuplicate.get();
+
+        return !registeredAuthor.getId().equals(author.getId());
     }
 }

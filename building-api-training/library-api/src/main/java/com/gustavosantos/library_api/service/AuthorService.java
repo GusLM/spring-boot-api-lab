@@ -33,6 +33,9 @@ public class AuthorService {
         if (author.getId() == null) {
             throw new IllegalArgumentException("The author ID does not exist in the database.");
         }
+
+        validator.checkIfAlreadyExists(author);
+
         authorRepository.save(author);
     }
 

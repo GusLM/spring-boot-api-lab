@@ -3,8 +3,11 @@ package com.gustavosantos.library_api.controller;
 import com.gustavosantos.library_api.controller.dto.AuthorDTO;
 import com.gustavosantos.library_api.controller.dto.AuthorResponseDTO;
 import com.gustavosantos.library_api.controller.dto.PageResponse;
+import com.gustavosantos.library_api.controller.dto.exceptions.StandardError;
+import com.gustavosantos.library_api.exceptions.DuplicateRecord;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.service.AuthorService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,16 +29,22 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<Object> save(@RequestBody AuthorDTO authorDTO, HttpServletRequest request) {
         Author obj = authorDTO.toEntity();
-        authorService.save(obj);
 
-        URI uri  = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{publicId}")
-                .buildAndExpand(obj.getPublicId())
-                .toUri();
+        try {
+            authorService.save(obj);
 
-        return ResponseEntity.created(uri).build();
+            URI uri  = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{publicId}")
+                    .buildAndExpand(obj.getPublicId())
+                    .toUri();
+
+            return ResponseEntity.created(uri).build();
+        } catch (DuplicateRecord e) {
+            var standardError = StandardError.conflict(e.getMessage(), request);
+            return ResponseEntity.status(standardError.getStatus()).body(standardError);
+        }
     }
 
     @GetMapping("/{publicId}")
