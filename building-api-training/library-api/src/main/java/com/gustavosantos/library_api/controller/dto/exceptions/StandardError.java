@@ -23,11 +23,18 @@ public class StandardError {
     public StandardError() {
     }
 
-    public StandardError(int status, Instant moment, String path, String message, List<FieldError> fieldErrorList) {
+    public StandardError(int status, Instant moment, String path, String message) {
         this.status = status;
         this.moment = moment;
         this.path = path;
         this.message = message;
-        this.fieldErrorList = fieldErrorList;
+    }
+
+    public void addFieldError(FieldError fieldError) {
+        fieldErrorList.add(fieldError);
+    }
+
+    public void removeFieldError(FieldError fieldError) {
+        fieldErrorList.remove(fieldError);
     }
 }
