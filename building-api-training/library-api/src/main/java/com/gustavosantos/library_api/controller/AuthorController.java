@@ -100,9 +100,10 @@ public class AuthorController {
     }
 
     @PutMapping("/{publicId}")
-    public ResponseEntity<Void> update(
+    public ResponseEntity<Object> update(
             @PathVariable String publicId,
-            @RequestBody AuthorDTO authorDTO
+            @RequestBody AuthorDTO authorDTO,
+            HttpServletRequest request
     ) {
 
         Optional<Author> authorOptional =
@@ -118,8 +119,14 @@ public class AuthorController {
         author.setBirthDate(authorDTO.birthDate());
         author.setNationality(authorDTO.nationality());
 
-        authorService.update(author);
+        try {
+            authorService.update(author);
 
-        return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();
+
+        } catch (DuplicateRecord e) {
+            var standardError = StandardError.conflict(e.getMessage(), request);
+            return ResponseEntity.status(standardError.getStatus()).body(standardError);
+        }
     }
 }
