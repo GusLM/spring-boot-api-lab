@@ -6,21 +6,18 @@ import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.repository.AuthorRepository;
 import com.gustavosantos.library_api.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class AuthorValidator {
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
-
-    public AuthorValidator(AuthorRepository authorRepository, BookRepository bookRepository) {
-        this.authorRepository = authorRepository;
-        this.bookRepository = bookRepository;
-    }
 
     public void checkIfAlreadyExists(Author author) {
         if (existsAuthorRegistered(author)) {
