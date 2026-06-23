@@ -17,6 +17,8 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     List<Book> findByAuthors(Author author);
 
+    boolean existsByAuthorsId(Integer authorId);
+
     @Query("SELECT a FROM Book b JOIN b.authors a")
     List<Author> findAllAuthorsWhoHaveBooks();
 }

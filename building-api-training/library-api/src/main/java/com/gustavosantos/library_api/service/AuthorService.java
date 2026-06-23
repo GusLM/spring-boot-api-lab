@@ -47,8 +47,8 @@ public class AuthorService {
         return authorRepository.searchAuthorByPublicId(publicId);
     }
 
-    //@Transactional
     public void delete(UUID publicId) {
+        validator.validateAuthorCanBeDeleted(publicId);
         authorRepository.deleteByPublicId(publicId);
     }
 

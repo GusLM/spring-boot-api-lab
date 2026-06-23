@@ -60,4 +60,24 @@ public class StandardError {
                 List.of()
         );
     }
+
+    public static StandardError resourceNotFound(String message, HttpServletRequest request) {
+        return new StandardError(
+                HttpStatus.NOT_FOUND.value(),
+                Instant.now(),
+                request.getRequestURI(),
+                message,
+                List.of()
+        );
+    }
+
+    public static StandardError forbidden(String message, HttpServletRequest request) {
+        return new StandardError(
+                HttpStatus.FORBIDDEN.value(),
+                Instant.now(),
+                request.getRequestURI(),
+                message,
+                List.of()
+        );
+    }
 }

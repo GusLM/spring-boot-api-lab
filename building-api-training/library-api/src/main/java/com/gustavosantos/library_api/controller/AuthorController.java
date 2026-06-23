@@ -4,7 +4,9 @@ import com.gustavosantos.library_api.controller.dto.AuthorDTO;
 import com.gustavosantos.library_api.controller.dto.AuthorResponseDTO;
 import com.gustavosantos.library_api.controller.dto.PageResponse;
 import com.gustavosantos.library_api.controller.dto.exceptions.StandardError;
-import com.gustavosantos.library_api.exceptions.DuplicateRecord;
+import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
+import com.gustavosantos.library_api.exceptions.ForbiddenOperationException;
+import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.service.AuthorService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,7 +43,7 @@ public class AuthorController {
                     .toUri();
 
             return ResponseEntity.created(uri).build();
-        } catch (DuplicateRecord e) {
+        } catch (DuplicateRecordException e) {
             var standardError = StandardError.conflict(e.getMessage(), request);
             return ResponseEntity.status(standardError.getStatus()).body(standardError);
         }
@@ -61,14 +63,21 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{publicId}")
-    public ResponseEntity<Void> delete(@PathVariable String publicId) {
-        if (!authorService.existsByPublicId(UUID.fromString(publicId))) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Object> delete(
+            @PathVariable String publicId,
+            HttpServletRequest request
+    ) {
+        try {
+            authorService.delete(UUID.fromString(publicId));
+
+            return ResponseEntity.noContent().build();
+        } catch (ResourceNotFoundException e) {
+            var standardError = StandardError.resourceNotFound(e.getMessage(), request);
+            return ResponseEntity.status(standardError.getStatus()).body(standardError);
+        } catch (ForbiddenOperationException e) {
+            var standardError = StandardError.forbidden(e.getMessage(), request);
+            return ResponseEntity.status(standardError.getStatus()).body(standardError);
         }
-
-        authorService.delete(UUID.fromString(publicId));
-
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -124,7 +133,7 @@ public class AuthorController {
 
             return ResponseEntity.noContent().build();
 
-        } catch (DuplicateRecord e) {
+        } catch (DuplicateRecordException e) {
             var standardError = StandardError.conflict(e.getMessage(), request);
             return ResponseEntity.status(standardError.getStatus()).body(standardError);
         }
