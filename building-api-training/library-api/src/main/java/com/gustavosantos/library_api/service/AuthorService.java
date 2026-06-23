@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -24,11 +25,13 @@ public class AuthorService {
         this.validator = validator;
     }
 
+    @Transactional
     public void save(Author author) {
         validator.checkIfAlreadyExists(author);
         authorRepository.save(author);
     }
 
+    @Transactional
     public void update(Author author) {
         if (author.getId() == null) {
             throw new IllegalArgumentException("The author ID does not exist in the database.");
@@ -39,23 +42,28 @@ public class AuthorService {
         authorRepository.save(author);
     }
 
+    @Transactional(readOnly = true)
     public Optional<AuthorResponseDTO> findByPublicId(UUID publicId) {
         return authorRepository.findByPublicId(publicId);
     }
 
+    @Transactional(readOnly = true)
     public Optional<Author> searchAuthorByPublicId(UUID publicId) {
         return authorRepository.searchAuthorByPublicId(publicId);
     }
 
+    @Transactional
     public void delete(UUID publicId) {
         validator.validateAuthorCanBeDeleted(publicId);
         authorRepository.deleteByPublicId(publicId);
     }
 
+    @Transactional(readOnly = true)
     public boolean existsByPublicId(UUID publicId) {
         return authorRepository.existsByPublicId(publicId);
     }
 
+    @Transactional(readOnly = true)
     public Page<AuthorDTO> search(
             String firstName,
             String lastName,
