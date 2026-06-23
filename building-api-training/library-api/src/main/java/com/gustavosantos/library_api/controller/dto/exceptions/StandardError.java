@@ -20,25 +20,25 @@ public class StandardError {
 
     private String message;
 
-    private List<FieldError> fieldErrorList;
+    private List<FieldValidationError> fieldValidationErrorList;
 
     public StandardError() {
     }
 
-    public StandardError(int status, Instant moment, String path, String message, List<FieldError> fieldErrorList) {
+    public StandardError(int status, Instant moment, String path, String message, List<FieldValidationError> fieldValidationErrorList) {
         this.status = status;
         this.moment = moment;
         this.path = path;
         this.message = message;
-        this.fieldErrorList = fieldErrorList;
+        this.fieldValidationErrorList = fieldValidationErrorList;
     }
 
-    public void addFieldError(FieldError fieldError) {
-        fieldErrorList.add(fieldError);
+    public void addFieldError(FieldValidationError fieldValidationError) {
+        fieldValidationErrorList.add(fieldValidationError);
     }
 
-    public void removeFieldError(FieldError fieldError) {
-        fieldErrorList.remove(fieldError);
+    public void removeFieldError(FieldValidationError fieldValidationError) {
+        fieldValidationErrorList.remove(fieldValidationError);
     }
 
     public static StandardError defaultResponse(String message, HttpServletRequest request) {

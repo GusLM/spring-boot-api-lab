@@ -10,6 +10,7 @@ import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.service.AuthorService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody AuthorDTO authorDTO, HttpServletRequest request) {
+    public ResponseEntity<Object> save(@RequestBody @Valid AuthorDTO authorDTO, HttpServletRequest request) {
         Author obj = authorDTO.toEntity();
 
         try {
@@ -109,7 +110,7 @@ public class AuthorController {
     @PutMapping("/{publicId}")
     public ResponseEntity<Object> update(
             @PathVariable String publicId,
-            @RequestBody AuthorDTO authorDTO,
+            @RequestBody @Valid AuthorDTO authorDTO,
             HttpServletRequest request
     ) {
 
