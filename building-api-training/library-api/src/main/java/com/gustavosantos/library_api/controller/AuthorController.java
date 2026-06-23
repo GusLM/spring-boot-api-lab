@@ -80,7 +80,7 @@ public class AuthorController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<AuthorDTO>> search(
+    public ResponseEntity<PageResponse<AuthorResponseDTO>> search(
             @RequestParam(value = "firstName", required = false)
             String firstName,
 
@@ -96,7 +96,7 @@ public class AuthorController {
             @RequestParam(value = "size", defaultValue = "10")
             int size
     ) {
-        Page<AuthorDTO> authorDTOPage = authorService.search(
+        Page<AuthorResponseDTO> authorResponseDTOS = authorService.searchByExample(
                 firstName,
                 lastName,
                 nationality,
@@ -104,7 +104,7 @@ public class AuthorController {
                 size
         );
 
-        return ResponseEntity.ok(PageResponse.from(authorDTOPage));
+        return ResponseEntity.ok(PageResponse.from(authorResponseDTOS));
     }
 
     @PutMapping("/{publicId}")

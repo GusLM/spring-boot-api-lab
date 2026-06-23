@@ -6,9 +6,7 @@ import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.repository.AuthorRepository;
 import com.gustavosantos.library_api.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -116,6 +114,40 @@ public class AuthorService {
         }
 
         return authorRepository.findAllCustom(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<AuthorResponseDTO> searchByExample(
+            String firstName,
+            String lastName,
+            String nationality,
+            int page,
+            int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        var author = new Author();
+        author.setFirstName(firstName);
+        author.setLastName(lastName);
+        author.setNationality(nationality);
+
+
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<Author> authorExample = Example.of(author, matcher);
+
+        Page<Author> authors = authorRepository.findAll(authorExample, pageable);
+
+        return authors.map(a -> new AuthorResponseDTO(
+                a.getPublicId(),
+                a.getFirstName(),
+                a.getLastName(),
+                a.getBirthDate(),
+                a.getNationality()
+        ));
     }
 
     private boolean hasText(String value) {
