@@ -1,6 +1,5 @@
 package com.gustavosantos.library_api.service;
 
-import com.gustavosantos.library_api.controller.dto.AuthorDTO;
 import com.gustavosantos.library_api.controller.dto.AuthorResponseDTO;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.repository.AuthorRepository;
@@ -58,64 +57,8 @@ public class AuthorService {
         return authorRepository.existsByPublicId(publicId);
     }
 
-    @Transactional(readOnly = true)
-    public Page<AuthorDTO> search(
-            String firstName,
-            String lastName,
-            String nationality,
-            int page,
-            int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
-
-        boolean hasFirstName = hasText(firstName);
-        boolean hasLastName = hasText(lastName);
-        boolean hasNationality = hasText(nationality);
-
-        if (hasFirstName && hasLastName && hasNationality) {
-            return authorRepository.findByFirstNameAndLastNameAndNationality(
-                    firstName,
-                    lastName,
-                    nationality,
-                    pageable
-            );
-        }
-
-        if (hasFirstName && hasLastName) {
-            return authorRepository.findByFirstNameAndLastName(firstName, lastName, pageable);
-        }
-
-        if (hasFirstName && hasNationality) {
-            return authorRepository.findByFirstNameAndNationality(
-                    firstName,
-                    nationality,
-                    pageable
-            );
-        }
-
-        if (hasLastName && hasNationality) {
-            return authorRepository.findByLastNameAndNationality(
-                    lastName,
-                    nationality,
-                    pageable
-            );
-        }
-
-        if (hasFirstName) {
-            return authorRepository.findByFirstName(firstName, pageable);
-        }
-
-        if (hasLastName) {
-            return authorRepository.findByLastName(lastName, pageable);
-        }
-
-        if (hasNationality) {
-            return authorRepository.findByNationality(nationality, pageable);
-        }
-
-        return authorRepository.findAllCustom(pageable);
-    }
-
+    /*
+    ***** Exemplo de Query By Example *****
     @Transactional(readOnly = true)
     public Page<AuthorResponseDTO> searchByExample(
             String firstName,
@@ -148,6 +91,41 @@ public class AuthorService {
                 a.getBirthDate(),
                 a.getNationality()
         ));
+    }
+     */
+
+    @Transactional(readOnly = true)
+    public Page<AuthorResponseDTO> search(
+            String firstName,
+            String lastName,
+            String nationality,
+            int page,
+            int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        String normalizedFirstName = normalize(firstName);
+        String normalizedLastName = normalize(lastName);
+        String normalizedNationality = normalize(nationality);
+
+        if (normalizedFirstName == null && normalizedLastName == null && normalizedNationality == null) {
+            return authorRepository.searchAll(pageable);
+        }
+
+        return authorRepository.search(
+                toLikePattern(normalizedFirstName),
+                toLikePattern(normalizedLastName),
+                toLikePattern(normalizedNationality),
+                pageable
+        );
+    }
+
+    private String normalize(String value) {
+        return hasText(value) ? value.trim() : null;
+    }
+
+    private String toLikePattern(String value) {
+        return value == null ? "%" : "%" + value + "%";
     }
 
     private boolean hasText(String value) {

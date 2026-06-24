@@ -11,6 +11,8 @@ import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.service.AuthorService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -91,12 +93,15 @@ public class AuthorController {
             String nationality,
 
             @RequestParam(value = "page", defaultValue = "0")
+            @Min(0)
             int page,
 
             @RequestParam(value = "size", defaultValue = "10")
+            @Min(1)
+            @Max(100)
             int size
     ) {
-        Page<AuthorResponseDTO> authorResponseDTOS = authorService.searchByExample(
+        Page<AuthorResponseDTO> authorResponseDTOS = authorService.search(
                 firstName,
                 lastName,
                 nationality,
