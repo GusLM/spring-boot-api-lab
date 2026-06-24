@@ -32,22 +32,17 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid AuthorDTO authorDTO, HttpServletRequest request) {
+    public ResponseEntity<Object> save(@RequestBody @Valid AuthorDTO authorDTO) {
         Author obj = authorDTO.toEntity();
 
-        try {
-            authorService.save(obj);
+        authorService.save(obj);
 
-            URI uri  = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{publicId}")
-                    .buildAndExpand(obj.getPublicId())
-                    .toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{publicId}")
+                .buildAndExpand(obj.getPublicId())
+                .toUri();
 
-            return ResponseEntity.created(uri).build();
-        } catch (DuplicateRecordException e) {
-            var standardError = StandardError.conflict(e.getMessage(), request);
-            return ResponseEntity.status(standardError.getStatus()).body(standardError);
-        }
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping("/{publicId}")
@@ -115,31 +110,10 @@ public class AuthorController {
     @PutMapping("/{publicId}")
     public ResponseEntity<Object> update(
             @PathVariable String publicId,
-            @RequestBody @Valid AuthorDTO authorDTO,
-            HttpServletRequest request
+            @RequestBody @Valid AuthorDTO authorDTO
     ) {
+        authorService.update(UUID.fromString(publicId), authorDTO);
 
-        Optional<Author> authorOptional =
-                authorService.searchAuthorByPublicId(UUID.fromString(publicId));
-
-        if (authorOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Author author = authorOptional.get();
-        author.setFirstName(authorDTO.firstName());
-        author.setLastName(authorDTO.lastName());
-        author.setBirthDate(authorDTO.birthDate());
-        author.setNationality(authorDTO.nationality());
-
-        try {
-            authorService.update(author);
-
-            return ResponseEntity.noContent().build();
-
-        } catch (DuplicateRecordException e) {
-            var standardError = StandardError.conflict(e.getMessage(), request);
-            return ResponseEntity.status(standardError.getStatus()).body(standardError);
-        }
+        return ResponseEntity.noContent().build();
     }
 }

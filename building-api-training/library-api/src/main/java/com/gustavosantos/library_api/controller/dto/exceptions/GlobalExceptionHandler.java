@@ -1,5 +1,7 @@
 package com.gustavosantos.library_api.controller.dto.exceptions;
 
+import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
+import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,5 +35,37 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(standardError);
+    }
+
+    @ExceptionHandler(DuplicateRecordException.class)
+    public ResponseEntity<StandardError> duplicateRecordException(
+            DuplicateRecordException e,
+            HttpServletRequest request
+    ) {
+        StandardError standardError = new StandardError(
+                HttpStatus.CONFLICT.value(),
+                Instant.now(),
+                request.getRequestURI(),
+                e.getMessage(),
+                List.of()
+        );
+
+        return ResponseEntity.status(standardError.getStatus()).body(standardError);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<StandardError> resourceNotFoundException(
+            ResourceNotFoundException e,
+            HttpServletRequest request
+    ) {
+        StandardError standardError = new StandardError(
+                HttpStatus.NOT_FOUND.value(),
+                Instant.now(),
+                request.getRequestURI(),
+                e.getMessage(),
+                List.of()
+        );
+
+        return ResponseEntity.status(standardError.getStatus()).body(standardError);
     }
 }

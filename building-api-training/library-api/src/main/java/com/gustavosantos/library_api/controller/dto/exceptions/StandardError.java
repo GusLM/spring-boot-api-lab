@@ -33,14 +33,6 @@ public class StandardError {
         this.fieldValidationErrorList = fieldValidationErrorList;
     }
 
-    public void addFieldError(FieldValidationError fieldValidationError) {
-        fieldValidationErrorList.add(fieldValidationError);
-    }
-
-    public void removeFieldError(FieldValidationError fieldValidationError) {
-        fieldValidationErrorList.remove(fieldValidationError);
-    }
-
     public static StandardError defaultResponse(String message, HttpServletRequest request) {
         return new StandardError(
                 HttpStatus.BAD_REQUEST.value(),

@@ -1,6 +1,8 @@
 package com.gustavosantos.library_api.service;
 
+import com.gustavosantos.library_api.controller.dto.AuthorDTO;
 import com.gustavosantos.library_api.controller.dto.AuthorResponseDTO;
+import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.repository.AuthorRepository;
 import com.gustavosantos.library_api.validator.AuthorValidator;
@@ -26,14 +28,22 @@ public class AuthorService {
     }
 
     @Transactional
-    public void update(Author author) {
-        if (author.getId() == null) {
-            throw new IllegalArgumentException("The author ID does not exist in the database.");
-        }
+    public void update(UUID publicId, AuthorDTO authorDTO) {
+        Author author = authorRepository.searchAuthorByPublicId(publicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Author not found."));
 
-        validator.checkIfAlreadyExists(author);
+        validator.checkIfAlreadyExists(
+                author.getId(),
+                authorDTO.firstName(),
+                authorDTO.lastName(),
+                authorDTO.birthDate(),
+                authorDTO.nationality()
+        );
 
-        authorRepository.save(author);
+        author.setFirstName(authorDTO.firstName());
+        author.setLastName(authorDTO.lastName());
+        author.setBirthDate(authorDTO.birthDate());
+        author.setNationality(authorDTO.nationality());
     }
 
     @Transactional(readOnly = true)
