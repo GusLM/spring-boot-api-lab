@@ -3,13 +3,8 @@ package com.gustavosantos.library_api.controller;
 import com.gustavosantos.library_api.controller.dto.AuthorDTO;
 import com.gustavosantos.library_api.controller.dto.AuthorResponseDTO;
 import com.gustavosantos.library_api.controller.dto.PageResponse;
-import com.gustavosantos.library_api.controller.dto.exceptions.StandardError;
-import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
-import com.gustavosantos.library_api.exceptions.ForbiddenOperationException;
-import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.service.AuthorService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -54,26 +49,18 @@ public class AuthorController {
         }
 
         AuthorResponseDTO dto = authorOptional.get();
+
         return ResponseEntity.ok(dto);
 
     }
 
     @DeleteMapping("/{publicId}")
     public ResponseEntity<Object> delete(
-            @PathVariable String publicId,
-            HttpServletRequest request
+            @PathVariable String publicId
     ) {
-        try {
-            authorService.delete(UUID.fromString(publicId));
+        authorService.delete(UUID.fromString(publicId));
 
-            return ResponseEntity.noContent().build();
-        } catch (ResourceNotFoundException e) {
-            var standardError = StandardError.resourceNotFound(e.getMessage(), request);
-            return ResponseEntity.status(standardError.getStatus()).body(standardError);
-        } catch (ForbiddenOperationException e) {
-            var standardError = StandardError.forbidden(e.getMessage(), request);
-            return ResponseEntity.status(standardError.getStatus()).body(standardError);
-        }
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
