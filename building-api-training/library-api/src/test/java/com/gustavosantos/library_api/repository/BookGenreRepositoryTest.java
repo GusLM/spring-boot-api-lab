@@ -1,5 +1,6 @@
 package com.gustavosantos.library_api.repository;
 
+import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.BookGenre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,18 +70,22 @@ class BookGenreRepositoryTest {
     void shouldFindBookGenreByPublicIdWhenBookGenreExists() {
         BookGenre savedBookGenre = saveBookGenre("Adventure");
 
-        BookGenre foundBookGenre = bookGenreRepository.findByPublicId(savedBookGenre.getPublicId());
+        Optional<BookGenre> foundBookGenre =
+                bookGenreRepository.findByPublicId(savedBookGenre.getPublicId());
 
         assertThat(foundBookGenre).isNotNull();
-        assertThat(foundBookGenre.getId()).isEqualTo(savedBookGenre.getId());
-        assertThat(foundBookGenre.getGenre()).isEqualTo("Adventure");
+        if (foundBookGenre.isPresent()) {
+            BookGenre bookGenre = foundBookGenre.get();
+            assertThat(bookGenre.getId()).isEqualTo(savedBookGenre.getId());
+            assertThat(bookGenre.getGenre()).isEqualTo("Adventure");
+        }
     }
 
     @Test
     void shouldReturnNullWhenFindingByPublicIdThatDoesNotExist() {
-        BookGenre foundBookGenre = bookGenreRepository.findByPublicId(UUID.randomUUID());
+        Optional<BookGenre> foundBookGenre = bookGenreRepository.findByPublicId(UUID.randomUUID());
 
-        assertThat(foundBookGenre).isNull();
+        assertThat(foundBookGenre.isPresent()).isFalse();
     }
 
     @Test

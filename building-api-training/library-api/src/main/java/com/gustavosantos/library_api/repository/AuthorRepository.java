@@ -1,6 +1,6 @@
 package com.gustavosantos.library_api.repository;
 
-import com.gustavosantos.library_api.controller.dto.AuthorResponseDTO;
+import com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO;
 import com.gustavosantos.library_api.model.Author;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +38,7 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
     void deleteByPublicId(UUID publicId);
 
     @Query("""
-        select new com.gustavosantos.library_api.controller.dto.AuthorResponseDTO(
+        select new com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO(
             a.publicId,
             a.firstName,
             a.lastName,
@@ -51,7 +51,7 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
     Page<AuthorResponseDTO> searchAll(Pageable pageable);
 
     @Query("""
-        select new com.gustavosantos.library_api.controller.dto.AuthorResponseDTO(
+        select new com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO(
             a.publicId,
             a.firstName,
             a.lastName,
@@ -59,9 +59,9 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
             a.nationality
         )
         from Author a
-        where lower(a.firstName) like :firstName
-          and lower(a.lastName) like :lastName
-          and lower(a.nationality) like :nationality
+        where lower(a.firstName) like lower(:firstName)
+          and lower(a.lastName) like lower(:lastName)
+          and lower(a.nationality) like lower(:nationality)
         order by a.firstName, a.lastName
         """)
     Page<AuthorResponseDTO> search(
