@@ -45,7 +45,7 @@ public class Book {
 
     @Setter
     @CreatedDate
-    @Column(name = "registered_at")
+    @Column(name = "registered_at", nullable = false)
     private LocalDateTime registeredAt;
 
     @Setter
@@ -59,7 +59,7 @@ public class Book {
 
     @ToString.Exclude
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "genre_id", nullable = false)
     private BookGenre genre;
 

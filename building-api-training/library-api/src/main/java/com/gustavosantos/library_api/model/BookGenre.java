@@ -33,7 +33,7 @@ public class BookGenre {
 
     @Setter
     @CreatedDate
-    @Column(name = "registered_at")
+    @Column(name = "registered_at", nullable = false)
     private LocalDateTime registeredAt;
 
     @Setter

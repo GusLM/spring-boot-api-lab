@@ -17,7 +17,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "authors", schema = "public")
+@Table(name = "authors", schema = "public", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_authors_first_name_last_name_birthdate_nationality",
+                columnNames = {"first_name", "last_name", "birthdate", "nationality"})
+})
 @Getter
 @NoArgsConstructor
 @ToString
@@ -49,7 +52,7 @@ public class Author {
 
     @Setter
     @CreatedDate
-    @Column(name = "registered_at")
+    @Column(name = "registered_at", nullable = false)
     private LocalDateTime registeredAt;
 
     @Setter
