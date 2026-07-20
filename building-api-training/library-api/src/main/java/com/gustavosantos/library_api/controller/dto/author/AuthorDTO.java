@@ -1,6 +1,5 @@
 package com.gustavosantos.library_api.controller.dto.author;
 
-import com.gustavosantos.library_api.model.Author;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -24,22 +23,4 @@ public record AuthorDTO(
         @NotBlank(message = "required field")
         @Size(max = 100, min = 2, message = "It must be more than 1 character and have a maximum of 100 characters")
         String nationality) {
-
-    public Author toEntity(){
-        return new Author(
-                this.firstName,
-                this.lastName,
-                this.birthDate,
-                this.nationality
-        );
-    }
-
-    public AuthorDTO toAuthorDTO(Author author) {
-        return new AuthorDTO(
-                author.getFirstName(),
-                author.getLastName(),
-                author.getBirthDate(),
-                author.getNationality()
-        );
-    }
 }

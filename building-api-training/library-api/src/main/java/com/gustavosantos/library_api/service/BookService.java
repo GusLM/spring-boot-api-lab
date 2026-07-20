@@ -1,6 +1,6 @@
 package com.gustavosantos.library_api.service;
 
-import com.gustavosantos.library_api.controller.dto.book.BookCreateRequestDTO;
+import com.gustavosantos.library_api.controller.dto.book.BookCreateDTO;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
@@ -24,23 +24,23 @@ public class BookService {
     private final AuthorRepository authorRepository;
 
     @Transactional
-    public Book save(BookCreateRequestDTO bookCreateRequestDTO) {
-        Book book = toEntity(bookCreateRequestDTO);
-        List<Author> authorList = findAuthorsByPublicIdsOrThrow(bookCreateRequestDTO.authorsPublicIds());
+    public Book save(BookCreateDTO bookCreateDTO) {
+        Book book = toEntity(bookCreateDTO);
+        List<Author> authorList = findAuthorsByPublicIdsOrThrow(bookCreateDTO.authorsPublicIds());
 
         authorList.forEach(book::addAuthor);
 
         return bookRepository.save(book);
     }
 
-    private Book toEntity(BookCreateRequestDTO bookCreateRequestDTO) {
-        BookGenre bookGenre = bookGenreRepository.findByPublicId(bookCreateRequestDTO.genrePublicId())
+    private Book toEntity(BookCreateDTO bookCreateDTO) {
+        BookGenre bookGenre = bookGenreRepository.findByPublicId(bookCreateDTO.genrePublicId())
                 .orElseThrow(() -> new ResourceNotFoundException("Book Genre not found."));
 
         Book book = new Book();
-        book.setIsbn(bookCreateRequestDTO.isbn());
-        book.setTitle(bookCreateRequestDTO.title());
-        book.setPublicationDate(bookCreateRequestDTO.publicationDate());
+        book.setIsbn(bookCreateDTO.isbn());
+        book.setTitle(bookCreateDTO.title());
+        book.setPublicationDate(bookCreateDTO.publicationDate());
         book.setGenre(bookGenre);
 
         return book;

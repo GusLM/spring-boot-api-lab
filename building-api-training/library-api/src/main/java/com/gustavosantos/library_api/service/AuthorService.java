@@ -130,6 +130,15 @@ public class AuthorService {
         );
     }
 
+    public Author toEntity(AuthorDTO authorDTO) {
+        return new Author(
+                authorDTO.firstName(),
+                authorDTO.lastName(),
+                authorDTO.birthDate(),
+                authorDTO.nationality()
+        );
+    }
+
     private String normalize(String value) {
         return hasText(value) ? value.trim() : null;
     }

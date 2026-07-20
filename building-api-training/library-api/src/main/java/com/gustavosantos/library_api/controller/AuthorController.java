@@ -28,7 +28,7 @@ public class AuthorController {
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody @Valid AuthorDTO authorDTO) {
-        Author obj = authorDTO.toEntity();
+        Author obj = authorService.toEntity(authorDTO);
 
         authorService.save(obj);
 

@@ -1,6 +1,6 @@
 package com.gustavosantos.library_api.controller;
 
-import com.gustavosantos.library_api.controller.dto.book.BookCreateRequestDTO;
+import com.gustavosantos.library_api.controller.dto.book.BookCreateDTO;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.service.BookService;
 import jakarta.validation.Valid;
@@ -22,8 +22,8 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid BookCreateRequestDTO bookCreateRequestDTO) {
-        Book book = bookService.save(bookCreateRequestDTO);
+    public ResponseEntity<Object> save(@RequestBody @Valid BookCreateDTO bookCreateDTO) {
+        Book book = bookService.save(bookCreateDTO);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{publicId}")
