@@ -1,7 +1,5 @@
 package com.gustavosantos.library_api.controller.dto.book;
 
-import com.gustavosantos.library_api.model.Author;
-import com.gustavosantos.library_api.model.Book;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -25,16 +23,4 @@ public record BookCreateRequestDTO(
 
         List<UUID> authorsPublicIds
 ) {
-
-    public BookCreateRequestDTO toBookDTO(Book book) {
-        List<UUID> authorsId = book.getAuthors().stream().map(Author::getPublicId).toList();
-
-        return new BookCreateRequestDTO(
-                book.getIsbn(),
-                book.getTitle(),
-                book.getPublicationDate(),
-                book.getGenre().getPublicId(),
-                authorsId
-        );
-    }
 }
