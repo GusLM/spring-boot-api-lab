@@ -16,19 +16,29 @@ import java.util.UUID;
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Integer> {
 
-    // Busca um autor pelo seu ID público e retorna um AuthorResponseDTO
-    Optional<AuthorResponseDTO> findByPublicId(UUID publicId);
-
     // Busca a entidade Author completa pelo seu ID público
-    Optional<Author> searchAuthorByPublicId(UUID publicId);
+    @Query("""
+        select a
+        from Author a
+        where a.publicId = :publicId
+        """)
+    Optional<Author> findEntityByPublicId(UUID publicId);
+
+    @Query("""
+        select new com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO(
+            a.publicId,
+            a.firstName,
+            a.lastName,
+            a.birthDate,
+            a.nationality
+        )
+        from Author a
+        where a.publicId = :publicId
+        """)
+    Optional<AuthorResponseDTO> findResponseByPublicId(UUID publicId);
 
     // Busca um autor pelos dados completos para verificar duplicidade
     Optional<Author> findByFirstNameAndLastNameAndBirthDateAndNationality(
-            String firstName, String lastName, LocalDate birthdate, String nationality
-    );
-
-    // Verifica se existe um autor com os dados fornecidos
-    boolean existsByFirstNameAndLastNameAndBirthDateAndNationality(
             String firstName, String lastName, LocalDate birthdate, String nationality
     );
 

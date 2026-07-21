@@ -1,4 +1,4 @@
-package com.gustavosantos.library_api.controller.dto.exceptions;
+package com.gustavosantos.library_api.controller.common;
 
 import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
 import com.gustavosantos.library_api.exceptions.ForbiddenOperationException;

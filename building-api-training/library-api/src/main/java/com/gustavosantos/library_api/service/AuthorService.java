@@ -1,6 +1,6 @@
 package com.gustavosantos.library_api.service;
 
-import com.gustavosantos.library_api.controller.dto.author.AuthorDTO;
+import com.gustavosantos.library_api.controller.dto.author.AuthorRequestDTO;
 import com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
@@ -28,32 +28,27 @@ public class AuthorService {
     }
 
     @Transactional
-    public void update(UUID publicId, AuthorDTO authorDTO) {
-        Author author = authorRepository.searchAuthorByPublicId(publicId)
+    public void update(UUID publicId, AuthorRequestDTO authorRequestDTO) {
+        Author author = authorRepository.findEntityByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Author not found."));
 
         validator.checkIfAlreadyExists(
                 author.getId(),
-                authorDTO.firstName(),
-                authorDTO.lastName(),
-                authorDTO.birthDate(),
-                authorDTO.nationality()
+                authorRequestDTO.firstName(),
+                authorRequestDTO.lastName(),
+                authorRequestDTO.birthDate(),
+                authorRequestDTO.nationality()
         );
 
-        author.setFirstName(authorDTO.firstName());
-        author.setLastName(authorDTO.lastName());
-        author.setBirthDate(authorDTO.birthDate());
-        author.setNationality(authorDTO.nationality());
+        author.setFirstName(authorRequestDTO.firstName());
+        author.setLastName(authorRequestDTO.lastName());
+        author.setBirthDate(authorRequestDTO.birthDate());
+        author.setNationality(authorRequestDTO.nationality());
     }
 
     @Transactional(readOnly = true)
     public Optional<AuthorResponseDTO> findByPublicId(UUID publicId) {
-        return authorRepository.findByPublicId(publicId);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Author> searchAuthorByPublicId(UUID publicId) {
-        return authorRepository.searchAuthorByPublicId(publicId);
+        return authorRepository.findResponseByPublicId(publicId);
     }
 
     @Transactional
@@ -127,15 +122,6 @@ public class AuthorService {
                 toLikePattern(normalizedLastName),
                 toLikePattern(normalizedNationality),
                 pageable
-        );
-    }
-
-    public Author toEntity(AuthorDTO authorDTO) {
-        return new Author(
-                authorDTO.firstName(),
-                authorDTO.lastName(),
-                authorDTO.birthDate(),
-                authorDTO.nationality()
         );
     }
 

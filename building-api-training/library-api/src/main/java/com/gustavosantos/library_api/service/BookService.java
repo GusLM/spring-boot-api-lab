@@ -48,7 +48,7 @@ public class BookService {
 
     private List<Author> findAuthorsByPublicIdsOrThrow(List<UUID> authorsPublicIds) {
         return authorsPublicIds.stream()
-                .map(authorPublicId -> authorRepository.searchAuthorByPublicId(authorPublicId)
+                .map(authorPublicId -> authorRepository.findEntityByPublicId(authorPublicId)
                         .orElseThrow(() -> new ResourceNotFoundException("Author not found with id: " + authorPublicId)))
                 .toList();
     }

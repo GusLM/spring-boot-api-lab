@@ -92,7 +92,7 @@ public class AuthorValidator {
      * @param publicId ID público do autor.
      */
     public void validateAuthorCanBeDeleted(UUID publicId) {
-        Author author = authorRepository.searchAuthorByPublicId(publicId)
+        Author author = authorRepository.findEntityByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Author not found."));
 
         if (bookRepository.existsByAuthorsId(author.getId())) {

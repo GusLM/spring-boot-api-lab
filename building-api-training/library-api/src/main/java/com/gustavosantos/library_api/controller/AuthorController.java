@@ -1,8 +1,9 @@
 package com.gustavosantos.library_api.controller;
 
-import com.gustavosantos.library_api.controller.dto.author.AuthorDTO;
+import com.gustavosantos.library_api.controller.dto.author.AuthorRequestDTO;
 import com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO;
 import com.gustavosantos.library_api.controller.dto.PageResponse;
+import com.gustavosantos.library_api.controller.mappers.AuthorMapper;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.service.AuthorService;
 import jakarta.validation.Valid;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -25,33 +25,28 @@ import java.util.UUID;
 public class AuthorController {
 
     private final AuthorService authorService;
+    private final AuthorMapper mapper;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid AuthorDTO authorDTO) {
-        Author obj = authorService.toEntity(authorDTO);
+    public ResponseEntity<Object> save(@RequestBody @Valid AuthorRequestDTO dto) {
+        Author author = mapper.toEntity(dto);
 
-        authorService.save(obj);
+        authorService.save(author);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{publicId}")
-                .buildAndExpand(obj.getPublicId())
+                .buildAndExpand(author.getPublicId())
                 .toUri();
 
         return ResponseEntity.created(uri).build();
     }
 
     @GetMapping("/{publicId}")
-    public ResponseEntity<AuthorResponseDTO> findByPublicId(@PathVariable String publicId) {
-        Optional<AuthorResponseDTO> authorOptional = authorService.findByPublicId(UUID.fromString(publicId));
-
-        if (authorOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        AuthorResponseDTO dto = authorOptional.get();
-
-        return ResponseEntity.ok(dto);
-
+    public ResponseEntity<AuthorResponseDTO> findByPublicId(@PathVariable UUID publicId) {
+        return authorService
+                .findByPublicId(publicId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{publicId}")
@@ -97,9 +92,9 @@ public class AuthorController {
     @PutMapping("/{publicId}")
     public ResponseEntity<Object> update(
             @PathVariable String publicId,
-            @RequestBody @Valid AuthorDTO authorDTO
+            @RequestBody @Valid AuthorRequestDTO authorRequestDTO
     ) {
-        authorService.update(UUID.fromString(publicId), authorDTO);
+        authorService.update(UUID.fromString(publicId), authorRequestDTO);
 
         return ResponseEntity.noContent().build();
     }

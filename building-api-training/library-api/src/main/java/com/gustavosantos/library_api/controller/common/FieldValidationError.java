@@ -1,4 +1,4 @@
-package com.gustavosantos.library_api.controller.dto.exceptions;
+package com.gustavosantos.library_api.controller.common;
 
 public record FieldValidationError(String field, String error) {
 }

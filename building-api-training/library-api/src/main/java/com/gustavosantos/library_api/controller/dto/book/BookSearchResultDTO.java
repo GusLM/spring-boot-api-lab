@@ -1,6 +1,6 @@
 package com.gustavosantos.library_api.controller.dto.book;
 
-import com.gustavosantos.library_api.controller.dto.author.AuthorDTO;
+import com.gustavosantos.library_api.controller.dto.author.AuthorRequestDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,6 +12,6 @@ public record BookSearchResultDTO(
         String title,
         LocalDate publicationDate,
         UUID genrePublicId,
-        List<AuthorDTO> authors
+        List<AuthorRequestDTO> authors
 ) {
 }

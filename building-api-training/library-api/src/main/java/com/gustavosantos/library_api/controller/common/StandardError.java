@@ -1,4 +1,4 @@
-package com.gustavosantos.library_api.controller.dto.exceptions;
+package com.gustavosantos.library_api.controller.common;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
