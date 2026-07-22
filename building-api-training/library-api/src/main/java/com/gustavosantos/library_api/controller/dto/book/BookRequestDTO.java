@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-public record BookCreateDTO(
+public record BookRequestDTO(
         @ISBN
         @NotBlank(message = "required field")
         @Size(min = 5, max = 20, message = "It must be more than 4 character and have a maximum of 20 characters")
