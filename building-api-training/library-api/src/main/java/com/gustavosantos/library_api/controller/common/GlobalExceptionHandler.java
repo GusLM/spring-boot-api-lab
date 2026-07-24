@@ -1,7 +1,7 @@
 package com.gustavosantos.library_api.controller.common;
 
-import tools.jackson.databind.JsonMappingException;
-import tools.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
 import com.gustavosantos.library_api.exceptions.ForbiddenOperationException;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
 import java.util.List;
@@ -54,6 +55,38 @@ public class GlobalExceptionHandler {
                 Instant.now(),
                 request.getRequestURI(),
                 "invalid request body",
+                List.of()
+        );
+
+        return ResponseEntity.status(standardError.getStatus()).body(standardError);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<StandardError> methodArgumentTypeMismatchException(
+            MethodArgumentTypeMismatchException e,
+            HttpServletRequest request
+    ) {
+
+        StandardError standardError;
+
+        if (UUID.class.equals(e.getRequiredType())) {
+
+            standardError = new StandardError(
+                    HttpStatus.BAD_REQUEST.value(),
+                    Instant.now(),
+                    request.getRequestURI(),
+                    "invalid UUID for field '" + e.getName() + "'",
+                    List.of()
+            );
+
+            return ResponseEntity.status(standardError.getStatus()).body(standardError);
+        }
+
+        standardError = new StandardError(
+                HttpStatus.BAD_REQUEST.value(),
+                Instant.now(),
+                request.getRequestURI(),
+                "invalid parameter",
                 List.of()
         );
 
