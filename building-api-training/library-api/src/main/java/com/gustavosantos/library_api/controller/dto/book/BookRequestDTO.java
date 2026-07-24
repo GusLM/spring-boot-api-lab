@@ -3,6 +3,7 @@ package com.gustavosantos.library_api.controller.dto.book;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.ISBN;
 
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public record BookRequestDTO(
 
         UUID genrePublicId,
 
+        @NotEmpty(message = "empty list not allowed")
         List<UUID> authorsPublicIds
 ) {
 }

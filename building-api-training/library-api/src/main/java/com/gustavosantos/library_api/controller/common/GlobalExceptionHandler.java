@@ -1,11 +1,14 @@
 package com.gustavosantos.library_api.controller.common;
 
+import tools.jackson.databind.JsonMappingException;
+import tools.jackson.databind.exc.InvalidFormatException;
 import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
 import com.gustavosantos.library_api.exceptions.ForbiddenOperationException;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,9 +16,49 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<StandardError> httpMessageNotReadableException(
+            HttpMessageNotReadableException e,
+            HttpServletRequest request
+    ) {
+
+        Throwable cause = e.getCause();
+
+        if (cause instanceof InvalidFormatException invalid &&
+                UUID.class.equals(invalid.getTargetType())) {
+
+            String field = invalid.getPath()
+                    .stream()
+                    .findFirst()
+                    .map(JsonMappingException.Reference::getFieldName)
+                    .orElse("unknown");
+
+            StandardError standardError = new StandardError(
+                    HttpStatus.BAD_REQUEST.value(),
+                    Instant.now(),
+                    request.getRequestURI(),
+                    "invalid UUID for field '" + field + "'",
+                    List.of()
+            );
+
+            return ResponseEntity.status(standardError.getStatus()).body(standardError);
+        }
+
+        StandardError standardError = new StandardError(
+                HttpStatus.BAD_REQUEST.value(),
+                Instant.now(),
+                request.getRequestURI(),
+                "invalid request body",
+                List.of()
+        );
+
+        return ResponseEntity.status(standardError.getStatus()).body(standardError);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<StandardError> methodArgumentNotValidException(
