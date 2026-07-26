@@ -57,11 +57,6 @@ public class AuthorService {
         authorRepository.deleteByPublicId(publicId);
     }
 
-    @Transactional(readOnly = true)
-    public boolean existsByPublicId(UUID publicId) {
-        return authorRepository.existsByPublicId(publicId);
-    }
-
     /*
     ***** Exemplo de Query By Example *****
     @Transactional(readOnly = true)

@@ -1,6 +1,7 @@
 package com.gustavosantos.library_api.controller.mappers;
 
 import com.gustavosantos.library_api.controller.dto.book.BookRequestDTO;
+import com.gustavosantos.library_api.controller.dto.book.BookSearchResultDTO;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
@@ -14,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses =  AuthorMapper.class)
 public abstract class BookMapper {
 
     @Autowired
@@ -32,6 +33,9 @@ public abstract class BookMapper {
     @Mapping(target = "authors", ignore = true)
     @Mapping(target = "genre", source = "genrePublicId")
     public abstract Book toEntity(BookRequestDTO dto);
+
+    @Mapping(target = "genrePublicId", source = "genre.publicId")
+    public abstract BookSearchResultDTO toSearchResultDto(Book book);
 
     protected BookGenre mapGenre(UUID genrePublicId) {
         if (genrePublicId == null) {
