@@ -65,7 +65,7 @@ public class Author {
     private Integer userId;
 
     @ToString.Exclude
-    @ManyToMany(mappedBy = "authors", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "authors")
     private final List<Book> books = new ArrayList<>();
 
     public Author(String firstName, String lastName, LocalDate birthDate, String nationality) {

@@ -11,28 +11,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/books")
-public class BookController {
+public class BookController implements GenericController{
 
     private final BookService bookService;
     private final BookMapper mapper;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid BookRequestDTO dto) {
+    public ResponseEntity<Void> save(@RequestBody @Valid BookRequestDTO dto) {
         Book book = bookService.save(dto);
-
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{publicId}")
-                .buildAndExpand(book.getPublicId())
-                .toUri();
-
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(headerLocationGenerator(book.getPublicId())).build();
     }
 
 }

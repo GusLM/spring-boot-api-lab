@@ -13,32 +13,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/authors")
 // http://localhost:8080/authors
-public class AuthorController {
+public class AuthorController implements GenericController{
 
     private final AuthorService authorService;
     private final AuthorMapper mapper;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid AuthorRequestDTO dto) {
+    public ResponseEntity<Void> save(@RequestBody @Valid AuthorRequestDTO dto) {
         Author author = mapper.toEntity(dto);
-
         authorService.save(author);
-
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{publicId}")
-                .buildAndExpand(author.getPublicId())
-                .toUri();
-
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(headerLocationGenerator(author.getPublicId())).build();
     }
 
     @GetMapping("/{publicId}")
@@ -50,7 +41,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{publicId}")
-    public ResponseEntity<Object> delete(
+    public ResponseEntity<Void> delete(
             @PathVariable String publicId
     ) {
         authorService.delete(UUID.fromString(publicId));
@@ -90,7 +81,7 @@ public class AuthorController {
     }
 
     @PutMapping("/{publicId}")
-    public ResponseEntity<Object> update(
+    public ResponseEntity<Void> update(
             @PathVariable String publicId,
             @RequestBody @Valid AuthorRequestDTO authorRequestDTO
     ) {

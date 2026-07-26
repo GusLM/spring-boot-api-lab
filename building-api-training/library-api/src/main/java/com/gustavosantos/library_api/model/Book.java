@@ -59,12 +59,12 @@ public class Book {
 
     @ToString.Exclude
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id", nullable = false)
     private BookGenre genre;
 
     @ToString.Exclude
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany
     @JoinTable(
             name = "books_authors",
             joinColumns = @JoinColumn(name = "book_id"),
