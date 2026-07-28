@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -36,5 +37,27 @@ public class BookController implements GenericController{
         bookService.delete(publicId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BookSearchResultDTO>> search(
+            @RequestParam(value = "isbn", required = false)
+            String isbn,
+
+            @RequestParam(value = "title", required = false)
+            String title,
+
+            @RequestParam(value = "publication-year", required = false)
+            Integer publicationYear,
+
+            @RequestParam(value = "genre-name", required = false)
+            String genreName,
+
+            @RequestParam(value = "author-name", required = false)
+            String AuthorName
+    ) {
+        List<BookSearchResultDTO> books = bookService.search(isbn, title, publicationYear, genreName, AuthorName);
+
+        return ResponseEntity.ok(books);
     }
 }

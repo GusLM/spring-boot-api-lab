@@ -9,8 +9,11 @@ import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.repository.AuthorRepository;
 import com.gustavosantos.library_api.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.gustavosantos.library_api.repository.specs.BookSpecs.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -54,5 +57,44 @@ public class BookService {
         }
 
         bookRepository.deleteByPublicId(publicId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BookSearchResultDTO> search(
+            String isbn,
+            String title,
+            Integer year,
+            String genreName,
+            String authorName
+    ) {
+
+        Specification<Book> specs =
+                Specification.
+                        where((root, query, criteriaBuilder) ->
+                                criteriaBuilder.conjunction());
+
+        if (isbn != null) {
+            specs = specs.and(isbnEqual(isbn));
+        }
+
+        if (title != null) {
+            specs = specs.and(titleLike(title));
+        }
+
+        if (year != null) {
+            specs = specs.and(publicationYearEqual(year));
+        }
+
+        if (genreName != null) {
+            specs = specs.and(genreNameLike(genreName));
+        }
+
+        if (authorName != null) {
+            specs = specs.and(authorNameLike(authorName));
+        }
+
+        List<Book> books = bookRepository.findAll(specs);
+
+        return books.stream().map(mapper::toSearchResultDto).toList();
     }
 }
