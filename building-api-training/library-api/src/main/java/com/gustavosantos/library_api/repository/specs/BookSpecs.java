@@ -1,6 +1,8 @@
 package com.gustavosantos.library_api.repository.specs;
 
 import com.gustavosantos.library_api.model.Book;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
 public class BookSpecs {
@@ -22,16 +24,36 @@ public class BookSpecs {
     }
 
     public static Specification<Book> genreNameLike(String genreName) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(
-                        criteriaBuilder.upper(root.get("genre").get("genre")
-                        ),"%" + genreName.toUpperCase() + "%");
+        return (root, query, criteriaBuilder) -> {
+            Join<Object, Object> joinGenre = root.join("genre", JoinType.LEFT);
+
+            return criteriaBuilder.like(
+                    criteriaBuilder.upper(joinGenre.get("genre")), "%" + genreName.toUpperCase() + "%"
+            );
+
+//            return criteriaBuilder.like(
+//                    criteriaBuilder.upper(root.get("genre").get("genre")
+//                    ),"%" + genreName.toUpperCase() + "%"
+//            );
+        };
+
+
+
     }
 
     public static Specification<Book> authorNameLike(String authorName) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(
-                        criteriaBuilder.upper(root.get("authors").get("firstName")
-                        ),"%" + authorName.toUpperCase() + "%");
+        return (root, query, criteriaBuilder) -> {
+
+            Join<Object, Object> authorJoin = root.join("authors", JoinType.LEFT);
+
+            return criteriaBuilder.like(
+                    criteriaBuilder.upper(authorJoin.get("firstName")), "%" + authorName.toUpperCase() + "%"
+            );
+
+//            return criteriaBuilder.like(
+//                    criteriaBuilder.upper(root.get("authors").get("firstName")
+//                    ),"%" + authorName.toUpperCase() + "%"
+//            );
+        };
     }
 }
