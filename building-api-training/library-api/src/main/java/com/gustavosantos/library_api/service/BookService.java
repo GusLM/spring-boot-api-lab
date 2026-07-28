@@ -7,14 +7,12 @@ import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.repository.AuthorRepository;
-import com.gustavosantos.library_api.repository.BookGenreRepository;
 import com.gustavosantos.library_api.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -47,5 +45,14 @@ public class BookService {
                 .map(authorPublicId -> authorRepository.findEntityByPublicId(authorPublicId)
                         .orElseThrow(() -> new ResourceNotFoundException("Author not found with id: " + authorPublicId)))
                 .toList();
+    }
+
+    @Transactional
+    public void delete(UUID publicId) {
+        if (!bookRepository.existsByPublicId(publicId)) {
+            throw new ResourceNotFoundException("Book not found with id: " + publicId);
+        }
+
+        bookRepository.deleteByPublicId(publicId);
     }
 }

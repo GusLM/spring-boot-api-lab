@@ -34,7 +34,7 @@ public abstract class BookMapper {
     @Mapping(target = "genre", source = "genrePublicId")
     public abstract Book toEntity(BookRequestDTO dto);
 
-    @Mapping(target = "genrePublicId", source = "genre.publicId")
+    @Mapping(target = "genre", source = "genre.genre")
     public abstract BookSearchResultDTO toSearchResultDto(Book book);
 
     protected BookGenre mapGenre(UUID genrePublicId) {

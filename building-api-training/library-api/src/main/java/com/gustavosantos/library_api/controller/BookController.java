@@ -26,8 +26,15 @@ public class BookController implements GenericController{
         return ResponseEntity.created(headerLocationGenerator(book.getPublicId())).build();
     }
 
-    @GetMapping("{publicId}")
+    @GetMapping("/{publicId}")
     public ResponseEntity<BookSearchResultDTO> findByPublicId(@PathVariable UUID publicId) {
         return ResponseEntity.ok(bookService.findByPublicId(publicId));
+    }
+
+    @DeleteMapping("/{publicId}")
+    public ResponseEntity<Void> delete(@PathVariable UUID publicId) {
+        bookService.delete(publicId);
+
+        return ResponseEntity.noContent().build();
     }
 }

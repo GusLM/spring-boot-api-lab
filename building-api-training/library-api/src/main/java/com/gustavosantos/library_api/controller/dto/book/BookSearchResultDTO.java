@@ -11,7 +11,7 @@ public record BookSearchResultDTO(
         String isbn,
         String title,
         LocalDate publicationDate,
-        UUID genrePublicId,
+        String genre,
         List<AuthorResponseDTO> authors
 ) {
 }

@@ -1,9 +1,9 @@
 package com.gustavosantos.library_api.repository;
 
-import com.gustavosantos.library_api.controller.dto.book.BookSearchResultDTO;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -26,4 +26,10 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Author> findAllAuthorsWhoHaveBooks();
 
     Optional<Book> findByPublicId(UUID publicId);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("DELETE FROM Book b WHERE b.publicId = :publicId")
+    void deleteByPublicId(UUID publicId);
+
+    boolean existsByPublicId(UUID publicId);
 }
