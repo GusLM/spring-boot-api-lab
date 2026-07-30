@@ -118,7 +118,7 @@ public class BookRepositoryTest {
 
         assertThat(foundBooks).isNotNull();
         assertThat(foundBooks).hasSize(1);
-        assertThat(foundBooks.get(0).getTitle()).isEqualTo(book.getTitle());
+        assertThat(foundBooks.getFirst().getTitle()).isEqualTo(book.getTitle());
     }
 
     @Test
@@ -137,7 +137,6 @@ public class BookRepositoryTest {
     @Test
     void shouldFindAuthorsWhoHaveBooks() {
         Author author = new Author("John", "Smith", LocalDate.of(1990, 7, 20), "British");
-        Author author1 = new Author("Maria", "Doe", LocalDate.of(1998, 2, 5), "Spanish");
         Author author2 = new Author("Joseph", "Joestar", LocalDate.of(2000, 6, 12), "American");
 
         Book book = createBook();

@@ -2,7 +2,6 @@ package com.gustavosantos.library_api.validator;
 
 import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
 import com.gustavosantos.library_api.exceptions.ForbiddenOperationException;
-import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.repository.AuthorRepository;
 import com.gustavosantos.library_api.repository.BookRepository;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor

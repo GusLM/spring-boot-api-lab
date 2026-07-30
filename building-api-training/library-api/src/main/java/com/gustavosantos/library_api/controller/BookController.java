@@ -19,7 +19,6 @@ import java.util.UUID;
 public class BookController implements GenericController{
 
     private final BookService bookService;
-    private final BookMapper mapper;
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody @Valid BookRequestDTO dto) {
