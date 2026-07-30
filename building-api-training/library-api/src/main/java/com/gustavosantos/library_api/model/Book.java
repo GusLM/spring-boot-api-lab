@@ -17,7 +17,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "books", schema = "public")
+@Table(name = "books", schema = "public", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_books_publicid",
+                columnNames = {"public_id"}),
+        @UniqueConstraint(name = "uk_books_isbn",
+                columnNames = {"isbn"})
+})
 @Getter
 @NoArgsConstructor
 @ToString

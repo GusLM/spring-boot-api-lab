@@ -6,8 +6,12 @@ import com.gustavosantos.library_api.controller.mappers.BookMapper;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
+import com.gustavosantos.library_api.model.BookGenre;
 import com.gustavosantos.library_api.repository.AuthorRepository;
+import com.gustavosantos.library_api.repository.BookGenreRepository;
 import com.gustavosantos.library_api.repository.BookRepository;
+import com.gustavosantos.library_api.validator.BookValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -23,8 +27,10 @@ import java.util.UUID;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookGenreRepository bookGenreRepository;
     private final AuthorRepository authorRepository;
     private final BookMapper mapper;
+    private final BookValidator bookValidator;
 
     @Transactional
     public Book save(BookRequestDTO bookRequestDTO) {
@@ -96,5 +102,22 @@ public class BookService {
         List<Book> books = bookRepository.findAll(specs);
 
         return books.stream().map(mapper::toSearchResultDto).toList();
+    }
+
+    public void update(UUID publicId, BookRequestDTO dto) {
+        Book book = bookRepository
+                .findByPublicId(publicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + publicId));
+
+        BookGenre bookGenre = bookGenreRepository
+                .findByPublicId(dto.genrePublicId())
+                .orElseThrow(() -> new ResourceNotFoundException("Genre not found with id: " + dto.genrePublicId()));
+
+        bookValidator.validateIsbnNotRegistered(book.getId(), dto.isbn());
+
+        book.setIsbn(dto.isbn());
+        book.setTitle(dto.title());
+        book.setPublicationDate(dto.publicationDate());
+        book.setGenre(bookGenre);
     }
 }

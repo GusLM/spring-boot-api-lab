@@ -14,7 +14,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "books_genres", schema = "public")
+@Table(name = "books_genres", schema = "public", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_books_genres_public_id",columnNames = {"public_id"}),
+        @UniqueConstraint(name = "uk_books_genres_genre", columnNames = {"genre"})
+})
 @Getter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)

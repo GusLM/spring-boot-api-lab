@@ -53,7 +53,9 @@ public class AuthorService {
 
     @Transactional
     public void delete(UUID publicId) {
-        validator.validateAuthorCanBeDeleted(publicId);
+        Author author = authorRepository.findEntityByPublicId(publicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Author not found."));
+        validator.validateAuthorCanBeDeleted(author);
         authorRepository.deleteByPublicId(publicId);
     }
 

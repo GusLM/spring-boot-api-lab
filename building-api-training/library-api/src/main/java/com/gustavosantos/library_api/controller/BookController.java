@@ -53,11 +53,17 @@ public class BookController implements GenericController{
             @RequestParam(value = "genre-name", required = false)
             String genreName,
 
-            @RequestParam(value = "author-name", required = false)
-            String AuthorName
+            @RequestParam(value = "authorName", required = false)
+            String authorName
     ) {
-        List<BookSearchResultDTO> books = bookService.search(isbn, title, publicationYear, genreName, AuthorName);
+        List<BookSearchResultDTO> books = bookService.search(isbn, title, publicationYear, genreName, authorName);
 
         return ResponseEntity.ok(books);
+    }
+
+    @PutMapping("/{publicId}")
+    public ResponseEntity<Void> update(@PathVariable UUID publicId, @RequestBody @Valid BookRequestDTO dto) {
+        bookService.update(publicId, dto);
+        return ResponseEntity.noContent().build();
     }
 }

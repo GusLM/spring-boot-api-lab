@@ -82,10 +82,10 @@ public class AuthorController implements GenericController{
 
     @PutMapping("/{publicId}")
     public ResponseEntity<Void> update(
-            @PathVariable String publicId,
+            @PathVariable UUID publicId,
             @RequestBody @Valid AuthorRequestDTO authorRequestDTO
     ) {
-        authorService.update(UUID.fromString(publicId), authorRequestDTO);
+        authorService.update(publicId, authorRequestDTO);
 
         return ResponseEntity.noContent().build();
     }

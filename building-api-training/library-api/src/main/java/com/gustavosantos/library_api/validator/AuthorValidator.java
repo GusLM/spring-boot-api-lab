@@ -91,10 +91,7 @@ public class AuthorValidator {
      * A exclusão é impedida se o autor possuir livros vinculados.
      * @param publicId ID público do autor.
      */
-    public void validateAuthorCanBeDeleted(UUID publicId) {
-        Author author = authorRepository.findEntityByPublicId(publicId)
-                .orElseThrow(() -> new ResourceNotFoundException("Author not found."));
-
+    public void validateAuthorCanBeDeleted(Author author) {
         if (bookRepository.existsByAuthorsId(author.getId())) {
             throw new ForbiddenOperationException("Author cannot be deleted because it has books.");
         }

@@ -15,7 +15,7 @@ import java.util.UUID;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer>, JpaSpecificationExecutor<Book> {
 
-    Book findByIsbn(String isbn);
+    Optional<Book> findByIsbn(String isbn);
 
     List<Book> findByTitleContainingIgnoreCase(String title);
 
