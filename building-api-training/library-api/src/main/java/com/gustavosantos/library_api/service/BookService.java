@@ -11,7 +11,6 @@ import com.gustavosantos.library_api.repository.AuthorRepository;
 import com.gustavosantos.library_api.repository.BookGenreRepository;
 import com.gustavosantos.library_api.repository.BookRepository;
 import com.gustavosantos.library_api.validator.BookValidator;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -19,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.gustavosantos.library_api.repository.specs.BookSpecs.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,9 +33,10 @@ public class BookService {
     private final BookValidator bookValidator;
 
     @Transactional
-    public Book save(BookRequestDTO bookRequestDTO) {
-        Book book = mapper.toEntity(bookRequestDTO);
-        List<Author> authorList = findAuthorsByPublicIdsOrThrow(bookRequestDTO.authorsPublicIds());
+    public Book save(BookRequestDTO dto) {
+        Book book = mapper.toEntity(dto);
+        bookValidator.validateIsbnNotRegistered(book.getId(), book.getIsbn());
+        List<Author> authorList = findAuthorsByPublicIdsOrThrow(dto.authorsPublicIds());
         authorList.forEach(book::addAuthor);
         return bookRepository.save(book);
     }
@@ -47,13 +48,6 @@ public class BookService {
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + publicId));
 
         return mapper.toSearchResultDto(book);
-    }
-
-    private List<Author> findAuthorsByPublicIdsOrThrow(List<UUID> authorsPublicIds) {
-        return authorsPublicIds.stream()
-                .map(authorPublicId -> authorRepository.findEntityByPublicId(authorPublicId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Author not found with id: " + authorPublicId)))
-                .toList();
     }
 
     @Transactional
@@ -104,20 +98,39 @@ public class BookService {
         return books.stream().map(mapper::toSearchResultDto).toList();
     }
 
+    @Transactional
     public void update(UUID publicId, BookRequestDTO dto) {
         Book book = bookRepository
                 .findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + publicId));
 
+        bookValidator.validateIsbnNotRegistered(book.getId(), dto.isbn());
+
         BookGenre bookGenre = bookGenreRepository
                 .findByPublicId(dto.genrePublicId())
                 .orElseThrow(() -> new ResourceNotFoundException("Genre not found with id: " + dto.genrePublicId()));
 
-        bookValidator.validateIsbnNotRegistered(book.getId(), dto.isbn());
+        List<Author> authorList = findAuthorsByPublicIdsOrThrow(dto.authorsPublicIds());
 
         book.setIsbn(dto.isbn());
         book.setTitle(dto.title());
         book.setPublicationDate(dto.publicationDate());
         book.setGenre(bookGenre);
+
+        updateAuthors(book, authorList);
+    }
+
+    private List<Author> findAuthorsByPublicIdsOrThrow(List<UUID> authorsPublicIds) {
+        return authorsPublicIds
+                .stream()
+                .map(authorPublicId -> authorRepository.findEntityByPublicId(authorPublicId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Author not found with id: " + authorPublicId)))
+                .toList();
+    }
+
+    private void updateAuthors(Book book, List<Author> authors) {
+        new ArrayList<>(book.getAuthors()).forEach(book::removeAuthor);
+
+        authors.forEach(book::addAuthor);
     }
 }

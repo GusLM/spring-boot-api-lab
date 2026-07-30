@@ -3,11 +3,10 @@ package com.gustavosantos.library_api.controller.mappers;
 import com.gustavosantos.library_api.controller.dto.book.BookRequestDTO;
 import com.gustavosantos.library_api.controller.dto.book.BookSearchResultDTO;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
-import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.model.BookGenre;
-import com.gustavosantos.library_api.repository.AuthorRepository;
 import com.gustavosantos.library_api.repository.BookGenreRepository;
+import com.gustavosantos.library_api.service.AuthorService;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,10 +18,10 @@ import java.util.UUID;
 public abstract class BookMapper {
 
     @Autowired
-    AuthorRepository authorRepository;
+    BookGenreRepository bookGenreRepository;
 
     @Autowired
-    BookGenreRepository bookGenreRepository;
+    AuthorService authorService;
 
 
     @Mapping(target = "id", ignore = true)
@@ -56,12 +55,7 @@ public abstract class BookMapper {
         }
 
         authorsPublicIds.stream()
-                .map(this::findAuthorByPublicId)
+                .map(authorService::findAuthorByPublicId)
                 .forEach(book::addAuthor);
-    }
-
-    private Author findAuthorByPublicId(UUID publicId) {
-        return authorRepository.findEntityByPublicId(publicId)
-                .orElseThrow(() -> new ResourceNotFoundException("Author not found: " + publicId));
     }
 }

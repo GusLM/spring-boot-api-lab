@@ -18,10 +18,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "books", schema = "public", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_books_publicid",
-                columnNames = {"public_id"}),
-        @UniqueConstraint(name = "uk_books_isbn",
-                columnNames = {"isbn"})
+        @UniqueConstraint(name = "uk_books_publicid", columnNames = {"public_id"}),
+        @UniqueConstraint(name = "uk_books_isbn", columnNames = {"isbn"})
 })
 @Getter
 @NoArgsConstructor
@@ -33,11 +31,11 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "public_id", nullable = false, unique = true)
+    @Column(name = "public_id", nullable = false)
     private UUID publicId;
 
     @Setter
-    @Column(name = "isbn", nullable = false, unique = true, length = 20)
+    @Column(name = "isbn", nullable = false, length = 20)
     private String isbn;
 
     @Setter

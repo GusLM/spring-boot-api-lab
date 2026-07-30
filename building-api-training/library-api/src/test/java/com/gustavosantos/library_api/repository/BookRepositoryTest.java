@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -98,10 +99,16 @@ public class BookRepositoryTest {
     @Test
     void shouldFindByIsbn() {
         Book book = bookRepository.saveAndFlush(createBook());
-        Book foundBook = bookRepository.findByIsbn(book.getIsbn());
+        Optional<Book> foundBook = bookRepository.findByIsbn(book.getIsbn());
 
-        assertThat(foundBook).isNotNull();
-        assertThat(foundBook.getIsbn()).isEqualTo(book.getIsbn());
+        assertThat(foundBook.isPresent());
+
+        Book foundedBook = new Book();
+        if (foundBook.isPresent()) {
+            foundedBook = foundBook.get();
+        }
+
+        assertThat(foundedBook.getIsbn()).isEqualTo(book.getIsbn());
     }
 
     @Test

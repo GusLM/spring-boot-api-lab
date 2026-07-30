@@ -122,6 +122,11 @@ public class AuthorService {
         );
     }
 
+    public Author findAuthorByPublicId(UUID publicId) {
+        return authorRepository.findEntityByPublicId(publicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Author not found: " + publicId));
+    }
+
     private String normalize(String value) {
         return hasText(value) ? value.trim() : null;
     }
