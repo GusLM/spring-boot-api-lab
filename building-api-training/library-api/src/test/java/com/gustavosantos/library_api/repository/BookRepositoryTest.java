@@ -23,6 +23,12 @@ public class BookRepositoryTest {
     private BookRepository bookRepository;
 
     @Autowired
+    private BookGenreRepository bookGenreRepository;
+
+    @Autowired
+    private AuthorRepository authorRepository;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Test
@@ -125,19 +131,22 @@ public class BookRepositoryTest {
     void shouldFindByAuthors() {
         Book book = createBook();
         Author author = new Author("John", "Smith", LocalDate.of(1990, 7, 20), "British");
+        authorRepository.saveAndFlush(author);
         book.addAuthor(author);
         bookRepository.saveAndFlush(book);
         List<Book> foundBooks = bookRepository.findByAuthors(author);
 
         assertThat(foundBooks).isNotNull();
         assertThat(foundBooks).hasSize(1);
-        assertThat(foundBooks.get(0).getTitle()).isEqualTo(book.getTitle());
+        assertThat(foundBooks.getFirst().getTitle()).isEqualTo(book.getTitle());
     }
 
     @Test
     void shouldFindAuthorsWhoHaveBooks() {
         Author author = new Author("John", "Smith", LocalDate.of(1990, 7, 20), "British");
         Author author2 = new Author("Joseph", "Joestar", LocalDate.of(2000, 6, 12), "American");
+        authorRepository.saveAndFlush(author);
+        authorRepository.saveAndFlush(author2);
 
         Book book = createBook();
         book.addAuthor(author);
@@ -156,6 +165,7 @@ public class BookRepositoryTest {
     }
 
     private BookGenre createBookGenre() {
-        return new BookGenre("Guide");
+        BookGenre bookGenre = new BookGenre("Guide");
+        return bookGenreRepository.save(bookGenre);
     }
 }

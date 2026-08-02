@@ -121,7 +121,7 @@ class BookGenreRepositoryTest {
         int deletedRows = bookGenreRepository.deleteByPublicId(savedBookGenre.getPublicId());
 
         assertThat(deletedRows).isEqualTo(1);
-        assertThat(bookGenreRepository.findByPublicId(savedBookGenre.getPublicId())).isNull();
+        assertThat(bookGenreRepository.findByPublicId(savedBookGenre.getPublicId()).isEmpty());
     }
 
     @Test
