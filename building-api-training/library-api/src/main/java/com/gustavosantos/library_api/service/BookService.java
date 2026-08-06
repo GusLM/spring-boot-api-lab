@@ -12,6 +12,9 @@ import com.gustavosantos.library_api.repository.BookGenreRepository;
 import com.gustavosantos.library_api.repository.BookRepository;
 import com.gustavosantos.library_api.validator.BookValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,12 +63,14 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public List<BookSearchResultDTO> search(
+    public Page<BookSearchResultDTO> search(
             String isbn,
             String title,
             Integer year,
             String genreName,
-            String authorName
+            String authorName,
+            Integer page,
+            Integer pageSize
     ) {
 
         Specification<Book> specs =
@@ -93,9 +98,10 @@ public class BookService {
             specs = specs.and(authorNameLike(authorName));
         }
 
-        List<Book> books = bookRepository.findAll(specs);
+        Pageable pageable = PageRequest.of(page, pageSize);
 
-        return books.stream().map(mapper::toSearchResultDto).toList();
+        return bookRepository.findAll(specs, pageable)
+                .map(mapper::toSearchResultDto);
     }
 
     @Transactional

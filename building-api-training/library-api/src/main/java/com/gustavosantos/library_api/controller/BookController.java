@@ -1,15 +1,16 @@
 package com.gustavosantos.library_api.controller;
 
+import com.gustavosantos.library_api.controller.dto.PageResponse;
 import com.gustavosantos.library_api.controller.dto.book.BookRequestDTO;
 import com.gustavosantos.library_api.controller.dto.book.BookSearchResultDTO;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class BookController implements GenericController{
     }
 
     @GetMapping
-    public ResponseEntity<List<BookSearchResultDTO>> search(
+    public ResponseEntity<PageResponse<BookSearchResultDTO>> search(
             @RequestParam(value = "isbn", required = false)
             String isbn,
 
@@ -52,11 +53,18 @@ public class BookController implements GenericController{
             String genreName,
 
             @RequestParam(value = "authorName", required = false)
-            String authorName
-    ) {
-        List<BookSearchResultDTO> books = bookService.search(isbn, title, publicationYear, genreName, authorName);
+            String authorName,
 
-        return ResponseEntity.ok(books);
+            @RequestParam(value = "page", defaultValue = "0")
+            Integer page,
+
+            @RequestParam(value = "page-size", defaultValue = "10")
+            Integer pageSize
+    ) {
+        Page<BookSearchResultDTO> books = bookService
+                .search(isbn, title, publicationYear, genreName, authorName, page, pageSize);
+
+        return ResponseEntity.ok(PageResponse.from(books));
     }
 
     @PutMapping("/{publicId}")
