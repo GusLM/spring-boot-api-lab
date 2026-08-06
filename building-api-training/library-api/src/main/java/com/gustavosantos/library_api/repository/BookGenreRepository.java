@@ -2,6 +2,7 @@ package com.gustavosantos.library_api.repository;
 
 import com.gustavosantos.library_api.model.BookGenre;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,11 +11,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface BookGenreRepository extends JpaRepository<BookGenre, Integer> {
+public interface BookGenreRepository extends JpaRepository<BookGenre, Integer>, JpaSpecificationExecutor<BookGenre> {
 
     Optional<BookGenre> findByPublicId(UUID publicId);
 
-    BookGenre findByGenre(String genre);
+    Optional<BookGenre> findByGenre(String genre);
 
     boolean existsBookGenresByPublicId(UUID publicId);
 

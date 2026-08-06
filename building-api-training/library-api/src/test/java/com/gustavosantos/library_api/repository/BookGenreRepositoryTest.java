@@ -1,5 +1,6 @@
 package com.gustavosantos.library_api.repository;
 
+import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.model.BookGenre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,15 +92,19 @@ class BookGenreRepositoryTest {
     void shouldFindBookGenreByGenreWhenBookGenreExists() {
         saveBookGenre("Science Fiction");
 
-        BookGenre foundBookGenre = bookGenreRepository.findByGenre("Science Fiction");
+        Optional<BookGenre> searchBookGenre = bookGenreRepository.findByGenre("Science Fiction");
 
-        assertThat(foundBookGenre).isNotNull();
-        assertThat(foundBookGenre.getGenre()).isEqualTo("Science Fiction");
+        assertThat(searchBookGenre).isNotEmpty();
+
+        searchBookGenre
+                .ifPresent(
+                        foundedBookGenre ->
+                                assertThat(foundedBookGenre.getGenre()).isEqualTo("Science Fiction"));
     }
 
     @Test
     void shouldReturnNullWhenFindingByGenreThatDoesNotExist() {
-        BookGenre foundBookGenre = bookGenreRepository.findByGenre("Biography");
+        Optional<BookGenre> foundBookGenre = bookGenreRepository.findByGenre("Biography");
 
         assertThat(foundBookGenre).isNull();
     }
