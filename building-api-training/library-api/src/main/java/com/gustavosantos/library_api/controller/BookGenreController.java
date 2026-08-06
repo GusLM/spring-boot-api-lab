@@ -29,4 +29,10 @@ public class BookGenreController implements GenericController{
     public ResponseEntity<BookGenreSearchResultDTO> findByPublicId(@PathVariable UUID publicId) {
         return ResponseEntity.ok(bookGenreService.findByPublicId(publicId));
     }
+
+    @DeleteMapping("/{publicId}")
+    public ResponseEntity<Void> deleteByPublicId(@PathVariable UUID publicId) {
+        bookGenreService.deleteByPublicId(publicId);
+        return ResponseEntity.noContent().build();
+    }
 }

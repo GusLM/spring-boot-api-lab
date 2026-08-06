@@ -29,11 +29,19 @@ public class BookGenreService {
         return bookGenreRepository.save(bookGenre);
     }
 
+    @Transactional(readOnly = true)
     public BookGenreSearchResultDTO findByPublicId(UUID publicId) {
         BookGenre bookGenre = bookGenreRepository
                 .findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + publicId));
 
         return mapper.toSearchResultDto(bookGenre);
+    }
+
+    @Transactional
+    public void deleteByPublicId(UUID publicId) {
+        if (bookGenreRepository.deleteByPublicId(publicId) == 0) {
+            throw new ResourceNotFoundException("Genre not found with id: " + publicId);
+        }
     }
 }
