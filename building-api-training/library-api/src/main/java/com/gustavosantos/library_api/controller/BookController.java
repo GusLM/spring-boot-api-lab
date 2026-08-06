@@ -6,6 +6,8 @@ import com.gustavosantos.library_api.controller.dto.book.BookSearchResultDTO;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.service.BookService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -56,9 +58,12 @@ public class BookController implements GenericController{
             String authorName,
 
             @RequestParam(value = "page", defaultValue = "0")
+            @Min(0)
             Integer page,
 
             @RequestParam(value = "page-size", defaultValue = "10")
+            @Min(1)
+            @Max(100)
             Integer pageSize
     ) {
         Page<BookSearchResultDTO> books = bookService

@@ -6,6 +6,8 @@ import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreSearchRes
 import com.gustavosantos.library_api.model.BookGenre;
 import com.gustavosantos.library_api.service.BookGenreService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,10 +44,19 @@ public class BookGenreController implements GenericController{
             @RequestParam(value = "genre-name", required = false)
             String genre,
             @RequestParam(value = "page", defaultValue = "0")
+            @Min(0)
             Integer page,
-            @RequestParam(value = "page-size", defaultValue = "10")
+            @RequestParam(value = "size", defaultValue = "10")
+            @Min(1)
+            @Max(100)
             Integer pageSize
     ) {
         return ResponseEntity.ok(PageResponse.from(bookGenreService.search(genre, page, pageSize)));
+    }
+
+    @PutMapping("/{publicId}")
+    public ResponseEntity<Void> update(@PathVariable UUID publicId, @RequestBody @Valid BookGenreRequestDTO dto) {
+        bookGenreService.update(publicId, dto);
+        return ResponseEntity.noContent().build();
     }
 }

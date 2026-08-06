@@ -101,8 +101,8 @@ public class AuthorService {
             String firstName,
             String lastName,
             String nationality,
-            int page,
-            int size
+            Integer page,
+            Integer size
     ) {
         Pageable pageable = PageRequest.of(page, size);
 

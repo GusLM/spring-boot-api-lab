@@ -53,21 +53,17 @@ public class AuthorController implements GenericController{
     public ResponseEntity<PageResponse<AuthorResponseDTO>> search(
             @RequestParam(value = "firstName", required = false)
             String firstName,
-
             @RequestParam(value = "lastName", required = false)
             String lastName,
-
             @RequestParam(value = "nationality", required = false)
             String nationality,
-
             @RequestParam(value = "page", defaultValue = "0")
             @Min(0)
-            int page,
-
+            Integer page,
             @RequestParam(value = "size", defaultValue = "10")
             @Min(1)
             @Max(100)
-            int size
+            Integer size
     ) {
         Page<AuthorResponseDTO> authorResponseDTOS = authorService.search(
                 firstName,
