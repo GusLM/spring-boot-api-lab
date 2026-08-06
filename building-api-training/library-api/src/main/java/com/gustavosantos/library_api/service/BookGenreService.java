@@ -1,13 +1,17 @@
 package com.gustavosantos.library_api.service;
 
 import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreRequestDTO;
+import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreSearchResultDTO;
 import com.gustavosantos.library_api.controller.mappers.BookGenreMapper;
+import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.BookGenre;
 import com.gustavosantos.library_api.repository.BookGenreRepository;
 import com.gustavosantos.library_api.validator.BookGenreValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -23,5 +27,13 @@ public class BookGenreService {
         BookGenre bookGenre = mapper.toEntity(dto);
         validator.validateBookGenreNotRegistered(bookGenre);
         return bookGenreRepository.save(bookGenre);
+    }
+
+    public BookGenreSearchResultDTO findByPublicId(UUID publicId) {
+        BookGenre bookGenre = bookGenreRepository
+                .findByPublicId(publicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + publicId));
+
+        return mapper.toSearchResultDto(bookGenre);
     }
 }

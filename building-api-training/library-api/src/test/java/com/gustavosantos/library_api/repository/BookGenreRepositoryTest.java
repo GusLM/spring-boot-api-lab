@@ -1,6 +1,5 @@
 package com.gustavosantos.library_api.repository;
 
-import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.model.BookGenre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

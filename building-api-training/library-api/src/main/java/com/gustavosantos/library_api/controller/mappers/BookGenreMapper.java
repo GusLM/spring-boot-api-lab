@@ -1,6 +1,7 @@
 package com.gustavosantos.library_api.controller.mappers;
 
 import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreRequestDTO;
+import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreSearchResultDTO;
 import com.gustavosantos.library_api.model.BookGenre;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,4 +16,6 @@ public interface BookGenreMapper {
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "books", ignore = true)
     BookGenre toEntity(BookGenreRequestDTO dto);
+
+    BookGenreSearchResultDTO toSearchResultDto(BookGenre bookGenre);
 }

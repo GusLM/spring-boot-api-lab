@@ -23,7 +23,6 @@ public abstract class BookMapper {
     @Autowired
     AuthorService authorService;
 
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "publicId", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
