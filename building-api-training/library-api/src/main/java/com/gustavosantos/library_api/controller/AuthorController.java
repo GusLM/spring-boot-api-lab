@@ -3,7 +3,6 @@ package com.gustavosantos.library_api.controller;
 import com.gustavosantos.library_api.controller.dto.author.AuthorRequestDTO;
 import com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO;
 import com.gustavosantos.library_api.controller.dto.PageResponse;
-import com.gustavosantos.library_api.controller.mappers.AuthorMapper;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.service.AuthorService;
 import jakarta.validation.Valid;
@@ -23,21 +22,16 @@ import java.util.UUID;
 public class AuthorController implements GenericController{
 
     private final AuthorService authorService;
-    private final AuthorMapper mapper;
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody @Valid AuthorRequestDTO dto) {
-        Author author = mapper.toEntity(dto);
-        authorService.save(author);
+        Author author = authorService.save(dto);
         return ResponseEntity.created(headerLocationGenerator(author.getPublicId())).build();
     }
 
     @GetMapping("/{publicId}")
     public ResponseEntity<AuthorResponseDTO> findByPublicId(@PathVariable UUID publicId) {
-        return authorService
-                .findByPublicId(publicId)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(authorService.findByPublicId(publicId));
     }
 
     @DeleteMapping("/{publicId}")

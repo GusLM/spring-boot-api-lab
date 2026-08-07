@@ -92,7 +92,7 @@ class AuthorRepositoryTest {
 
         authorRepository.deleteByPublicId(savedAuthor.getPublicId());
 
-        assertThat(authorRepository.findEntityByPublicId(savedAuthor.getPublicId())).isEmpty();
+        assertThat(authorRepository.findByPublicId(savedAuthor.getPublicId())).isEmpty();
     }
 
     @Test

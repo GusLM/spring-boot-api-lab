@@ -17,8 +17,6 @@ public interface BookGenreRepository extends JpaRepository<BookGenre, Integer>, 
 
     Optional<BookGenre> findByGenre(String genre);
 
-    boolean existsBookGenresByPublicId(UUID publicId);
-
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("DELETE FROM BookGenre bg WHERE bg.publicId = :publicId")
     int deleteByPublicId(UUID publicId);

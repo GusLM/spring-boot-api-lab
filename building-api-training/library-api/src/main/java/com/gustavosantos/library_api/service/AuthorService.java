@@ -2,16 +2,19 @@ package com.gustavosantos.library_api.service;
 
 import com.gustavosantos.library_api.controller.dto.author.AuthorRequestDTO;
 import com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO;
+import com.gustavosantos.library_api.controller.mappers.AuthorMapper;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.repository.AuthorRepository;
 import com.gustavosantos.library_api.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import static com.gustavosantos.library_api.repository.specs.AuthorSpecs.*;
+
 import java.util.UUID;
 
 @Service
@@ -20,16 +23,18 @@ public class AuthorService {
 
     private final AuthorRepository authorRepository;
     private final AuthorValidator validator;
+    private final AuthorMapper mapper;
 
     @Transactional
-    public void save(Author author) {
+    public Author save(AuthorRequestDTO dto) {
+        Author author = mapper.toEntity(dto);
         validator.checkIfAlreadyExists(author);
-        authorRepository.save(author);
+       return authorRepository.save(author);
     }
 
     @Transactional
     public void update(UUID publicId, AuthorRequestDTO authorRequestDTO) {
-        Author author = authorRepository.findEntityByPublicId(publicId)
+        Author author = authorRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Author not found."));
 
         validator.checkIfAlreadyExists(
@@ -47,13 +52,17 @@ public class AuthorService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<AuthorResponseDTO> findByPublicId(UUID publicId) {
-        return authorRepository.findResponseByPublicId(publicId);
+    public AuthorResponseDTO findByPublicId(UUID publicId) {
+        Author author = authorRepository
+                .findByPublicId(publicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Author not found with id: " + publicId));
+
+        return mapper.toResponseDto(author);
     }
 
     @Transactional
     public void delete(UUID publicId) {
-        Author author = authorRepository.findEntityByPublicId(publicId)
+        Author author = authorRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Author not found."));
         validator.validateAuthorCanBeDeleted(author);
         authorRepository.deleteByPublicId(publicId);
@@ -104,38 +113,57 @@ public class AuthorService {
             Integer page,
             Integer size
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Specification<Author> specs =
+                Specification.where((root, query, criteriaBuilder) ->
+                        criteriaBuilder.conjunction());
 
-        String normalizedFirstName = normalize(firstName);
-        String normalizedLastName = normalize(lastName);
-        String normalizedNationality = normalize(nationality);
 
-        if (normalizedFirstName == null && normalizedLastName == null && normalizedNationality == null) {
-            return authorRepository.searchAll(pageable);
+        if (firstName != null) {
+            specs = specs.and(firstNameLike(firstName));
         }
 
-        return authorRepository.search(
-                toLikePattern(normalizedFirstName),
-                toLikePattern(normalizedLastName),
-                toLikePattern(normalizedNationality),
-                pageable
-        );
+        if (lastName != null) {
+            specs = specs.and(lastNameLike(lastName));
+        }
+
+        if (nationality != null) {
+            specs = specs.and(nationalityLike(nationality));
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return authorRepository.findAll(specs, pageable).map(mapper::toResponseDto);
+
+//        String normalizedFirstName = normalize(firstName);
+//        String normalizedLastName = normalize(lastName);
+//        String normalizedNationality = normalize(nationality);
+//
+//        if (normalizedFirstName == null && normalizedLastName == null && normalizedNationality == null) {
+//            return authorRepository.searchAll(pageable);
+//        }
+//
+//        return authorRepository.search(
+//                toLikePattern(normalizedFirstName),
+//                toLikePattern(normalizedLastName),
+//                toLikePattern(normalizedNationality),
+//                pageable
+//        );
     }
 
     public Author findAuthorByPublicId(UUID publicId) {
-        return authorRepository.findEntityByPublicId(publicId)
+        return authorRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Author not found: " + publicId));
     }
 
-    private String normalize(String value) {
-        return hasText(value) ? value.trim() : null;
-    }
-
-    private String toLikePattern(String value) {
-        return value == null ? "%" : "%" + value + "%";
-    }
-
-    private boolean hasText(String value) {
-        return value != null && !value.isBlank();
-    }
+//    private String normalize(String value) {
+//        return hasText(value) ? value.trim() : null;
+//    }
+//
+//    private String toLikePattern(String value) {
+//        return value == null ? "%" : "%" + value + "%";
+//    }
+//
+//    private boolean hasText(String value) {
+//        return value != null && !value.isBlank();
+//    }
 }

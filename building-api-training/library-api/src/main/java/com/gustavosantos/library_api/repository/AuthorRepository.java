@@ -5,6 +5,7 @@ import com.gustavosantos.library_api.model.Author;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,28 +15,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, Integer> {
+public interface AuthorRepository extends JpaRepository<Author, Integer>, JpaSpecificationExecutor<Author> {
 
-    // Busca a entidade Author completa pelo seu ID público
-    @Query("""
-        select a
-        from Author a
-        where a.publicId = :publicId
-        """)
-    Optional<Author> findEntityByPublicId(UUID publicId);
-
-    @Query("""
-        select new com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO(
-            a.publicId,
-            a.firstName,
-            a.lastName,
-            a.birthDate,
-            a.nationality
-        )
-        from Author a
-        where a.publicId = :publicId
-        """)
-    Optional<AuthorResponseDTO> findResponseByPublicId(UUID publicId);
+    Optional<Author> findByPublicId(UUID publicId);
 
     // Busca um autor pelos dados completos para verificar duplicidade
     Optional<Author> findByFirstNameAndLastNameAndBirthDateAndNationality(
@@ -60,27 +42,24 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
         """)
     Page<AuthorResponseDTO> searchAll(Pageable pageable);
 
-    @Query("""
-        select new com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO(
-            a.publicId,
-            a.firstName,
-            a.lastName,
-            a.birthDate,
-            a.nationality
-        )
-        from Author a
-        where lower(a.firstName) like lower(:firstName)
-          and lower(a.lastName) like lower(:lastName)
-          and lower(a.nationality) like lower(:nationality)
-        order by a.firstName, a.lastName
-        """)
-    Page<AuthorResponseDTO> search(
-            String firstName,
-            String lastName,
-            String nationality,
-            Pageable pageable
-    );
-
-    // Verifica se um autor existe pelo seu ID público
-    boolean existsByPublicId(UUID publicId);
+//    @Query("""
+//        select new com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO(
+//            a.publicId,
+//            a.firstName,
+//            a.lastName,
+//            a.birthDate,
+//            a.nationality
+//        )
+//        from Author a
+//        where lower(a.firstName) like lower(:firstName)
+//          and lower(a.lastName) like lower(:lastName)
+//          and lower(a.nationality) like lower(:nationality)
+//        order by a.firstName, a.lastName
+//        """)
+//    Page<AuthorResponseDTO> search(
+//            String firstName,
+//            String lastName,
+//            String nationality,
+//            Pageable pageable
+//    );
 }
