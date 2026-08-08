@@ -10,8 +10,6 @@ import com.gustavosantos.library_api.service.AuthorService;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring", uses =  AuthorMapper.class)
@@ -43,18 +41,5 @@ public abstract class BookMapper {
         return bookGenreRepository
                 .findByPublicId(genrePublicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book genre not found: " + genrePublicId));
-    }
-
-    @AfterMapping
-    protected void mapAuthors(BookRequestDTO dto, @MappingTarget Book book) {
-        List<UUID> authorsPublicIds = dto.authorsPublicIds();
-
-        if (authorsPublicIds == null) {
-            authorsPublicIds = Collections.emptyList();
-        }
-
-        authorsPublicIds.stream()
-                .map(authorService::findAuthorByPublicId)
-                .forEach(book::addAuthor);
     }
 }
