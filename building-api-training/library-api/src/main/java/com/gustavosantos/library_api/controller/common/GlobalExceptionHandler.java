@@ -1,7 +1,7 @@
 package com.gustavosantos.library_api.controller.common;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.exc.InvalidFormatException;
 import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
 import com.gustavosantos.library_api.exceptions.ForbiddenOperationException;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
             String field = invalid.getPath()
                     .stream()
                     .findFirst()
-                    .map(JsonMappingException.Reference::getFieldName)
+                    .map(JacksonException.Reference::getPropertyName)
                     .orElse("unknown");
 
             StandardError standardError = new StandardError(
