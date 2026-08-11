@@ -16,7 +16,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(Customizer.withDefaults())
+                // Configuração de formulário de login customizado
+                .formLogin(configurer -> {
+                    // Define a URL da página de login e permite acesso público a ela
+                    configurer.loginPage("/login").permitAll();
+                })
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.anyRequest().authenticated();

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmls:th="http://www.thymeleaf.org" xmlns:xmls="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --spring: #6db33f;
+      --spring-dark: #4b8a2a;
+      --leaf: #a8d08d;
+      --graphite: #1b1f1c;
+      --panel: #23281f;
+      --line: rgba(109,179,63,0.25);
+    }
+
+    *{ box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background:
+              radial-gradient(700px 400px at 50% -10%, rgba(109,179,63,0.18) 0%, transparent 60%),
+              var(--graphite);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card-login{
+      width: 100%;
+      max-width: 380px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 40px 34px;
+      box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+    }
+
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .brand .leaf{
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--spring);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand .leaf svg{ width: 18px; height: 18px; }
+
+    .brand span{
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #f2f5ef;
+      letter-spacing: -0.02em;
+    }
+
+    .brand span b{ color: var(--spring); font-weight: 700; }
+
+    h1.title{
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #f2f5ef;
+      margin: 0 0 4px;
+    }
+
+    .subtitle{
+      font-size: 0.85rem;
+      color: #8b968a;
+      margin-bottom: 26px;
+    }
+
+    .form-label{
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--leaf);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .form-control{
+      background: #181c15;
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #f2f5ef;
+      padding: 11px 14px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .form-control::placeholder{ color: #5a6157; }
+
+    .form-control:focus{
+      background: #181c15;
+      color: #f2f5ef;
+      border-color: var(--spring);
+      box-shadow: 0 0 0 3px rgba(109,179,63,0.2);
+    }
+
+    .btn-spring{
+      background: var(--spring);
+      border: none;
+      color: #10250a;
+      font-weight: 700;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      margin-top: 8px;
+      transition: background .2s ease, transform .15s ease;
+    }
+
+    .btn-spring:hover{
+      background: var(--spring-dark);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .foot-note{
+      text-align: center;
+      font-size: 0.72rem;
+      color: #5a6157;
+      margin-top: 22px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card-login">
+
+  <div class="brand">
+    <span class="leaf">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 4C10 4 4 10 4 18c0 1 .05 1.6.15 2C10.5 13.5 16 10.5 20 8c-4.3 3-9 6.5-14.6 10.6C6.9 19.7 8.5 20 10 20c8 0 14-6 14-16 0 0-.6 0-4 0z" fill="#10250a"/>
+      </svg>
+    </span>
+    <span><b>spring</b>boot</span>
+  </div>
+
+  <h1 class="title">Acessar aplicação</h1>
+  <p class="subtitle">Informe suas credenciais para continuar.</p>
+
+  <form method="POST" th:action="@{/login}">
+    <div class="mb-3">
+      <label class="form-label" for="username">Usuário</label>
+      <input type="text" class="form-control" id="username" name="username" placeholder="usuario" required>
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label" for="password">Senha</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+    </div>
+
+    <button type="submit" class="btn btn-spring w-100">Entrar</button>
+  </form>
+
+  <p class="foot-note">// spring-security · v1.0</p>
+
+</div>
+
+</body>
+</html>
