@@ -17,10 +17,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "books", schema = "public", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_books_publicid", columnNames = {"public_id"}),
-        @UniqueConstraint(name = "uk_books_isbn", columnNames = {"isbn"})
-})
+@Table(name = "books", schema = "public")
 @Getter
 @NoArgsConstructor
 @ToString
@@ -31,11 +28,11 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "public_id", nullable = false)
+    @Column(name = "public_id", nullable = false, unique = true)
     private UUID publicId;
 
     @Setter
-    @Column(name = "isbn", nullable = false, length = 20)
+    @Column(name = "isbn", nullable = false, length = 20, unique = true)
     private String isbn;
 
     @Setter
