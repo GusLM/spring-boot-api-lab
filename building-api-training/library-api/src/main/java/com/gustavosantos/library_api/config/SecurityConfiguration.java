@@ -31,7 +31,8 @@ public class SecurityConfiguration {
                 })
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
-                    authorize.anyRequest().permitAll();
+                    authorize.requestMatchers("/login/**").permitAll();
+                    authorize.anyRequest().authenticated();
                 })
                 .build();
     }
