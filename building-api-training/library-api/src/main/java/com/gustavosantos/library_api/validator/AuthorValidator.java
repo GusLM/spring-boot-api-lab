@@ -1,7 +1,7 @@
 package com.gustavosantos.library_api.validator;
 
 import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
-import com.gustavosantos.library_api.exceptions.ForbiddenOperationException;
+import com.gustavosantos.library_api.exceptions.ConflictException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.repository.AuthorRepository;
 import com.gustavosantos.library_api.repository.BookRepository;
@@ -91,7 +91,7 @@ public class AuthorValidator {
      */
     public void validateAuthorCanBeDeleted(Author author) {
         if (bookRepository.existsByAuthorsId(author.getId())) {
-            throw new ForbiddenOperationException("Author cannot be deleted because it has books.");
+            throw new ConflictException("Author cannot be deleted because it has books.");
         }
     }
 }

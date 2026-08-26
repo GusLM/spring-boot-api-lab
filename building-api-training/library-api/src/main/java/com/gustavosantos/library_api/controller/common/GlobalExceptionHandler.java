@@ -1,9 +1,10 @@
 package com.gustavosantos.library_api.controller.common;
 
+import org.springframework.security.access.AccessDeniedException;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.exc.InvalidFormatException;
 import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
-import com.gustavosantos.library_api.exceptions.ForbiddenOperationException;
+import com.gustavosantos.library_api.exceptions.ConflictException;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -146,13 +147,29 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(standardError.getStatus()).body(standardError);
     }
 
-    @ExceptionHandler(ForbiddenOperationException.class)
-    public ResponseEntity<StandardError> forbiddenOperationException(
-            ForbiddenOperationException e,
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<StandardError> forbiddenException(
+             AccessDeniedException e,
             HttpServletRequest request
     ) {
         StandardError standardError = new StandardError(
                 HttpStatus.FORBIDDEN.value(),
+                Instant.now(),
+                request.getRequestURI(),
+                "Access Denied.",
+                List.of()
+        );
+
+        return ResponseEntity.status(standardError.getStatus()).body(standardError);
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<StandardError> conflictException(
+            ConflictException e,
+            HttpServletRequest request
+    ) {
+        StandardError standardError = new StandardError(
+                HttpStatus.CONFLICT.value(),
                 Instant.now(),
                 request.getRequestURI(),
                 e.getMessage(),

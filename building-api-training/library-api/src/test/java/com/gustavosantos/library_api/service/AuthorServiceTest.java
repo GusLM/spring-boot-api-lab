@@ -3,7 +3,7 @@ package com.gustavosantos.library_api.service;
 import com.gustavosantos.library_api.dto.author.AuthorRequestDTO;
 import com.gustavosantos.library_api.dto.author.AuthorResponseDTO;
 import com.gustavosantos.library_api.mappers.AuthorMapper;
-import com.gustavosantos.library_api.exceptions.ForbiddenOperationException;
+import com.gustavosantos.library_api.exceptions.ConflictException;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.repository.AuthorRepository;
@@ -172,11 +172,11 @@ class AuthorServiceTest {
         // Não remove o autor quando a validação identifica livros vinculados.
         UUID publicId = UUID.randomUUID();
         when(authorRepository.findByPublicId(publicId)).thenReturn(Optional.of(author));
-        org.mockito.Mockito.doThrow(new ForbiddenOperationException("Author cannot be deleted because it has books."))
+        org.mockito.Mockito.doThrow(new ConflictException("Author cannot be deleted because it has books."))
                 .when(validator).validateAuthorCanBeDeleted(author);
 
         assertThatThrownBy(() -> authorService.delete(publicId))
-                .isInstanceOf(ForbiddenOperationException.class)
+                .isInstanceOf(ConflictException.class)
                 .hasMessage("Author cannot be deleted because it has books.");
 
         verify(authorRepository, never()).deleteByPublicId(publicId);
