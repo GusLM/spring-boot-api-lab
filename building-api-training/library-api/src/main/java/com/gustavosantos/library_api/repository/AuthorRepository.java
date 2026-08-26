@@ -30,7 +30,7 @@ public interface AuthorRepository extends JpaRepository<Author, Integer>, JpaSpe
     void deleteByPublicId(UUID publicId);
 
     @Query("""
-        select new com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO(
+        select new com.gustavosantos.library_api.dto.author.AuthorResponseDTO(
             a.publicId,
             a.firstName,
             a.lastName,
