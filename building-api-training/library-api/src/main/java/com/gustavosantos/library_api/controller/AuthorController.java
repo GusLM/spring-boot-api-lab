@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,17 +25,20 @@ public class AuthorController implements GenericController{
     private final AuthorService authorService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> save(@RequestBody @Valid AuthorRequestDTO dto) {
         Author author = authorService.save(dto);
         return ResponseEntity.created(headerLocationGenerator(author.getPublicId())).build();
     }
 
     @GetMapping("/{publicId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<AuthorResponseDTO> findByPublicId(@PathVariable UUID publicId) {
         return ResponseEntity.ok(authorService.findByPublicId(publicId));
     }
 
     @DeleteMapping("/{publicId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> delete(
             @PathVariable String publicId
     ) {
@@ -44,6 +48,7 @@ public class AuthorController implements GenericController{
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<PageResponse<AuthorResponseDTO>> search(
             @RequestParam(value = "firstName", required = false)
             String firstName,
@@ -71,6 +76,7 @@ public class AuthorController implements GenericController{
     }
 
     @PutMapping("/{publicId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> update(
             @PathVariable UUID publicId,
             @RequestBody @Valid AuthorRequestDTO authorRequestDTO

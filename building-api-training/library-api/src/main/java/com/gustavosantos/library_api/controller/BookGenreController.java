@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class BookGenreController implements GenericController{
     private final BookGenreService bookGenreService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> save(@RequestBody @Valid BookGenreRequestDTO dto) {
         BookGenre bookGenre = bookGenreService.save(dto);
         return ResponseEntity.created(headerLocationGenerator(bookGenre.getPublicId())).build();
@@ -34,12 +36,14 @@ public class BookGenreController implements GenericController{
     }
 
     @DeleteMapping("/{publicId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> deleteByPublicId(@PathVariable UUID publicId) {
         bookGenreService.deleteByPublicId(publicId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<PageResponse<BookGenreSearchResultDTO>> search(
             @RequestParam(value = "genre-name", required = false)
             String genre,
@@ -55,6 +59,7 @@ public class BookGenreController implements GenericController{
     }
 
     @PutMapping("/{publicId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> update(@PathVariable UUID publicId, @RequestBody @Valid BookGenreRequestDTO dto) {
         bookGenreService.update(publicId, dto);
         return ResponseEntity.noContent().build();
