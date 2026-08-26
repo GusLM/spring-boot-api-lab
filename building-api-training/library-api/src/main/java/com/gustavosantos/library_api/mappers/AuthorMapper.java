@@ -1,7 +1,7 @@
-package com.gustavosantos.library_api.controller.mappers;
+package com.gustavosantos.library_api.mappers;
 
-import com.gustavosantos.library_api.controller.dto.author.AuthorRequestDTO;
-import com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO;
+import com.gustavosantos.library_api.dto.author.AuthorRequestDTO;
+import com.gustavosantos.library_api.dto.author.AuthorResponseDTO;
 import com.gustavosantos.library_api.model.Author;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

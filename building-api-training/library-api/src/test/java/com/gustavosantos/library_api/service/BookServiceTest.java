@@ -1,8 +1,8 @@
 package com.gustavosantos.library_api.service;
 
-import com.gustavosantos.library_api.controller.dto.book.BookRequestDTO;
-import com.gustavosantos.library_api.controller.dto.book.BookSearchResultDTO;
-import com.gustavosantos.library_api.controller.mappers.BookMapper;
+import com.gustavosantos.library_api.dto.book.BookRequestDTO;
+import com.gustavosantos.library_api.dto.book.BookSearchResultDTO;
+import com.gustavosantos.library_api.mappers.BookMapper;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;

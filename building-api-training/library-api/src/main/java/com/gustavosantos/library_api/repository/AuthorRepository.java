@@ -1,6 +1,6 @@
 package com.gustavosantos.library_api.repository;
 
-import com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO;
+import com.gustavosantos.library_api.dto.author.AuthorResponseDTO;
 import com.gustavosantos.library_api.model.Author;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +43,7 @@ public interface AuthorRepository extends JpaRepository<Author, Integer>, JpaSpe
     Page<AuthorResponseDTO> searchAll(Pageable pageable);
 
 //    @Query("""
-//        select new com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO(
+//        select new com.gustavosantos.library_api.dto.author.AuthorResponseDTO(
 //            a.publicId,
 //            a.firstName,
 //            a.lastName,

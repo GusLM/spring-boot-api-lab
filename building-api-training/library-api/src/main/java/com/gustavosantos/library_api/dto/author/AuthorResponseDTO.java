@@ -1,4 +1,4 @@
-package com.gustavosantos.library_api.controller.dto.author;
+package com.gustavosantos.library_api.dto.author;
 
 import java.time.LocalDate;
 import java.util.UUID;

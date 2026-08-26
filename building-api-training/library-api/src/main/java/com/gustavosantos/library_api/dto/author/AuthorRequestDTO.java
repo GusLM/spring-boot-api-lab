@@ -1,4 +1,4 @@
-package com.gustavosantos.library_api.controller.dto.author;
+package com.gustavosantos.library_api.dto.author;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package com.gustavosantos.library_api.controller.dto.bookgenre;
+package com.gustavosantos.library_api.dto.bookgenre;
 
 import java.util.UUID;
 

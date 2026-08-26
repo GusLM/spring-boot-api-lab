@@ -1,8 +1,8 @@
 package com.gustavosantos.library_api.service;
 
-import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreRequestDTO;
-import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreSearchResultDTO;
-import com.gustavosantos.library_api.controller.mappers.BookGenreMapper;
+import com.gustavosantos.library_api.dto.bookgenre.BookGenreRequestDTO;
+import com.gustavosantos.library_api.dto.bookgenre.BookGenreSearchResultDTO;
+import com.gustavosantos.library_api.mappers.BookGenreMapper;
 import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.BookGenre;

@@ -1,8 +1,8 @@
 package com.gustavosantos.library_api.service;
 
-import com.gustavosantos.library_api.controller.dto.author.AuthorRequestDTO;
-import com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO;
-import com.gustavosantos.library_api.controller.mappers.AuthorMapper;
+import com.gustavosantos.library_api.dto.author.AuthorRequestDTO;
+import com.gustavosantos.library_api.dto.author.AuthorResponseDTO;
+import com.gustavosantos.library_api.mappers.AuthorMapper;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.repository.AuthorRepository;

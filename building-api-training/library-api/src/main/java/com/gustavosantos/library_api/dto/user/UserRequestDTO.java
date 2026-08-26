@@ -1,4 +1,4 @@
-package com.gustavosantos.library_api.controller.dto.user;
+package com.gustavosantos.library_api.dto.user;
 
 import com.gustavosantos.library_api.model.UserRole;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
-package com.gustavosantos.library_api.controller.dto.book;
+package com.gustavosantos.library_api.dto.book;
 
-import com.gustavosantos.library_api.controller.dto.author.AuthorResponseDTO;
+import com.gustavosantos.library_api.dto.author.AuthorResponseDTO;
 
 import java.time.LocalDate;
 import java.util.List;

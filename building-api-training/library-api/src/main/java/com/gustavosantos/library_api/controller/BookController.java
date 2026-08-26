@@ -1,8 +1,8 @@
 package com.gustavosantos.library_api.controller;
 
-import com.gustavosantos.library_api.controller.dto.PageResponse;
-import com.gustavosantos.library_api.controller.dto.book.BookRequestDTO;
-import com.gustavosantos.library_api.controller.dto.book.BookSearchResultDTO;
+import com.gustavosantos.library_api.dto.PageResponse;
+import com.gustavosantos.library_api.dto.book.BookRequestDTO;
+import com.gustavosantos.library_api.dto.book.BookSearchResultDTO;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.service.BookService;
 import jakarta.validation.Valid;

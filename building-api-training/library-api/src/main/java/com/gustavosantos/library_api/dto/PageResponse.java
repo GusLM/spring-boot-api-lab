@@ -1,4 +1,4 @@
-package com.gustavosantos.library_api.controller.dto;
+package com.gustavosantos.library_api.dto;
 
 import org.springframework.data.domain.Page;
 

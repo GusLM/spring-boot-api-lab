@@ -1,4 +1,4 @@
-package com.gustavosantos.library_api.controller.dto.book;
+package com.gustavosantos.library_api.dto.book;
 
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.ISBN;

@@ -1,6 +1,6 @@
-package com.gustavosantos.library_api.controller.mappers;
+package com.gustavosantos.library_api.mappers;
 
-import com.gustavosantos.library_api.controller.dto.user.UserRequestDTO;
+import com.gustavosantos.library_api.dto.user.UserRequestDTO;
 import com.gustavosantos.library_api.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

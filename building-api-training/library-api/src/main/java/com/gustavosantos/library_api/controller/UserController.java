@@ -1,6 +1,6 @@
 package com.gustavosantos.library_api.controller;
 
-import com.gustavosantos.library_api.controller.dto.user.UserRequestDTO;
+import com.gustavosantos.library_api.dto.user.UserRequestDTO;
 import com.gustavosantos.library_api.model.User;
 import com.gustavosantos.library_api.service.UserService;
 import jakarta.validation.Valid;

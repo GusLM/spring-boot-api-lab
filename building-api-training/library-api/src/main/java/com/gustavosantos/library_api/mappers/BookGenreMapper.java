@@ -1,7 +1,7 @@
-package com.gustavosantos.library_api.controller.mappers;
+package com.gustavosantos.library_api.mappers;
 
-import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreRequestDTO;
-import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreSearchResultDTO;
+import com.gustavosantos.library_api.dto.bookgenre.BookGenreRequestDTO;
+import com.gustavosantos.library_api.dto.bookgenre.BookGenreSearchResultDTO;
 import com.gustavosantos.library_api.model.BookGenre;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

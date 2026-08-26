@@ -1,8 +1,8 @@
 package com.gustavosantos.library_api.controller;
 
-import com.gustavosantos.library_api.controller.dto.PageResponse;
-import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreRequestDTO;
-import com.gustavosantos.library_api.controller.dto.bookgenre.BookGenreSearchResultDTO;
+import com.gustavosantos.library_api.dto.PageResponse;
+import com.gustavosantos.library_api.dto.bookgenre.BookGenreRequestDTO;
+import com.gustavosantos.library_api.dto.bookgenre.BookGenreSearchResultDTO;
 import com.gustavosantos.library_api.model.BookGenre;
 import com.gustavosantos.library_api.service.BookGenreService;
 import jakarta.validation.Valid;

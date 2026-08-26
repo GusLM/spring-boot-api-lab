@@ -6,6 +6,7 @@ import com.gustavosantos.library_api.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
 
     @Bean
@@ -25,10 +27,11 @@ public class SecurityConfiguration {
                 // Configuração de formulário de “login” customizado
                 .formLogin(configurer -> {
                     // Define a URL da página de “login” e permite acesso público a ela
-                    configurer.loginPage("/login").permitAll();
+                    configurer.loginPage("/login");
                 })
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers("/login/**").permitAll();
                     authorize.requestMatchers("/books/**").hasRole(String.valueOf(UserRole.ADMIN));
 
                     authorize.anyRequest().permitAll();
