@@ -7,6 +7,7 @@ import com.gustavosantos.library_api.model.UserRole;
 import com.gustavosantos.library_api.repository.UserRepository;
 import com.gustavosantos.library_api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +25,14 @@ public class UserService {
     public User save(UserRequestDTO dto) {
         User user = mapper.toEntity(dto);
         validator.checkIfAlreadyExists(user);
-        user.setRole(UserRole.USER);
         user.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public User findByLogin(String login) {
+        return userRepository
+                .findByLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
     }
 }
