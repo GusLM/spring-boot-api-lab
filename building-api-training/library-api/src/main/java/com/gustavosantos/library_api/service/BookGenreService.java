@@ -6,7 +6,9 @@ import com.gustavosantos.library_api.mappers.BookGenreMapper;
 import com.gustavosantos.library_api.exceptions.DuplicateRecordException;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.BookGenre;
+import com.gustavosantos.library_api.model.User;
 import com.gustavosantos.library_api.repository.BookGenreRepository;
+import com.gustavosantos.library_api.security.SecurityService;
 import com.gustavosantos.library_api.validator.BookGenreValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,12 +29,15 @@ public class BookGenreService {
     private final BookGenreRepository bookGenreRepository;
     private final BookGenreMapper mapper;
     private final BookGenreValidator validator;
+    private final SecurityService securityService;
 
 
     @Transactional
     public BookGenre save(BookGenreRequestDTO dto) {
         BookGenre bookGenre = mapper.toEntity(dto);
         validator.validateBookGenreNotRegistered(bookGenre);
+        User user = securityService.getLoggedUser();
+        bookGenre.setUser(user);
         return bookGenreRepository.save(bookGenre);
     }
 

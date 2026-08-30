@@ -5,7 +5,9 @@ import com.gustavosantos.library_api.dto.author.AuthorResponseDTO;
 import com.gustavosantos.library_api.mappers.AuthorMapper;
 import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
+import com.gustavosantos.library_api.model.User;
 import com.gustavosantos.library_api.repository.AuthorRepository;
+import com.gustavosantos.library_api.security.SecurityService;
 import com.gustavosantos.library_api.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -24,11 +26,14 @@ public class AuthorService {
     private final AuthorRepository authorRepository;
     private final AuthorValidator validator;
     private final AuthorMapper mapper;
+    private final SecurityService securityService;
 
     @Transactional
     public Author save(AuthorRequestDTO dto) {
         Author author = mapper.toEntity(dto);
         validator.checkIfAlreadyExists(author);
+        User user = securityService.getLoggedUser();
+        author.setUser(user);
        return authorRepository.save(author);
     }
 

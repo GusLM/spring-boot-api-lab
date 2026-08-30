@@ -7,9 +7,11 @@ import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.model.Author;
 import com.gustavosantos.library_api.model.Book;
 import com.gustavosantos.library_api.model.BookGenre;
+import com.gustavosantos.library_api.model.User;
 import com.gustavosantos.library_api.repository.AuthorRepository;
 import com.gustavosantos.library_api.repository.BookGenreRepository;
 import com.gustavosantos.library_api.repository.BookRepository;
+import com.gustavosantos.library_api.security.SecurityService;
 import com.gustavosantos.library_api.validator.BookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,6 +36,7 @@ public class BookService {
     private final AuthorRepository authorRepository;
     private final BookMapper mapper;
     private final BookValidator bookValidator;
+    private final SecurityService securityService;
 
     @Transactional
     public Book save(BookRequestDTO dto) {
@@ -41,6 +44,8 @@ public class BookService {
         bookValidator.validateIsbnNotRegistered(book.getId(), book.getIsbn());
         List<Author> authorList = findAuthorsByPublicIdsOrThrow(dto.authorsPublicIds());
         authorList.forEach(book::addAuthor);
+        User user = securityService.getLoggedUser();
+        book.setUser(user);
         return bookRepository.save(book);
     }
 
