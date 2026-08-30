@@ -14,7 +14,7 @@ public interface AuthorMapper {
     @Mapping(target = "books", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "user", ignore = true)
     Author toEntity(AuthorRequestDTO dto);
 
     AuthorResponseDTO toResponseDto(Author author);

@@ -13,7 +13,7 @@ public interface BookGenreMapper {
     @Mapping(target = "publicId", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "books", ignore = true)
     BookGenre toEntity(BookGenreRequestDTO dto);
 

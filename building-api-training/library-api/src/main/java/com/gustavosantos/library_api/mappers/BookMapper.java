@@ -25,7 +25,7 @@ public abstract class BookMapper {
     @Mapping(target = "publicId", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "authors", ignore = true)
     @Mapping(target = "genre", source = "genrePublicId")
     public abstract Book toEntity(BookRequestDTO dto);
