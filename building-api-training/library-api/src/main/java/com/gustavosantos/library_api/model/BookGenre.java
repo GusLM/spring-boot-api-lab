@@ -45,8 +45,9 @@ public class BookGenre {
     private LocalDateTime updatedAt;
 
     @Setter
-    @Column(name = "user_id")
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User user;
 
     // Constructor
     public BookGenre(String genre) {

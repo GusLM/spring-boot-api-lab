@@ -61,8 +61,9 @@ public class Author {
     private LocalDateTime updatedAt;
 
     @Setter
-    @Column(name = "user_id")
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User user;
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "authors")
