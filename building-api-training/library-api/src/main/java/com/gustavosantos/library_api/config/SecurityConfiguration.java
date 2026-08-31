@@ -25,15 +25,17 @@ public class SecurityConfiguration {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 // Configuração de formulário de “login” customizado
-                .formLogin(configurer -> {
-                    // Define a URL da página de “login” e permite acesso público a ela
-                    configurer.loginPage("/login");
-                })
+//                .formLogin(configurer -> {
+//                    // Define a URL da página de “login” e permite acesso público a ela
+//                    configurer.loginPage("/login");
+//                })
+                .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/login/**").permitAll();
                     authorize.anyRequest().authenticated();
                 })
+                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 
