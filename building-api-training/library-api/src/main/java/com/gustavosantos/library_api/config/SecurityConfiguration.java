@@ -1,6 +1,5 @@
 package com.gustavosantos.library_api.config;
 
-import com.gustavosantos.library_api.model.UserRole;
 import com.gustavosantos.library_api.security.CustomUserDetailsService;
 import com.gustavosantos.library_api.service.UserService;
 import org.springframework.context.annotation.Bean;
