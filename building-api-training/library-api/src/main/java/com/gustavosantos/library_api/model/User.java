@@ -2,6 +2,7 @@ package com.gustavosantos.library_api.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
@@ -36,7 +37,10 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Setter
+    @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.ARRAY)
+    @ColumnTransformer(write = "?::user_role[]")
     @Column(name = "roles", columnDefinition = "user_role[]", nullable = false)
     private List<UserRole> roles;
 
