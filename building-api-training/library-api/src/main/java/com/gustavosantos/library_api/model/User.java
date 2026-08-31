@@ -2,11 +2,14 @@ package com.gustavosantos.library_api.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -33,10 +36,9 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Setter
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "role", nullable = false)
-    private UserRole role;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(name = "roles", columnDefinition = "user_role[]", nullable = false)
+    private List<UserRole> roles;
 
     @Setter
     @CreatedDate

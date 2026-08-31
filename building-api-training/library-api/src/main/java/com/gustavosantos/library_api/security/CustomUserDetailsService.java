@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .builder()
                 .username(user.getLogin())
                 .password(user.getPassword())
-                .roles(String.valueOf(user.getRole()))
+                .roles(String.valueOf(user.getRoles()))
                 .build();
     }
 }
