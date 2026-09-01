@@ -152,6 +152,10 @@ public class GlobalExceptionHandler {
              AccessDeniedException e,
             HttpServletRequest request
     ) {
+        /*
+         * AccessDeniedException acontece quando o usuário está autenticado,
+         * mas não possui o papel/permissão exigido por @PreAuthorize.
+         */
         StandardError standardError = new StandardError(
                 HttpStatus.FORBIDDEN.value(),
                 Instant.now(),

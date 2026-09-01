@@ -32,6 +32,7 @@ public class AuthorService {
     public Author save(AuthorRequestDTO dto) {
         Author author = mapper.toEntity(dto);
         validator.checkIfAlreadyExists(author);
+        // Registra quem criou o autor usando o usuário autenticado na requisição atual.
         User user = securityService.getLoggedUser();
         author.setUser(user);
        return authorRepository.save(author);

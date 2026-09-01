@@ -25,6 +25,7 @@ public class AuthorController implements GenericController{
     private final AuthorService authorService;
 
     @PostMapping
+    // @PreAuthorize é avaliado antes do método executar; sem o papel exigido, o controller nem chama o service.
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> save(@RequestBody @Valid AuthorRequestDTO dto) {
         Author author = authorService.save(dto);

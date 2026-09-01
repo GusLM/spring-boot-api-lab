@@ -36,6 +36,7 @@ public class BookGenreService {
     public BookGenre save(BookGenreRequestDTO dto) {
         BookGenre bookGenre = mapper.toEntity(dto);
         validator.validateBookGenreNotRegistered(bookGenre);
+        // Usa o contexto de segurança para vincular o gênero ao usuário que fez a operação.
         User user = securityService.getLoggedUser();
         bookGenre.setUser(user);
         return bookGenreRepository.save(bookGenre);

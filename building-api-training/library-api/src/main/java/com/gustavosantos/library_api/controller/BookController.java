@@ -24,6 +24,7 @@ public class BookController implements GenericController{
     private final BookService bookService;
 
     @PostMapping
+    // Regra de autorização em nível de método: somente usuários com papel USER ou ADMIN podem cadastrar livros.
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> save(@RequestBody @Valid BookRequestDTO dto) {
         Book book = bookService.save(dto);

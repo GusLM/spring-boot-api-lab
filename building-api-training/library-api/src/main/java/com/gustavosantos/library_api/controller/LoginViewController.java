@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class LoginViewController {
 
     @GetMapping("/login")
+    // Renderiza a página de login quando a configuração usar loginPage("/login").
     public String loginPage() {
         return "login";
     }
@@ -16,6 +17,7 @@ public class LoginViewController {
     @GetMapping("/")
     @ResponseBody
     public String homePage(Authentication authentication) {
+        // O Spring injeta a autenticação da requisição atual como parâmetro do controller.
         return "Hello" + authentication.getName();
     }
 }

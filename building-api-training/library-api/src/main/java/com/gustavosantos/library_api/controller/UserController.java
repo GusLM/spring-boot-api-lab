@@ -20,6 +20,7 @@ public class UserController implements GenericController{
     private final UserService userService;
 
     @PostMapping
+    // Cadastro de usuários fica restrito a ADMIN para evitar criação livre de contas e privilégios.
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> save(@RequestBody @Valid UserRequestDTO dto) {
         User user = userService.save(dto);

@@ -41,6 +41,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.ARRAY)
     @ColumnTransformer(write = "?::user_role[]")
+    // Papéis usados pelo Spring Security para autorizar rotas com hasRole/hasAnyRole.
     @Column(name = "roles", columnDefinition = "user_role[]", nullable = false)
     private List<UserRole> roles;
 

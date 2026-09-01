@@ -44,6 +44,7 @@ public class BookService {
         bookValidator.validateIsbnNotRegistered(book.getId(), book.getIsbn());
         List<Author> authorList = findAuthorsByPublicIdsOrThrow(dto.authorsPublicIds());
         authorList.forEach(book::addAuthor);
+        // Associa o livro ao usuário autenticado, permitindo rastrear quem cadastrou o registro.
         User user = securityService.getLoggedUser();
         book.setUser(user);
         return bookRepository.save(book);

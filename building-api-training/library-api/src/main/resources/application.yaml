@@ -22,5 +22,6 @@ spring:
       client:
         registration:
           google:
+            # Credenciais usadas pelo Spring Security para iniciar o login social com Google.
             client-id: ${SOCIAL_CLIENT_ID}
             client-secret: ${SOCIAL_CLIENT_SECRET}

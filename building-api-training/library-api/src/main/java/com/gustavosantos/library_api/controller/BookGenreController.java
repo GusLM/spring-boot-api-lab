@@ -24,6 +24,7 @@ public class BookGenreController implements GenericController{
     private final BookGenreService bookGenreService;
 
     @PostMapping
+    // USER e ADMIN podem criar gêneros; usuários sem esses papéis recebem acesso negado.
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> save(@RequestBody @Valid BookGenreRequestDTO dto) {
         BookGenre bookGenre = bookGenreService.save(dto);
@@ -31,6 +32,7 @@ public class BookGenreController implements GenericController{
     }
 
     @GetMapping("/{publicId}")
+    // Sem @PreAuthorize aqui, vale a regra global: precisa estar autenticado, mas não exige papel específico.
     public ResponseEntity<BookGenreSearchResultDTO> findByPublicId(@PathVariable UUID publicId) {
         return ResponseEntity.ok(bookGenreService.findByPublicId(publicId));
     }
