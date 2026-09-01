@@ -10,16 +10,23 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+/*
+ * Serviço auxiliar para consultar o usuário autenticado no fluxo de negócio.
+ * Ele evita espalhar acesso direto ao SecurityContextHolder por vários services.
+ */
 public class SecurityService {
 
     private final UserService userService;
 
     public User getLoggedUser() {
+        // SecurityContextHolder armazena a Authentication criada pelo Spring para a requisição atual.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assert authentication != null;
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        assert userDetails != null;
-        String login = userDetails.getUsername();
-        return userService.findByLogin(login);
+
+        if (authentication instanceof CustomAuthentication customAuth) {
+            return customAuth.getUser();
+        }
+
+        return null;
     }
 }
