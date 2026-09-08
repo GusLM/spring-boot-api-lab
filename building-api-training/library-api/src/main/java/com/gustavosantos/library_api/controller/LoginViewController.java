@@ -18,6 +18,6 @@ public class LoginViewController {
     @ResponseBody
     public String homePage(Authentication authentication) {
         // O Spring injeta a autenticação da requisição atual como parâmetro do controller.
-        return "Hello" + authentication.getName();
+        return "Hello " + authentication.getName();
     }
 }

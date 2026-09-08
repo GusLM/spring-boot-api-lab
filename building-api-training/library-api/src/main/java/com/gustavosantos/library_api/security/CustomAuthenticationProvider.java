@@ -3,7 +3,6 @@ package com.gustavosantos.library_api.security;
 import com.gustavosantos.library_api.model.User;
 import com.gustavosantos.library_api.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
