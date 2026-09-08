@@ -1,6 +1,7 @@
 package com.gustavosantos.library_api.service;
 
 import com.gustavosantos.library_api.dto.user.UserRequestDTO;
+import com.gustavosantos.library_api.exceptions.ResourceNotFoundException;
 import com.gustavosantos.library_api.mappers.UserMapper;
 import com.gustavosantos.library_api.model.User;
 import com.gustavosantos.library_api.repository.UserRepository;
@@ -36,5 +37,12 @@ public class UserService {
         return userRepository
                 .findByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+    }
+
+    @Transactional(readOnly = true)
+    public User findByEmail(String email) {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
     }
 }

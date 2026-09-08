@@ -1,6 +1,7 @@
 package com.gustavosantos.library_api.config;
 
 import com.gustavosantos.library_api.security.CustomUserDetailsService;
+import com.gustavosantos.library_api.security.LoginSocialSuccessHandler;
 import com.gustavosantos.library_api.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +24,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSocialSuccessHandler socialSuccessHandler) throws Exception {
         /*
          * SecurityFilterChain define a "porta de entrada" da segurança web.
          * Toda requisição passa por essa cadeia de filtros antes de chegar aos controllers.
@@ -32,12 +33,12 @@ public class SecurityConfiguration {
                 // CSRF costuma ser desabilitado em APIs stateless ou laboratórios de API.
                 .csrf(AbstractHttpConfigurer::disable)
                 // Configuração de formulário de “login” customizado
-//                .formLogin(configurer -> {
-//                    // Define a URL da página de “login” e permite acesso público a ela
-//                    configurer.loginPage("/login");
-//                })
+                .formLogin(configurer -> {
+                    // Define a URL da página de “login” e permite acesso público a ela
+                    configurer.loginPage("/login");
+                })
                 // Ativa o login por formulário usando a tela padrão do Spring Security.
-                .formLogin(Customizer.withDefaults())
+//                .formLogin(Customizer.withDefaults())
                 // Também permite autenticação HTTP Basic, útil para testar a API por Postman/cURL.
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
@@ -48,7 +49,10 @@ public class SecurityConfiguration {
                     authorize.anyRequest().authenticated();
                 })
                 // Habilita login social OAuth2 usando os providers configurados em application.yaml.
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(oauth2 -> {
+                    oauth2.loginPage("/login");
+                    oauth2.successHandler(socialSuccessHandler);
+                })
                 .build();
     }
 
