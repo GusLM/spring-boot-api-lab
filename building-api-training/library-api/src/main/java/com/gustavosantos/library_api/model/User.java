@@ -38,6 +38,10 @@ public class User {
     private String password;
 
     @Setter
+    @Column(name = "email", nullable = false, length = 150, unique = true)
+    private String email;
+
+    @Setter
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.ARRAY)
     @ColumnTransformer(write = "?::user_role[]")

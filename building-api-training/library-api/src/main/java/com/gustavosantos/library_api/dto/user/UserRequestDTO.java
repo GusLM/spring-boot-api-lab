@@ -1,6 +1,7 @@
 package com.gustavosantos.library_api.dto.user;
 
 import com.gustavosantos.library_api.model.UserRole;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -15,6 +16,10 @@ public record UserRequestDTO(
         @NotBlank(message = "required field")
         @Size(min = 6, max = 12, message = "Password must be almost 6 characters and have a maximum of 12 characters")
         String password,
+
+        @Email(message = "Invalid email.")
+        @Size(max = 150, message = "The email field must not exceed 150 characters.")
+        String email,
 
         @NotEmpty(message = "empty list not allowed")
         List<UserRole> roles
