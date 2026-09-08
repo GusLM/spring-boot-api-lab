@@ -19,6 +19,7 @@ public record UserRequestDTO(
 
         @Email(message = "Invalid email.")
         @Size(max = 150, message = "The email field must not exceed 150 characters.")
+        @NotBlank(message = "required field")
         String email,
 
         @NotEmpty(message = "empty list not allowed")
