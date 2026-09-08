@@ -1,7 +1,18 @@
 -- Adjusts the users table to match User.role: List<UserRole>.
 -- Existing ordinal values are migrated to the corresponding enum value.
 
-CREATE TYPE public.user_role AS ENUM ('ADMIN', 'USER', 'GUEST');
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_type t
+        JOIN pg_namespace n ON n.oid = t.typnamespace
+        WHERE t.typname = 'user_role'
+          AND n.nspname = 'public'
+    ) THEN
+        CREATE TYPE public.user_role AS ENUM ('ADMIN', 'USER', 'GUEST');
+    END IF;
+END $$;
 
 ALTER TABLE public.users
     ADD COLUMN roles public.user_role[];

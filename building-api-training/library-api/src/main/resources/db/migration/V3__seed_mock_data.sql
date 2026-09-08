@@ -5,8 +5,8 @@
 
 INSERT INTO public.users (public_id, login, password, role, created_at, updated_at)
 VALUES
-    ('11111111-1111-1111-1111-111111111111', 'admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 0, '2026-01-01 09:00:00', NULL),
-    ('22222222-2222-2222-2222-222222222222', 'reader', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 1, '2026-01-01 09:05:00', NULL);
+    ('11111111-1111-1111-1111-111111111111', 'admin', '$2a$10$lRYIGJRCCf5CMMZjMbJAoOHU2lP9eqQCFw/Et90DKBJmrIAbA3MYy', 0, '2026-01-01 09:00:00', NULL),
+    ('22222222-2222-2222-2222-222222222222', 'reader', '$2a$10$lRYIGJRCCf5CMMZjMbJAoOHU2lP9eqQCFw/Et90DKBJmrIAbA3MYy', 1, '2026-01-01 09:05:00', NULL);
 
 INSERT INTO public.books_genres (public_id, genre, registered_at, updated_at, user_id)
 VALUES
