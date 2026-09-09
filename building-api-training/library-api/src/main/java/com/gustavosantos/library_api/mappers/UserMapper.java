@@ -12,5 +12,9 @@ public interface UserMapper {
     @Mapping(target = "publicId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "authProvider", ignore = true)
+    @Mapping(target = "providerId", ignore = true)
     User toEntity(UserRequestDTO dto);
+
+    UserRequestDTO toDto(User user);
 }

@@ -34,12 +34,20 @@ public class User {
     private String login;
 
     @Setter
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Setter
     @Column(name = "email", nullable = false, length = 150, unique = true)
     private String email;
+
+    @Setter
+    @Column(name = "auth_provider", length = 50)
+    private String authProvider;
+
+    @Setter
+    @Column(name = "provider_id", length = 150)
+    private String providerId;
 
     @Setter
     @Enumerated(EnumType.STRING)
