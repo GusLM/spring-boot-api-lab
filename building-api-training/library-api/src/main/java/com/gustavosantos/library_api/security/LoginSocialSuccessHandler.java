@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -30,14 +31,35 @@ public class LoginSocialSuccessHandler extends SavedRequestAwareAuthenticationSu
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
         OAuth2User oauth2User = oAuth2AuthenticationToken.getPrincipal();
 
+        String provider = oAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
+
         String email = oauth2User.getAttribute("email");
 
-        User user = userService.findByEmail(email);
+        if (email == null || email.isBlank()) {
+            throw new ServletException("OAuth2 provider did not return an email.");
+        }
 
-        authentication = new CustomAuthentication(user);
+        String providerId = getProviderId(provider, oauth2User);
+        
+        if (providerId == null || providerId.isBlank()) {
+            throw new ServletException("OAuth2 provider did not return a provider id.");
+        }
+
+        User user = userService.findOrCreateSocialUser(email, provider, providerId);
+
+        Authentication customAuthentication = new CustomAuthentication(user);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        super.onAuthenticationSuccess(request, response, authentication);
+        super.onAuthenticationSuccess(request, response, customAuthentication);
+    }
+
+    private String getProviderId(String provider, OAuth2User oauth2User) {
+        return switch (provider) {
+            case "google" -> oauth2User.getAttribute("sub");
+            case "github" -> String.valueOf(Objects.requireNonNull(oauth2User.getAttribute("id")));
+            default -> oauth2User.getName();
+        };
     }
 }
+
