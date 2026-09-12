@@ -1,5 +1,6 @@
 package com.gustavosantos.library_api.model;
 
+import com.gustavosantos.library_api.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnTransformer;

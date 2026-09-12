@@ -1,6 +1,6 @@
 package com.gustavosantos.library_api.dto.user;
 
-import com.gustavosantos.library_api.model.UserRole;
+import com.gustavosantos.library_api.enums.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

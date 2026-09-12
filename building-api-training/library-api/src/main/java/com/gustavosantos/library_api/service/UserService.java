@@ -3,7 +3,7 @@ package com.gustavosantos.library_api.service;
 import com.gustavosantos.library_api.dto.user.UserRequestDTO;
 import com.gustavosantos.library_api.mappers.UserMapper;
 import com.gustavosantos.library_api.model.User;
-import com.gustavosantos.library_api.model.UserRole;
+import com.gustavosantos.library_api.enums.UserRole;
 import com.gustavosantos.library_api.repository.UserRepository;
 import com.gustavosantos.library_api.validator.UserValidator;
 import lombok.RequiredArgsConstructor;

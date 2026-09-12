@@ -1,4 +1,4 @@
-package com.gustavosantos.library_api.model;
+package com.gustavosantos.library_api.enums;
 
 public enum UserRole {
     // Pode acessar operações administrativas, como cadastrar novos usuários.
