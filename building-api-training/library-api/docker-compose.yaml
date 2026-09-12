@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:18.4
+    container_name: library-api-postgres
+    environment:
+      POSTGRES_DB: library
+      POSTGRES_USER: ${DATABASE_USERNAME:?DATABASE_USERNAME is required}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?DATABASE_PASSWORD is required}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U ${DATABASE_USERNAME:?DATABASE_USERNAME is required} -d library
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  flyway:
+    image: flyway/flyway:12.4.0
+    container_name: library-api-flyway
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:?DATABASE_USERNAME is required}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:?DATABASE_PASSWORD is required}
+      DATABASE_DRIVER_CLASS_NAME: ${DATABASE_DRIVER_CLASS_NAME:?DATABASE_DRIVER_CLASS_NAME is required}
+    command:
+      - -url=jdbc:postgresql://postgres:5432/library
+      - -user=${DATABASE_USERNAME:?DATABASE_USERNAME is required}
+      - -password=${DATABASE_PASSWORD:?DATABASE_PASSWORD is required}
+      - -locations=filesystem:/flyway/sql
+      - -connectRetries=60
+      - -executeInTransaction=true
+      - -mixed=false
+      - migrate
+    volumes:
+      - ./src/main/resources/db/migration:/flyway/sql:ro
+
+volumes:
+  postgres_data:
