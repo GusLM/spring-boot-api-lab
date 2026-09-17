@@ -15,4 +15,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     Optional<Client> findByClientIdAndRevokedAtIsNull(String clientId);
 
     Optional<Client> findByClientId(String clientId);
+
+    Client findClientByClientId(String clientId);
 }

@@ -115,4 +115,8 @@ public class ClientService {
         return clientRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Client not found with id: " + publicId));
     }
+
+    public Client findClientByClientId(String clientId) {
+        return clientRepository.findClientByClientId(clientId);
+    }
 }
