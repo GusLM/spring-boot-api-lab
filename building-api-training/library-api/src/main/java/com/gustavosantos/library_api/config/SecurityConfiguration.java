@@ -1,8 +1,6 @@
 package com.gustavosantos.library_api.config;
 
-import com.gustavosantos.library_api.security.CustomUserDetailsService;
 import com.gustavosantos.library_api.security.LoginSocialSuccessHandler;
-import com.gustavosantos.library_api.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -11,9 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -53,21 +50,10 @@ public class SecurityConfiguration {
                     oauth2.loginPage("/login");
                     oauth2.successHandler(socialSuccessHandler);
                 })
+                .oauth2ResourceServer(oauth2Rs ->
+                        oauth2Rs.jwt(Customizer.withDefaults()))
                 .build();
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // BCrypt gera hash com salt e custo configurável; aqui o custo 10 equilibra segurança e desempenho.
-        return new BCryptPasswordEncoder(10);
-    }
-
-//    @Bean
-//    public UserDetailsService userDetailsService(UserService userService) {
-//        // Alternativa ao CustomAuthenticationProvider: o Spring carregaria o usuário por login
-//        // e compararia a senha usando o PasswordEncoder registrado acima.
-//        return new CustomUserDetailsService(userService);
-//    }
 
     @Bean
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
@@ -76,5 +62,21 @@ public class SecurityConfiguration {
          * Com prefixo vazio, a aplicação passa a trabalhar diretamente com "ADMIN", "USER", etc.
          */
         return new GrantedAuthorityDefaults("");
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        /*
+         * O JwtGrantedAuthoritiesConverter extrai as authorities dos claims "scope" ou "scp" do JWT.
+         * Por padrão, ele adiciona o prefixo "SCOPE_"; com o prefixo vazio, os valores do token
+         * são usados diretamente como authorities, como "ADMIN" e "USER".
+         */
+        var authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        authoritiesConverter.setAuthorityPrefix("");
+
+        var converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+
+        return converter;
     }
 }
