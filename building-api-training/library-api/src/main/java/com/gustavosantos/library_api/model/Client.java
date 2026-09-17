@@ -101,11 +101,11 @@ public class Client {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id) && Objects.equals(publicId, client.publicId);
+        return Objects.equals(publicId, client.publicId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, publicId);
+        return Objects.hashCode(publicId);
     }
 }
