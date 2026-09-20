@@ -3,6 +3,7 @@ package com.gustavosantos.library_api.controller;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -19,5 +20,11 @@ public class LoginViewController {
     public String homePage(Authentication authentication) {
         // O Spring injeta a autenticação da requisição atual como parâmetro do controller.
         return "Hello " + authentication.getName();
+    }
+
+    @GetMapping("/authorized")
+    @ResponseBody
+    public String getAuthorizationCode(@RequestParam("code") String code) {
+        return code;
     }
 }
