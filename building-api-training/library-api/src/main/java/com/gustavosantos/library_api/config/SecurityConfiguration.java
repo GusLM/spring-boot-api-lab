@@ -12,6 +12,7 @@ import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 @Configuration
 // Habilita a infraestrutura de filtros do Spring Security para as requisições HTTP.
@@ -34,6 +35,12 @@ public class SecurityConfiguration {
                     // Define a URL da página de “login” e permite acesso público a ela
                     configurer.loginPage("/login");
                 })
+                .securityContext(securityContext -> securityContext
+                        .requireExplicitSave(false)
+                )
+                .requestCache(requestCache -> requestCache
+                        .requestCache(new HttpSessionRequestCache())
+                )
                 // Ativa o login por formulário usando a tela padrão do Spring Security.
 //                .formLogin(Customizer.withDefaults())
                 // Também permite autenticação HTTP Basic, útil para testar a API por Postman/cURL.

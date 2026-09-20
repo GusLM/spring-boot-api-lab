@@ -19,7 +19,10 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.http.MediaType;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -42,11 +45,20 @@ public class AuthorizationServerConfiguration {
             authorizationServer.oidc(Customizer.withDefaults());
         });
 
+        http.authorizeHttpRequests(authorize ->
+                authorize.anyRequest().authenticated()
+        );
+
+        http.exceptionHandling(exceptions -> exceptions
+                .defaultAuthenticationEntryPointFor(
+                        new LoginUrlAuthenticationEntryPoint("/login"),
+                        new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                )
+        );
+
         http.oauth2ResourceServer(oauth2Rs -> {
             oauth2Rs.jwt(Customizer.withDefaults());
         });
-
-        http.formLogin(configurer -> configurer.loginPage("/login"));
 
         return http.build();
 
