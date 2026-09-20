@@ -1,6 +1,7 @@
 package com.gustavosantos.library_api.repository;
 
 import com.gustavosantos.library_api.model.Client;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     Optional<Client> findByClientId(String clientId);
 
+    @EntityGraph(attributePaths = "scopes")
     Client findClientByClientId(String clientId);
 }

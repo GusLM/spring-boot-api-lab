@@ -49,7 +49,5 @@ public class CustomRegisteredClientRepository implements RegisteredClientReposit
         client.getScopes().forEach(builder::scope);
 
         return builder.build();
-
-
     }
 }
