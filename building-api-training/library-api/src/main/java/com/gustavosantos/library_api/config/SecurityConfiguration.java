@@ -1,5 +1,6 @@
 package com.gustavosantos.library_api.config;
 
+import com.gustavosantos.library_api.security.JwtCustomAuthenticationFilter;
 import com.gustavosantos.library_api.security.LoginSocialSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
@@ -22,7 +24,11 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSocialSuccessHandler socialSuccessHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            LoginSocialSuccessHandler socialSuccessHandler,
+            JwtCustomAuthenticationFilter jwtCustomAuthenticationFilter
+    ) throws Exception {
         /*
          * SecurityFilterChain define a "porta de entrada" da segurança web.
          * Toda requisição passa por essa cadeia de filtros antes de chegar aos controllers.
@@ -57,8 +63,9 @@ public class SecurityConfiguration {
                     oauth2.loginPage("/login");
                     oauth2.successHandler(socialSuccessHandler);
                 })
-                .oauth2ResourceServer(oauth2Rs ->
-                        oauth2Rs.jwt(Customizer.withDefaults()))
+                .oauth2ResourceServer(oauth2RS ->
+                        oauth2RS.jwt(Customizer.withDefaults()))
+                .addFilterAfter(jwtCustomAuthenticationFilter, BearerTokenAuthenticationFilter.class)
                 .build();
     }
 

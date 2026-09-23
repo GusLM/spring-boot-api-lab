@@ -1,5 +1,6 @@
 package com.gustavosantos.library_api.controller;
 
+import com.gustavosantos.library_api.security.CustomAuthentication;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,9 @@ public class LoginViewController {
     @ResponseBody
     public String homePage(Authentication authentication) {
         // O Spring injeta a autenticação da requisição atual como parâmetro do controller.
+        if (authentication instanceof CustomAuthentication customAuthentication) {
+            System.out.println(customAuthentication.getUser());
+        }
         return "Hello " + authentication.getName();
     }
 
