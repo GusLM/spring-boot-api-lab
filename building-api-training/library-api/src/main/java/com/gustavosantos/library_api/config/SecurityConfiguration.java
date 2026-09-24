@@ -51,7 +51,7 @@ public class SecurityConfiguration {
                 // Ativa o login por formulário usando a tela padrão do Spring Security.
 //                .formLogin(Customizer.withDefaults())
                 // Também permite autenticação HTTP Basic, útil para testar a API por Postman/cURL.
-                .httpBasic(Customizer.withDefaults())
+//                .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     // A página de login precisa ser pública; caso contrário o usuário nunca conseguiria acessá-la.
                     authorize.requestMatchers("/login/**").permitAll();
