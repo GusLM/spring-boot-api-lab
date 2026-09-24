@@ -1,5 +1,6 @@
 package com.gustavosantos.library_api.dto.book;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.ISBN;
 
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+@Schema(name = "BookRequest", description = "Data required to create or update a book")
 public record BookRequestDTO(
         @ISBN
         @NotBlank(message = "required field")

@@ -1,6 +1,7 @@
 package com.gustavosantos.library_api.dto.user;
 
 import com.gustavosantos.library_api.enums.UserRole;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
+@Schema(name = "UserRequest", description = "Data required to create a user")
 public record UserRequestDTO(
         @NotBlank(message = "required field")
         @Size(min = 5, max = 30, message = "It must be almost 5 characters and have a maximum of 30 characters")

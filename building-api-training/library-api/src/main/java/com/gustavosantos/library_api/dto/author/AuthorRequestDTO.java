@@ -1,5 +1,6 @@
 package com.gustavosantos.library_api.dto.author;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
+@Schema(name = "AuthorRequest", description = "Data required to create or update an author")
 public record AuthorRequestDTO(
         @NotBlank(message = "required field")
         @Size(max = 100, min = 2, message = "It must be more than 1 character and have a maximum of 100 characters")

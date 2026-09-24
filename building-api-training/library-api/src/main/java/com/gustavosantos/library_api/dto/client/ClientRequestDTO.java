@@ -1,11 +1,13 @@
 package com.gustavosantos.library_api.dto.client;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
+@Schema(name = "ClientRequest", description = "Data required to register or update an OAuth client")
 public record ClientRequestDTO(
 
         @NotBlank(message = "required field")
